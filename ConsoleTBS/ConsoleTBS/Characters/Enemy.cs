@@ -3,7 +3,7 @@ using ConsoleTBS.Weapons;
 
 namespace ConsoleTBS;
 
-public class Player : ICharacter
+public class Enemy : ICharacter
 {
     readonly Character _character;
     public CharacterName Name => CharacterName.Player;
@@ -11,7 +11,7 @@ public class Player : ICharacter
     public int CurrentHealth => _character.CurrentHealth;
     public int BaseDamage => _character.BaseDamage;
     public IWeapon Weapon => _character.Weapon;
-    public Player(Character character)
+    public Enemy(Character character)
     {
         _character = character;
     }
