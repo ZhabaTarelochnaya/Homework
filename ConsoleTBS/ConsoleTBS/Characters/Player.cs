@@ -1,3 +1,5 @@
+using ConsoleTBS.Potions;
+
 namespace ConsoleTBS;
 
 public class Player : ICharacter
@@ -16,4 +18,5 @@ public class Player : ICharacter
     public void Attack(ICharacter character) => character.Hurt(BaseDamage);
     public void Hurt(int damage) => CurrentHealth = Math.Max(CurrentHealth - damage, 0);
     public void Heal(int heal) => CurrentHealth = Math.Min(CurrentHealth + heal, 0);
+    public void Consume(IConsumable consumable) => consumable.ConsumeBy(this);
 }

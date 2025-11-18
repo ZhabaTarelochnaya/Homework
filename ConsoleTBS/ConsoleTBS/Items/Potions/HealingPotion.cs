@@ -8,5 +8,5 @@ public class HealingPotion : Item, IConsumable
     
     public HealingPotion() : base(10) { }
     public override void Use(ICharacter character) => character.Heal(HealingAmount);
-    public void Consume(ICharacter character) => Use(character);
+    public void ConsumeBy(ICharacter character) => Use(character);
 }

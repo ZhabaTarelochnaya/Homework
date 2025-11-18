@@ -1,3 +1,5 @@
+using ConsoleTBS.Potions;
+
 namespace ConsoleTBS;
 
 public interface ICharacter
@@ -9,4 +11,5 @@ public interface ICharacter
     public void Attack(ICharacter character);
     public void Hurt(int damage);
     public void Heal(int heal);
+    public void Consume(IConsumable consumable);
 }
