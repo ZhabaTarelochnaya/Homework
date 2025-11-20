@@ -32,7 +32,15 @@ public class Player : ICharacter
         _character = character;
     }
 
-    public void EquipWeapon(IWeapon weapon) => _character.EquipWeapon(weapon);
+    public void EquipWeapon(IWeapon weapon)
+    {
+        if (!_weapons.Contains(weapon))
+        { 
+            _weapons.Add(weapon);
+        }
+        _character.EquipWeapon(weapon);
+    }
+
     public void UnequipCurrentWeapon() => _character.UnequipCurrentWeapon();
     public void AddWeapon(IWeapon weapon)
     {

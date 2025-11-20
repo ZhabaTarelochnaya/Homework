@@ -16,6 +16,6 @@ public class RegenerationPotion : Item, IConsumable
         _heal = new Heal(_regen, _duration);
     }
     public IEffect Consume() => _heal;
-    public override void Use(ICharacter character) => character.Consume(this);
+    public override void Use(ICharacter character) => character.AddConsumable(this);
     public string GetDescription() => $"Restores {_regen} health each round. Duration: {_duration}.";
 }

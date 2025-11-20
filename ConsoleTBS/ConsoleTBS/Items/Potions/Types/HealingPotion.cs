@@ -14,7 +14,7 @@ public class HealingPotion : Item, IConsumable
         _healAmount = healAmount;
         _healEffect = new Heal(healAmount, 1);
     }
-    public override void Use(ICharacter character) => character.Consume(this);
+    public override void Use(ICharacter character) => character.AddConsumable(this);
     public IEffect Consume() => _healEffect;
     public string GetDescription() => $"Restores {_healAmount} health.";
 }

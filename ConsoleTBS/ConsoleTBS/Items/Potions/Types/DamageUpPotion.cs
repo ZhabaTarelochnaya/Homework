@@ -16,6 +16,6 @@ public class DamageUpPotion : Item, IConsumable
         _duration = duration;
     }
     public IEffect Consume() => _damageUpEffect;
-    public override void Use(ICharacter character) => character.Consume(this);
+    public override void Use(ICharacter character) => character.AddConsumable(this);
     public string GetDescription() => $"Increases damage by {_damageUp}. Duration: {_duration} rounds.";
 }

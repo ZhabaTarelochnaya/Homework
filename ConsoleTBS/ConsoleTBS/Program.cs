@@ -12,11 +12,11 @@ class Program
         var rng = new Random();
         var player = CreatePlayer();
         var enemy = CreateEnemy(rng);
+        var shop = CreateShop(player);
         var renderer = new ConsoleRenderer();
-        
         while (true)
         {
-            bool isExitPressed = OpenMenu(renderer, player, enemy);
+            bool isExitPressed = OpenMenu(renderer, player, enemy, shop);
             if (isExitPressed) break;
             
             renderer.Clear();
@@ -45,7 +45,7 @@ class Program
         }
     }
 
-    static bool OpenMenu(ConsoleRenderer renderer, Player player, Enemy enemy)
+    static bool OpenMenu(ConsoleRenderer renderer, Player player, Enemy enemy, Shop shop)
     {
         while (true)
         {
@@ -81,6 +81,9 @@ class Program
                     case 5:
                         renderer.ShowStatus(player);
                         Console.ReadLine();
+                        break;
+                    case 6:
+                        OpenShop(shop, player, renderer);
                         break;
                     case 0:
                         return true;
@@ -162,6 +165,45 @@ class Program
         Console.ReadLine();
         renderer.Clear();
     }
+
+    static void OpenShop(Shop shop, Player player,  ConsoleRenderer renderer)
+    {
+        renderer.Clear();
+        renderer.ShowShop(shop, player);
+        if (!shop.Items.Any())
+        {
+            renderer.ShowShopEmpty();
+            Console.ReadLine();
+            return;
+        }
+
+        if (int.TryParse(Console.ReadLine(), out var index))
+        {
+            renderer.Clear();
+            index--;
+            if (index >= shop.Items.Count())
+            {
+                renderer.ShowInvalidInput();
+                Console.ReadLine();
+                return;
+            }
+
+            if (shop.TryBuyItem(index, out var item))
+            {
+                renderer.ShowPurchase(item);
+            }
+            else
+            {
+                renderer.ShowNotEnoughMoney(item, player);
+            }
+        }
+        else
+        {
+            renderer.Clear();
+            renderer.ShowInvalidInput();
+        }
+        Console.ReadLine();
+    }
     static Enemy CreateEnemy(Random rng)
     {
         var character = new Character(rng.Next(10, 31), rng.Next(0,3));
@@ -194,6 +236,17 @@ class Program
         
         player.AddConsumable(new HealingPotion(20, 10));
         player.AddConsumable(new DamageUpPotion(5, 3, 15));
+        player.CoinsLeft += 100;
         return player;
+    }
+
+    static Shop CreateShop(Player player)
+    {
+        var shop = new Shop(player);
+        shop.AddItem(new Sword(6, 10));
+        shop.AddItem(new Daggers(5, 15));
+        shop.AddItem(new HealingPotion(20, 10));
+        shop.AddItem(new DamageUpPotion(5, 3, 20));
+        return shop;
     }
 }

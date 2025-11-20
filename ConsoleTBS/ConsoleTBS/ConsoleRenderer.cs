@@ -14,6 +14,7 @@ public class ConsoleRenderer
                           "3 - Equip Weapon\n" +
                           "4 - Equip Potion\n" +
                           "5 - Show Status\n" +
+                          "6 - Open shop\n" +
                           "0 - Exit");
     }
 
@@ -28,13 +29,54 @@ public class ConsoleRenderer
             ShowEffectInfo(effect);
         } 
         Console.WriteLine();
-        Console.WriteLine($"Coins: {player.CoinsLeft}");
+        ShowCoins(player);
         Console.WriteLine();
         ShowCurrentWeapon(player);
         ShowAvailableWeapons(player.Weapons);
         Console.WriteLine();
         ShowCurrentConsumable(player);
         ShowAvailableConsumables(player.Consumables);
+    }
+
+    public void ShowShop(Shop shop, Player player)
+    {
+        int i = 1;
+        ShowCoins(player);
+        foreach (var item in shop.Items)
+        {
+            if (item is IWeapon weapon)
+            {
+                Console.Write($"{i} ({item.Price} coins) - ");
+                ShowWeaponInfo(weapon);
+            }
+            else if (item is IConsumable consumable)
+            {
+                Console.Write($"{i} ({item.Price} coins) - ");
+                ShowConsumableInfo(consumable);
+            }
+            else
+            {
+                throw new Exception("Unknown shop item type");
+            }
+            i++;
+        }
+    }
+    public void ShowPurchase(Item item)
+    {
+        Console.WriteLine($"Bought item: {item.Name}");
+    }
+    public void ShowNotEnoughMoney(Item item, Player player)
+    {
+        Console.WriteLine($"Not enough money: {player.CoinsLeft} /  {item.Price}");
+    }
+    public void ShowShopEmpty()
+    {
+        Console.WriteLine("Shop is empty");
+    }
+
+    public void ShowCoins(Player player)
+    {
+        Console.WriteLine($"Coins: {player.CoinsLeft}");
     }
     public void ShowAttackInfo(ICharacter target, int damage)
     {
@@ -45,13 +87,13 @@ public class ConsoleRenderer
         string equippedWeapon;
         if (weaponWielder.Weapon != null)
         {
-            equippedWeapon = weaponWielder.Weapon.Name.ToString();
+            Console.Write("Equipped Weapon: ");
+            ShowWeaponInfo(weaponWielder.Weapon);
         }
         else
         {
-            equippedWeapon = "none";
+            Console.WriteLine($"Equipped Weapon: none");
         }
-        Console.WriteLine($"Equipped Weapon: {equippedWeapon}");
     }
     public void ShowAvailableWeapons(IEnumerable<IWeapon> weapons)
     {
@@ -85,16 +127,16 @@ public class ConsoleRenderer
 
     public void ShowCurrentConsumable(ICharacter character)
     {
-        string equippedPotion;
         if (character.CurrentConsumable != null)
         {
-            equippedPotion = character.CurrentConsumable.Name.ToString();
+            Console.Write($"Equipped Potion: ");
+            ShowConsumableInfo(character.CurrentConsumable);
         }
         else
         {
-            equippedPotion = "none";
+            Console.WriteLine($"Equipped Potion: none");
         }
-        Console.WriteLine($"Equipped Potion: {equippedPotion}");
+        
     }
     public void ShowConsumableNotEquipped()
     {
