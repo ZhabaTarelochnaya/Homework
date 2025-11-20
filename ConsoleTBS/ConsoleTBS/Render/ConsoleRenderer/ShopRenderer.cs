@@ -44,10 +44,6 @@ public class ShopRenderer
     {
         Console.WriteLine($"Not enough money: {player.CoinsLeft} /  {item.Price}");
     }
-    public void ShowShopEmpty()
-    {
-        Console.WriteLine("Shop is empty");
-    }
 
     public void ShowCoins(Player player)
     {

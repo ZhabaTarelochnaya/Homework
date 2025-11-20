@@ -107,13 +107,15 @@ class Program
     static void SwitchWeapon(Player player, ConsoleRenderer renderer)
     {
         renderer.Clear();
-        renderer.WeaponsRenderer.ShowAvailableWeapons(player.Weapons);
-        Console.WriteLine("0 - Exit");
         if (!player.Weapons.Any())
         {
+            renderer.ShowEmpty();
             Console.ReadLine();
             return;
         }
+        
+        renderer.WeaponsRenderer.ShowAvailableWeapons(player.Weapons);
+        Console.WriteLine("0 - Exit");
         if (int.TryParse(Console.ReadLine(), out var index))
         {
             if (index == 0) return;
@@ -140,13 +142,15 @@ class Program
     static void SwitchConsumable(Player player, ConsoleRenderer renderer)
     {
         renderer.Clear();
-        renderer.ConsumablesRenderer.ShowAvailableConsumables(player.Consumables);
-        Console.WriteLine("0 - Exit");
         if (!player.Consumables.Any())
         {
+            renderer.ShowEmpty();
             Console.ReadLine();
             return;
         }
+        
+        renderer.ConsumablesRenderer.ShowAvailableConsumables(player.Consumables);
+        Console.WriteLine("0 - Exit");
         if (int.TryParse(Console.ReadLine(), out var index))
         {
             if (index == 0) return;
@@ -173,13 +177,13 @@ class Program
     static void OpenShop(Shop shop, Player player,  ConsoleRenderer renderer)
     {
         renderer.Clear();
-        renderer.ShopRenderer.ShowShop(shop, player);
         if (!shop.Items.Any())
         {
-            renderer.ShopRenderer.ShowShopEmpty();
+            renderer.ShowEmpty();
             Console.ReadLine();
             return;
         }
+        renderer.ShopRenderer.ShowShop(shop, player);
         Console.WriteLine("0 - Exit");
         if (int.TryParse(Console.ReadLine(), out var index))
         {

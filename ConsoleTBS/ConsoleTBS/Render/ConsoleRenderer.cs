@@ -64,5 +64,9 @@ public class ConsoleRenderer
     {
         Console.WriteLine("You are defeated.");
     }
+    public void ShowEmpty()
+    {
+        Console.WriteLine("Empty");
+    }
     public void Clear() => Console.Clear();
 }
