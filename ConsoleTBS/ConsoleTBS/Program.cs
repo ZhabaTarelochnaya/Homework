@@ -65,11 +65,11 @@ class Program
                         if (player.TryConsumeCurrent(out IConsumable? consumable))
                         {
                             player.EffectProcessor.ApplyEffects();
-                            renderer.ShowConsumedMessage(consumable);
+                            renderer.ConsumablesRenderer.ShowConsumedMessage(consumable);
                             Console.ReadLine();
                             return false;
                         }
-                        renderer.ShowConsumableNotEquipped();
+                        renderer.ConsumablesRenderer.ShowConsumableNotEquipped();
                         Console.ReadLine();
                         break;
                     case 3:
@@ -107,7 +107,7 @@ class Program
     static void SwitchWeapon(Player player, ConsoleRenderer renderer)
     {
         renderer.Clear();
-        renderer.ShowAvailableWeapons(player.Weapons);
+        renderer.WeaponsRenderer.ShowAvailableWeapons(player.Weapons);
         if (!player.Weapons.Any())
         {
             Console.ReadLine();
@@ -124,7 +124,7 @@ class Program
                 return;
             }
             player.SwitchCurrentWeapon(index);
-            renderer.ShowCurrentWeapon(player);
+            renderer.WeaponsRenderer.ShowCurrentWeapon(player);
         }
         else
         {
@@ -138,7 +138,7 @@ class Program
     static void SwitchConsumable(Player player, ConsoleRenderer renderer)
     {
         renderer.Clear();
-        renderer.ShowAvailableConsumables(player.Consumables);
+        renderer.ConsumablesRenderer.ShowAvailableConsumables(player.Consumables);
         if (!player.Consumables.Any())
         {
             Console.ReadLine();
@@ -155,7 +155,7 @@ class Program
                 return;
             }
             player.SwitchCurrentConsumable(index);
-            renderer.ShowCurrentConsumable(player);
+            renderer.ConsumablesRenderer.ShowCurrentConsumable(player);
         }
         else
         {
@@ -169,10 +169,10 @@ class Program
     static void OpenShop(Shop shop, Player player,  ConsoleRenderer renderer)
     {
         renderer.Clear();
-        renderer.ShowShop(shop, player);
+        renderer.ShopRenderer.ShowShop(shop, player);
         if (!shop.Items.Any())
         {
-            renderer.ShowShopEmpty();
+            renderer.ShopRenderer.ShowShopEmpty();
             Console.ReadLine();
             return;
         }
@@ -190,11 +190,11 @@ class Program
 
             if (shop.TryBuyItem(index, out var item))
             {
-                renderer.ShowPurchase(item);
+                renderer.ShopRenderer.ShowPurchase(item);
             }
             else
             {
-                renderer.ShowNotEnoughMoney(item, player);
+                renderer.ShopRenderer.ShowNotEnoughMoney(item, player);
             }
         }
         else
