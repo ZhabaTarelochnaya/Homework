@@ -56,21 +56,10 @@ class Program
                 switch (option)
                 {
                     case 1:
-                        player.EffectProcessor.ApplyEffects();
-                        var damage = player.Attack(enemy);
-                        renderer.ShowAttackInfo(enemy, damage);
-                        Console.ReadLine();
+                        Attack(player, enemy, renderer);
                         return false;
                     case 2:
-                        if (player.TryConsumeCurrent(out IConsumable? consumable))
-                        {
-                            player.EffectProcessor.ApplyEffects();
-                            renderer.ConsumablesRenderer.ShowConsumedMessage(consumable);
-                            Console.ReadLine();
-                            return false;
-                        }
-                        renderer.ConsumablesRenderer.ShowConsumableNotEquipped();
-                        Console.ReadLine();
+                        if (TryConsumeCurrent(player, renderer)) return false;
                         break;
                     case 3:
                         SwitchWeapon(player, renderer);
@@ -104,6 +93,26 @@ class Program
         }
     }
 
+    static void Attack(Player player, Enemy enemy, ConsoleRenderer renderer)
+    {
+        player.EffectProcessor.ApplyEffects();
+        var damage = player.Attack(enemy);
+        renderer.ShowAttackInfo(enemy, damage);
+        Console.ReadLine();
+    }
+    static bool TryConsumeCurrent(Player player, ConsoleRenderer renderer)
+    {
+        if (player.TryConsumeCurrent(out IConsumable? consumable))
+        {
+            player.EffectProcessor.ApplyEffects();
+            renderer.ConsumablesRenderer.ShowConsumedMessage(consumable);
+            Console.ReadLine();
+            return true;
+        }
+        renderer.ConsumablesRenderer.ShowConsumableNotEquipped();
+        Console.ReadLine();
+        return false;
+    }
     static void SwitchWeapon(Player player, ConsoleRenderer renderer)
     {
         renderer.Clear();
