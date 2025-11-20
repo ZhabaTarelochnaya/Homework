@@ -1,6 +1,10 @@
+using ConsoleTBS.Effects;
+
 namespace ConsoleTBS.Potions;
 
 public interface IConsumable
 {
-    void ConsumeBy(ICharacter character);
+    ItemName Name { get; }
+    IEffect Consume();
+    string GetDescription();
 }
