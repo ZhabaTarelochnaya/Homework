@@ -108,6 +108,7 @@ class Program
     {
         renderer.Clear();
         renderer.WeaponsRenderer.ShowAvailableWeapons(player.Weapons);
+        Console.WriteLine("0 - Exit");
         if (!player.Weapons.Any())
         {
             Console.ReadLine();
@@ -115,6 +116,7 @@ class Program
         }
         if (int.TryParse(Console.ReadLine(), out var index))
         {
+            if (index == 0) return;
             renderer.Clear();
             index--;
             if (index >= player.Weapons.Count())
@@ -139,6 +141,7 @@ class Program
     {
         renderer.Clear();
         renderer.ConsumablesRenderer.ShowAvailableConsumables(player.Consumables);
+        Console.WriteLine("0 - Exit");
         if (!player.Consumables.Any())
         {
             Console.ReadLine();
@@ -146,6 +149,7 @@ class Program
         }
         if (int.TryParse(Console.ReadLine(), out var index))
         {
+            if (index == 0) return;
             renderer.Clear();
             index--;
             if (index >= player.Consumables.Count())
@@ -176,9 +180,10 @@ class Program
             Console.ReadLine();
             return;
         }
-
+        Console.WriteLine("0 - Exit");
         if (int.TryParse(Console.ReadLine(), out var index))
         {
+            if (index == 0) return;
             renderer.Clear();
             index--;
             if (index >= shop.Items.Count())
