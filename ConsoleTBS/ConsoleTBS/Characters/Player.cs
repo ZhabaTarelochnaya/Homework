@@ -8,6 +8,7 @@ public class Player : ICharacter
 {
     readonly Character _character;
     int _coinsLeft;
+    List<IWeapon> _weapons = new();
     public CharacterName Name => CharacterName.Player;
     public int MaxHealth => _character.MaxHealth;
     public int CurrentHealth => _character.CurrentHealth;
@@ -16,7 +17,8 @@ public class Player : ICharacter
         get => _character.BaseDamage;
         set => _character.BaseDamage = value;
     }
-    public IWeapon Weapon => _character.Weapon;
+    public IWeapon? Weapon => _character.Weapon;
+    public IEnumerable<IWeapon> Weapons => _weapons;
     public EffectProcessor EffectProcessor => _character.EffectProcessor;
     public IConsumable CurrentConsumable => _character.CurrentConsumable;
     public IEnumerable<IConsumable> Consumables => _character.Consumables;
@@ -29,8 +31,23 @@ public class Player : ICharacter
     {
         _character = character;
     }
+
     public void EquipWeapon(IWeapon weapon) => _character.EquipWeapon(weapon);
     public void UnequipCurrentWeapon() => _character.UnequipCurrentWeapon();
+    public void AddWeapon(IWeapon weapon)
+    {
+        _weapons.Add(weapon);
+        if (Weapon == null)
+        {
+            EquipWeapon(weapon);
+        }
+    }
+    public IWeapon SwitchCurrentWeapon(int index)
+    {
+        EquipWeapon(_weapons[index]);
+        return _weapons[index];
+    }
+
     public int Attack(ICharacter character) => _character.Attack(character);
     public void Hurt(int damage) => _character.Hurt(damage);
     public void Heal(int heal) => _character.Heal(heal);

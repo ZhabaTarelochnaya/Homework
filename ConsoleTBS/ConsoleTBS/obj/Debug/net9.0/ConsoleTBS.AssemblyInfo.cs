@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ConsoleTBS")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a8b7fb37e8c708e6d56bdc3d317470ec2a1e7046")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bbcb557117926f24fe7eb55bc716529387643a06")]
 [assembly: System.Reflection.AssemblyProductAttribute("ConsoleTBS")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ConsoleTBS")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

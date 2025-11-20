@@ -27,8 +27,12 @@ public class ConsoleRenderer
             Console.Write("\t");
             ShowEffectInfo(effect);
         } 
+        Console.WriteLine();
         Console.WriteLine($"Coins: {player.CoinsLeft}");
-        ShowWeaponInfo(player.Weapon);
+        Console.WriteLine();
+        ShowCurrentWeapon(player);
+        ShowAvailableWeapons(player.Weapons);
+        Console.WriteLine();
         ShowCurrentConsumable(player);
         ShowAvailableConsumables(player.Consumables);
     }
@@ -36,12 +40,40 @@ public class ConsoleRenderer
     {
         Console.WriteLine($"{target.Name} took {damage} damage");
     }
+    public void ShowCurrentWeapon(IWeaponWielder weaponWielder)
+    {
+        string equippedWeapon;
+        if (weaponWielder.Weapon != null)
+        {
+            equippedWeapon = weaponWielder.Weapon.Name.ToString();
+        }
+        else
+        {
+            equippedWeapon = "none";
+        }
+        Console.WriteLine($"Equipped Weapon: {equippedWeapon}");
+    }
+    public void ShowAvailableWeapons(IEnumerable<IWeapon> weapons)
+    {
+        if (!weapons.Any())
+        {
+            Console.WriteLine("No weapons left");
+            return;
+        }
+        Console.WriteLine($"Available weapons:");
+        int i = 1;
+        foreach (var weapon in weapons)
+        {
+            Console.Write($"{i} - ");
+            ShowWeaponInfo(weapon);
+            i++;
+        }
+    }
     public void ShowWeaponInfo(IWeapon weapon)
     {
-        Console.WriteLine($"Equipped Weapon: {weapon.Name} ({weapon.GetDamageFormula()})");
+        Console.WriteLine($"{weapon.Name}: {weapon.GetDamageFormula()} damage.");
     }
-
-   
+    
     public void ShowConsumableInfo(IConsumable consumable)
     {
         Console.WriteLine($"{consumable.Name}: {consumable.GetDescription()}");
@@ -62,11 +94,7 @@ public class ConsoleRenderer
         {
             equippedPotion = "none";
         }
-        Console.WriteLine($"Equipped Potion: {equippedPotion}\n");
-    }
-    public void ShowConsumableEquipped(IConsumable consumable)
-    {
-        Console.WriteLine("Equiped: " + consumable.Name);
+        Console.WriteLine($"Equipped Potion: {equippedPotion}");
     }
     public void ShowConsumableNotEquipped()
     {

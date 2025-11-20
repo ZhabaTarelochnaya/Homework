@@ -73,6 +73,7 @@ class Program
                         Console.ReadLine();
                         break;
                     case 3:
+                        SwitchWeapon(player, renderer);
                         break;
                     case 4:
                         SwitchConsumable(player, renderer);
@@ -100,6 +101,37 @@ class Program
         }
     }
 
+    static void SwitchWeapon(Player player, ConsoleRenderer renderer)
+    {
+        renderer.Clear();
+        renderer.ShowAvailableWeapons(player.Weapons);
+        if (!player.Weapons.Any())
+        {
+            Console.ReadLine();
+            return;
+        }
+        if (int.TryParse(Console.ReadLine(), out var index))
+        {
+            renderer.Clear();
+            index--;
+            if (index >= player.Weapons.Count())
+            {
+                renderer.ShowInvalidInput();
+                Console.ReadLine();
+                return;
+            }
+            player.SwitchCurrentWeapon(index);
+            renderer.ShowCurrentWeapon(player);
+        }
+        else
+        {
+            renderer.Clear();
+            renderer.ShowInvalidInput();
+        }
+        Console.ReadLine();
+        renderer.Clear();
+    }
+
     static void SwitchConsumable(Player player, ConsoleRenderer renderer)
     {
         renderer.Clear();
@@ -119,8 +151,8 @@ class Program
                 Console.ReadLine();
                 return;
             }
-            var consumable = player.SwitchCurrentConsumable(index);
-            renderer.ShowConsumableEquipped(consumable);
+            player.SwitchCurrentConsumable(index);
+            renderer.ShowCurrentConsumable(player);
         }
         else
         {
@@ -157,8 +189,8 @@ class Program
         var character = new Character(40, 2);
         var player = new Player(character);
 
-        Sword sword = new(4, 10);
-        player.EquipWeapon(sword);
+        player.AddWeapon(new Sword(4, 10));
+        player.AddWeapon(new Daggers(2, 10));
         
         player.AddConsumable(new HealingPotion(20, 10));
         player.AddConsumable(new DamageUpPotion(5, 3, 15));

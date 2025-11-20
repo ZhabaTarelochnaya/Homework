@@ -2,7 +2,7 @@ namespace ConsoleTBS.Weapons;
 
 public interface IWeaponWielder
 {
-    public IWeapon Weapon { get; }
+    public IWeapon? Weapon { get; }
     public void EquipWeapon(IWeapon weapon);
     public void UnequipCurrentWeapon();
 }
