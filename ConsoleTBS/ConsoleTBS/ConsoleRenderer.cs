@@ -17,19 +17,20 @@ public class ConsoleRenderer
                           "0 - Exit");
     }
 
-    public void ShowStatus(ICharacter character)
+    public void ShowStatus(Player player)
     {
-        Console.WriteLine($"Health: {character.CurrentHealth} / {character.MaxHealth}\n" +
-                          $"Damage: {character.BaseDamage} + {character.Weapon.GetDamageFormula()}\n" +
-                          $"Current Effects:\n");
-        foreach (var effect in character.EffectProcessor.CurrentEffects)
+        Console.WriteLine($"Health: {player.CurrentHealth} / {player.MaxHealth}\n" +
+                          $"Damage: {player.BaseDamage} + {player.Weapon.GetDamageFormula()}\n" +
+                          $"Current Effects:");
+        foreach (var effect in player.EffectProcessor.CurrentEffects)
         {
             Console.Write("\t");
             ShowEffectInfo(effect);
         } 
-        ShowWeaponInfo(character.Weapon);
-        ShowCurrentConsumable(character);
-        ShowAvailableConsumables(character.Consumables);
+        Console.WriteLine($"Coins: {player.CoinsLeft}");
+        ShowWeaponInfo(player.Weapon);
+        ShowCurrentConsumable(player);
+        ShowAvailableConsumables(player.Consumables);
     }
     public void ShowAttackInfo(ICharacter target, int damage)
     {
@@ -92,5 +93,16 @@ public class ConsoleRenderer
     {
         Console.WriteLine($"{effect.Name}: {effect.GetDescription()} Turns left: {effect.TurnsLeft}");
     }
+    public void ShowEnemyDead(IEnemy enemy)
+    {
+        Console.WriteLine($"Enemy killed. Reward: {enemy.Reward} coins.");
+    }
+    public void ShowDefeat()
+    {
+        Console.WriteLine("You are defeated.");
+    }
     public void Clear() => Console.Clear();
+
+
+   
 }

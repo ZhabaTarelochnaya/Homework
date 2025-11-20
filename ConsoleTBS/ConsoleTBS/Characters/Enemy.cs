@@ -4,7 +4,7 @@ using ConsoleTBS.Weapons;
 
 namespace ConsoleTBS;
 
-public class Enemy : ICharacter
+public class Enemy : IEnemy
 {
     readonly Character _character;
     public CharacterName Name => CharacterName.Enemy;
@@ -19,8 +19,10 @@ public class Enemy : ICharacter
     public EffectProcessor EffectProcessor => _character.EffectProcessor;
     public IConsumable CurrentConsumable => _character.CurrentConsumable;
     public IEnumerable<IConsumable> Consumables => _character.Consumables;
-    public Enemy(Character character)
+    public int Reward { get; }
+    public Enemy(Character character, int reward)
     {
+        Reward = reward;
         _character = character;
     }
     public void EquipWeapon(IWeapon weapon) => _character.EquipWeapon(weapon);

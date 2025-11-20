@@ -1,6 +1,7 @@
 ﻿using ConsoleTBS.Effects;
 using ConsoleTBS.Potions;
 using ConsoleTBS.Weapons;
+using ConsoleTBS.Weapons.Types;
 
 namespace ConsoleTBS;
 
@@ -10,17 +11,35 @@ class Program
     {
         var rng = new Random();
         var player = CreatePlayer();
-        var enemy = CreateEnemy();
+        var enemy = CreateEnemy(rng);
         var renderer = new ConsoleRenderer();
-        bool isExitPressed = false;
-        while (!isExitPressed)
+        
+        while (true)
         {
-            isExitPressed = OpenMenu(renderer, player, enemy);
+            bool isExitPressed = OpenMenu(renderer, player, enemy);
+            if (isExitPressed) break;
+            
             renderer.Clear();
-            player.EffectProcessor.ApplyEffects();
-            var damage = enemy.Attack(player);
-            renderer.ShowAttackInfo(player, damage);
+            if (enemy.CurrentHealth == 0)
+            {
+                player.CoinsLeft += enemy.Reward;
+                renderer.ShowEnemyDead(enemy);
+                enemy = CreateEnemy(rng);
+            }
+            else
+            {
+                var damage = enemy.Attack(player);
+                renderer.ShowAttackInfo(player, damage);
+                if (player.CurrentHealth == 0)
+                {
+                    renderer.Clear();
+                    renderer.ShowDefeat();
+                    Console.ReadLine();
+                    return;
+                }
+            }
             player.EffectProcessor.DisposeCompleted();
+            
             Console.ReadLine();
             renderer.Clear();
         }
@@ -37,6 +56,7 @@ class Program
                 switch (option)
                 {
                     case 1:
+                        player.EffectProcessor.ApplyEffects();
                         var damage = player.Attack(enemy);
                         renderer.ShowAttackInfo(enemy, damage);
                         Console.ReadLine();
@@ -44,14 +64,14 @@ class Program
                     case 2:
                         if (player.TryConsumeCurrent(out IConsumable? consumable))
                         {
+                            player.EffectProcessor.ApplyEffects();
                             renderer.ShowConsumedMessage(consumable);
+                            Console.ReadLine();
+                            return false;
                         }
-                        else
-                        {
-                            renderer.ShowConsumableNotEquipped();
-                        }
+                        renderer.ShowConsumableNotEquipped();
                         Console.ReadLine();
-                        return false;
+                        break;
                     case 3:
                         break;
                     case 4:
@@ -110,13 +130,25 @@ class Program
         Console.ReadLine();
         renderer.Clear();
     }
-    static Enemy CreateEnemy()
+    static Enemy CreateEnemy(Random rng)
     {
-        var character = new Character(20, 2);
-        var enemy = new Enemy(character);
-
-        Sword sword = new(4);
-        enemy.EquipWeapon(sword);
+        var character = new Character(rng.Next(10, 31), rng.Next(0,3));
+        var enemy = new Enemy(character, rng.Next(3, 7));
+        int weaponIndex = rng.Next(0, 2);
+        IWeapon weapon;
+        switch (weaponIndex)
+        {
+            case 0:
+                weapon = new Sword(3, 10);
+                break;
+            case 1:
+                weapon = new Daggers(1, 10);
+                break;
+            default:
+                weapon = new Sword(3, 10);
+                break;
+        }
+        enemy.EquipWeapon(weapon);
         return enemy;
     }
 
@@ -125,7 +157,7 @@ class Program
         var character = new Character(40, 2);
         var player = new Player(character);
 
-        Sword sword = new(4);
+        Sword sword = new(4, 10);
         player.EquipWeapon(sword);
         
         player.AddConsumable(new HealingPotion(20, 10));

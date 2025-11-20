@@ -6,7 +6,7 @@ public class Sword : Item, IWeapon
     readonly Random rng = new ();
     readonly int _baseDamage;
     public override ItemName Name => ItemName.Sword;
-    public Sword(int baseDamage) : base(20)
+    public Sword(int baseDamage, int price) : base(price)
     {
         _baseDamage = baseDamage;
     }

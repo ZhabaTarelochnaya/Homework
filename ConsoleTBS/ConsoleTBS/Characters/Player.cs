@@ -7,6 +7,7 @@ namespace ConsoleTBS;
 public class Player : ICharacter
 {
     readonly Character _character;
+    int _coinsLeft;
     public CharacterName Name => CharacterName.Player;
     public int MaxHealth => _character.MaxHealth;
     public int CurrentHealth => _character.CurrentHealth;
@@ -19,7 +20,11 @@ public class Player : ICharacter
     public EffectProcessor EffectProcessor => _character.EffectProcessor;
     public IConsumable CurrentConsumable => _character.CurrentConsumable;
     public IEnumerable<IConsumable> Consumables => _character.Consumables;
-
+    public int CoinsLeft
+    {
+        get => _coinsLeft;
+        set => _coinsLeft = value < 0 ? 0 : value;
+    }
     public Player(Character character)
     {
         _character = character;
