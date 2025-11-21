@@ -12,7 +12,6 @@ public class ConsoleRenderer
         _taskManager = taskManager;
         UpdateTasks();
     }
-
     public void ShowMainMenu()
     {
         Console.WriteLine("1 - Add new task");
@@ -46,7 +45,6 @@ public class ConsoleRenderer
             Console.WriteLine();
         }
     }
-
     public void ShowTasksByCategory(Category category)
     {
         foreach (var task in _taskManager.GetTasksByCategory(category))
@@ -54,7 +52,6 @@ public class ConsoleRenderer
             ShowTask(GetIndex(task));
         }
     }
-
     public void ShowTasksByPriority(Priority priority)
     {
         foreach (var task in _taskManager.GetTasksByPriority(priority))
@@ -62,7 +59,6 @@ public class ConsoleRenderer
             ShowTask(GetIndex(task));
         }
     }
-
     public void ShowTasksByStatus(Status status)
     {
         foreach (var task in _taskManager.GetTasksByStatus(status))
@@ -87,22 +83,10 @@ public class ConsoleRenderer
                           "6 - Save\n" +
                           "0 - Exit");
     }
-
     public void ShowEnterTaskNumber() => Console.WriteLine("Enter task number: ");
-    public void UpdateTasks()
-    {
-        _tasks = _taskManager.GetTasks().ToList();
-    }
-    void CheckIndex(int index)
-    {
-        if (index < 0 || index >= _tasks.Count)
-        {
-            throw new IndexOutOfRangeException();
-        }
-    }
+    public void UpdateTasks() => _tasks = _taskManager.GetTasks().ToList();
     public void ShowEnterNameMessage() => Console.WriteLine("Enter task name:");
     public void ShowEnterDescriptionMessage() => Console.WriteLine("Enter task description:");
-
     public void ShowChooseStatusMessage()
     {
         Console.WriteLine("Choose task status:\n" +
@@ -127,6 +111,13 @@ public class ConsoleRenderer
     }
     public void Clear() => Console.Clear();
     public void ShowInvalidOptionMessage() => Console.WriteLine("Invalid option");
+    void CheckIndex(int index)
+    {
+        if (index < 0 || index >= _tasks.Count)
+        {
+            throw new IndexOutOfRangeException();
+        }
+    }
     string InsertNewLines(string text, int maxCharsPerLine)
     {
         string[] words = text.Split(' ');
@@ -135,7 +126,7 @@ public class ConsoleRenderer
         sb.Append("        ");
         foreach(string word in words)
         {
-            if(currLength + word.Length + 1 < maxCharsPerLine) // +1 accounts for adding a space
+            if(currLength + word.Length + 1 < maxCharsPerLine) 
             {
                 sb.Append($"{word} ");
                 currLength = sb.Length % maxCharsPerLine;
