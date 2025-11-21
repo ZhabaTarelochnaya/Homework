@@ -2,7 +2,7 @@ namespace ConsoleTaskManager;
 
 public class TaskBuilder
 {
-    TaskData _taskData =  new TaskData();
+    readonly TaskData _taskData =  new TaskData();
     TaskBuilder() {}
     TaskBuilder(TaskData taskData) => _taskData = taskData;
     TaskBuilder(Task task)

@@ -1,0 +1,15 @@
+D:\Projects\Tasks\Homework\Homework\task-1\ConsoleTaskManager\ConsoleTaskManager\ConsoleTaskManager\bin\Debug\net9.0\ConsoleTaskManager.exe
+D:\Projects\Tasks\Homework\Homework\task-1\ConsoleTaskManager\ConsoleTaskManager\ConsoleTaskManager\bin\Debug\net9.0\ConsoleTaskManager.deps.json
+D:\Projects\Tasks\Homework\Homework\task-1\ConsoleTaskManager\ConsoleTaskManager\ConsoleTaskManager\bin\Debug\net9.0\ConsoleTaskManager.runtimeconfig.json
+D:\Projects\Tasks\Homework\Homework\task-1\ConsoleTaskManager\ConsoleTaskManager\ConsoleTaskManager\bin\Debug\net9.0\ConsoleTaskManager.dll
+D:\Projects\Tasks\Homework\Homework\task-1\ConsoleTaskManager\ConsoleTaskManager\ConsoleTaskManager\bin\Debug\net9.0\ConsoleTaskManager.pdb
+D:\Projects\Tasks\Homework\Homework\task-1\ConsoleTaskManager\ConsoleTaskManager\ConsoleTaskManager\obj\Debug\net9.0\ConsoleTaskManager.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\Tasks\Homework\Homework\task-1\ConsoleTaskManager\ConsoleTaskManager\ConsoleTaskManager\obj\Debug\net9.0\ConsoleTaskManager.AssemblyInfoInputs.cache
+D:\Projects\Tasks\Homework\Homework\task-1\ConsoleTaskManager\ConsoleTaskManager\ConsoleTaskManager\obj\Debug\net9.0\ConsoleTaskManager.AssemblyInfo.cs
+D:\Projects\Tasks\Homework\Homework\task-1\ConsoleTaskManager\ConsoleTaskManager\ConsoleTaskManager\obj\Debug\net9.0\ConsoleTaskManager.csproj.CoreCompileInputs.cache
+D:\Projects\Tasks\Homework\Homework\task-1\ConsoleTaskManager\ConsoleTaskManager\ConsoleTaskManager\obj\Debug\net9.0\ConsoleTaskManager.sourcelink.json
+D:\Projects\Tasks\Homework\Homework\task-1\ConsoleTaskManager\ConsoleTaskManager\ConsoleTaskManager\obj\Debug\net9.0\ConsoleTaskManager.dll
+D:\Projects\Tasks\Homework\Homework\task-1\ConsoleTaskManager\ConsoleTaskManager\ConsoleTaskManager\obj\Debug\net9.0\refint\ConsoleTaskManager.dll
+D:\Projects\Tasks\Homework\Homework\task-1\ConsoleTaskManager\ConsoleTaskManager\ConsoleTaskManager\obj\Debug\net9.0\ConsoleTaskManager.pdb
+D:\Projects\Tasks\Homework\Homework\task-1\ConsoleTaskManager\ConsoleTaskManager\ConsoleTaskManager\obj\Debug\net9.0\ConsoleTaskManager.genruntimeconfig.cache
+D:\Projects\Tasks\Homework\Homework\task-1\ConsoleTaskManager\ConsoleTaskManager\ConsoleTaskManager\obj\Debug\net9.0\ref\ConsoleTaskManager.dll
