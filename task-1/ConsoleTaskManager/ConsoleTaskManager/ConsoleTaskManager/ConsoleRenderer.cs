@@ -66,12 +66,12 @@ public class ConsoleRenderer
             ShowTask(GetIndex(task));
         }
     }
-    public void ShowViewMenu() => Console.WriteLine("\n" +
-                                                            "1 - All tasks\n" +
-                                                            "2 - Filter by category\n" +
-                                                            "3 - Filter by priority\n" +
-                                                            "4 - Filter by status\n" +
-                                                            "0 - Exit");
+    public void ShowViewMenu() => Console.WriteLine("1 - Filter by category\n" +
+                                                    "2 - Filter by priority\n" +
+                                                    "3 - Filter by status\n" +
+                                                    "0 - Exit");
+
+    public void ShowEnterTaskNumber() => Console.WriteLine("Enter task number: ");
     public void UpdateTasks()
     {
         _tasks = _taskManager.GetTasks().ToList();
@@ -134,10 +134,6 @@ public class ConsoleRenderer
     int GetIndex(TaskItem task)
     {
         var index = _tasks.IndexOf(task);
-        if (index == -1)
-        {
-            throw new IndexOutOfRangeException();
-        }
         return index;
     }
 }

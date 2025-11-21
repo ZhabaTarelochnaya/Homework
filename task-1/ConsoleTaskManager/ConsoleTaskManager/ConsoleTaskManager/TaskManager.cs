@@ -29,6 +29,17 @@ public class TaskManager
         _tasks[index].Description = description;
     }
     public void AddTask(TaskData taskData) => _tasks.Add(taskData);
+    public void RemoveTask(TaskData taskData) => _tasks.Remove(taskData);
+    public bool TryGetTask(int index, out TaskData taskData)
+    {
+        if (_tasks.Count <= index || index < 0)
+        {
+            taskData = null;
+            return false;
+        }
+        taskData = _tasks[index];
+        return true;
+    }
     public IEnumerable<TaskItem> GetTasks()
     {
         var tasks = _tasks.Select(t => TaskBuilder.FromTask(t).Build());
