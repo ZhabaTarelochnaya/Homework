@@ -25,6 +25,10 @@ public class ConsoleRenderer
     {
         CheckIndex(index);
         var task = _tasks[index];
+        ShowTask(task, index);
+    }
+    public void ShowTask(TaskItem task, int index)
+    {
         var description = task.Description == null ? "" : InsertNewLines(task.Description, CharLimit);
         Console.WriteLine($"{index + 1}: {task.Name}\n" +
                           $"    Description:\n" +
@@ -70,6 +74,19 @@ public class ConsoleRenderer
                                                     "2 - Filter by priority\n" +
                                                     "3 - Filter by status\n" +
                                                     "0 - Exit");
+    public void ShowEditTaskMenu(TaskItem task, int index)
+    {
+        UpdateTasks();
+        ShowTask(task, index);
+        Console.WriteLine("\nChoose field to edit:\n" +
+                          "1 - Name\n" +
+                          "2 - Description\n" +
+                          "3 - Category\n" +
+                          "4 - Priority\n" +
+                          "5 - Status\n" +
+                          "6 - Save\n" +
+                          "0 - Exit");
+    }
 
     public void ShowEnterTaskNumber() => Console.WriteLine("Enter task number: ");
     public void UpdateTasks()

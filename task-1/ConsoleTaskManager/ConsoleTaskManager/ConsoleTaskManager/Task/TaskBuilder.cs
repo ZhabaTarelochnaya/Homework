@@ -4,7 +4,15 @@ public class TaskBuilder
 {
     readonly TaskData _taskData =  new TaskData();
     TaskBuilder() {}
-    TaskBuilder(TaskData taskData) => _taskData = taskData;
+
+    TaskBuilder(TaskData taskData)
+    {
+        _taskData.Name = taskData.Name;
+        _taskData.Description = taskData.Description;
+        _taskData.Category  = taskData.Category;
+        _taskData.Status = taskData.Status;
+        _taskData.Priority = taskData.Priority;
+    }
     TaskBuilder(TaskItem taskItem)
     {
         _taskData.Name = taskItem.Name;

@@ -3,33 +3,9 @@ namespace ConsoleTaskManager;
 public class TaskManager
 {
     List<TaskData> _tasks = new ();
-    public void ChangeStatus(int index, Status status)
-    {
-        CheckIndex(index);
-        _tasks[index].Status = status;
-    }
-    public void ChangePriority(int index, Priority priority)
-    {
-        CheckIndex(index);
-        _tasks[index].Priority = priority;
-    }
-    public void ChangeCategory(int index, Category category)
-    {
-        CheckIndex(index);
-        _tasks[index].Category = category;
-    }
-    public void ChangeName(int index, string? name)
-    {
-        CheckIndex(index);
-        _tasks[index].Name = name;
-    }
-    public void ChangeDescription(int index, string? description)
-    {
-        CheckIndex(index);
-        _tasks[index].Description = description;
-    }
     public void AddTask(TaskData taskData) => _tasks.Add(taskData);
     public void RemoveTask(TaskData taskData) => _tasks.Remove(taskData);
+    public void ChangeTask(TaskData taskData, int index) => _tasks[index] = taskData;
     public bool TryGetTask(int index, out TaskData taskData)
     {
         if (_tasks.Count <= index || index < 0)
