@@ -29,10 +29,27 @@ public class TaskManager
         _tasks[index].Description = description;
     }
     public void AddTask(TaskData taskData) => _tasks.Add(taskData);
-
-    public IEnumerable<Task> GetTasks()
+    public IEnumerable<TaskItem> GetTasks()
     {
         var tasks = _tasks.Select(t => TaskBuilder.FromTask(t).Build());
+        return tasks;
+    }
+    public IEnumerable<TaskItem> GetTasksByCategory(Category category)
+    {
+        var tasks = _tasks.Where(t => t.Category == category)
+            .Select(t => TaskBuilder.FromTask(t).Build());
+        return tasks;
+    }
+    public IEnumerable<TaskItem> GetTasksByPriority(Priority priority)
+    {
+        var tasks = _tasks.Where(t => t.Priority == priority)
+            .Select(t => TaskBuilder.FromTask(t).Build());
+        return tasks;
+    }
+    public IEnumerable<TaskItem> GetTasksByStatus(Status status)
+    {
+        var tasks = _tasks.Where(t => t.Status == status)
+            .Select(t => TaskBuilder.FromTask(t).Build());
         return tasks;
     }
     void CheckIndex(int index)

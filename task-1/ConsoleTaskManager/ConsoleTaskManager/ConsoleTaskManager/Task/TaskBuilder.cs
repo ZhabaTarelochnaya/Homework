@@ -5,23 +5,23 @@ public class TaskBuilder
     readonly TaskData _taskData =  new TaskData();
     TaskBuilder() {}
     TaskBuilder(TaskData taskData) => _taskData = taskData;
-    TaskBuilder(Task task)
+    TaskBuilder(TaskItem taskItem)
     {
-        _taskData.Name = task.Name;
-        _taskData.Description = task.Description;
-        _taskData.Category  = task.Category;
-        _taskData.Status = task.Status;
-        _taskData.Priority = task.Priority;
+        _taskData.Name = taskItem.Name;
+        _taskData.Description = taskItem.Description;
+        _taskData.Category  = taskItem.Category;
+        _taskData.Status = taskItem.Status;
+        _taskData.Priority = taskItem.Priority;
     }
     public static TaskBuilder Empty() => new TaskBuilder();
     public static TaskBuilder FromTask(TaskData task) => new(task);
-    public static TaskBuilder FromTask(Task task) => new(task);
-    public TaskBuilder Name(string name)
+    public static TaskBuilder FromTask(TaskItem taskItem) => new(taskItem);
+    public TaskBuilder Name(string? name)
     {
         _taskData.Name = name;
         return this;
     }
-    public TaskBuilder Description(string description)
+    public TaskBuilder Description(string? description)
     {
         _taskData.Description = description;
         return this;
@@ -41,6 +41,6 @@ public class TaskBuilder
         _taskData.Status = status;
         return this;
     }
-    public Task Build() => new(_taskData);
+    public TaskItem Build() => new(_taskData);
     public TaskData BuildData() => _taskData;
 }

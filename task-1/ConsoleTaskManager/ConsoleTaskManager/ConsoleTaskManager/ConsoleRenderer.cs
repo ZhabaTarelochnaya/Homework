@@ -6,7 +6,7 @@ public class ConsoleRenderer
 {
     readonly TaskManager _taskManager;
     const int CharLimit = 60;
-    List<Task> _tasks = new ();
+    List<TaskItem> _tasks = new();
     public ConsoleRenderer(TaskManager taskManager)
     {
         _taskManager = taskManager;
@@ -43,10 +43,34 @@ public class ConsoleRenderer
         }
     }
 
-    public void ShowViewMenuControls() => Console.WriteLine("\n" +
-                                                            "1 - All tasks category\n" +
-                                                            "2 - Filter by priority\n" +
-                                                            "3 - Filter by status\n" +
+    public void ShowTasksByCategory(Category category)
+    {
+        foreach (var task in _taskManager.GetTasksByCategory(category))
+        {
+            ShowTask(GetIndex(task));
+        }
+    }
+
+    public void ShowTasksByPriority(Priority priority)
+    {
+        foreach (var task in _taskManager.GetTasksByPriority(priority))
+        {
+            ShowTask(GetIndex(task));
+        }
+    }
+
+    public void ShowTasksByStatus(Status status)
+    {
+        foreach (var task in _taskManager.GetTasksByStatus(status))
+        {
+            ShowTask(GetIndex(task));
+        }
+    }
+    public void ShowViewMenu() => Console.WriteLine("\n" +
+                                                            "1 - All tasks\n" +
+                                                            "2 - Filter by category\n" +
+                                                            "3 - Filter by priority\n" +
+                                                            "4 - Filter by status\n" +
                                                             "0 - Exit");
     public void UpdateTasks()
     {
@@ -106,5 +130,14 @@ public class ConsoleRenderer
             }
         }
         return sb.ToString();
+    }
+    int GetIndex(TaskItem task)
+    {
+        var index = _tasks.IndexOf(task);
+        if (index == -1)
+        {
+            throw new IndexOutOfRangeException();
+        }
+        return index;
     }
 }
