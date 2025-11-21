@@ -42,4 +42,5 @@ public class TaskBuilder
         return this;
     }
     public Task Build() => new(_taskData);
+    public TaskData BuildData() => _taskData;
 }
