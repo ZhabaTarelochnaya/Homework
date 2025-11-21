@@ -6,12 +6,14 @@ namespace ConsoleTBS;
 
 public class ConsoleRenderer
 {
+    readonly Player _player;
     public ConsumablesRenderer ConsumablesRenderer { get; }
     public WeaponsRenderer WeaponsRenderer { get; }
     public ShopRenderer ShopRenderer { get; }
 
-    public ConsoleRenderer()
+    public ConsoleRenderer(Player player)
     {
+        _player = player;
         ConsumablesRenderer = new ConsumablesRenderer();
         WeaponsRenderer = new WeaponsRenderer();
         ShopRenderer = new ShopRenderer(WeaponsRenderer, ConsumablesRenderer);
@@ -27,24 +29,24 @@ public class ConsoleRenderer
                           "6 - Open shop\n" +
                           "0 - Exit");
     }
-    public void ShowStatus(Player player)
+    public void ShowPlayerStatus()
     {
-        Console.WriteLine($"Health: {player.CurrentHealth} / {player.MaxHealth}\n" +
-                          $"Damage: {player.BaseDamage} + {player.Weapon.GetDamageFormula()}\n" +
+        Console.WriteLine($"Health: {_player.CurrentHealth} / {_player.MaxHealth}\n" +
+                          $"Damage: {_player.BaseDamage} + {_player.Weapon.GetDamageFormula()}\n" +
                           $"Current Effects:");
-        foreach (var effect in player.EffectProcessor.CurrentEffects)
+        foreach (var effect in _player.EffectProcessor.CurrentEffects)
         {
             Console.Write("\t");
             ShowEffectInfo(effect);
         } 
         Console.WriteLine();
-        ShopRenderer.ShowCoins(player);
+        ShopRenderer.ShowCoins(_player);
         Console.WriteLine();
-        WeaponsRenderer.ShowCurrentWeapon(player);
-        WeaponsRenderer.ShowAvailableWeapons(player.Weapons);
+        WeaponsRenderer.ShowCurrentWeapon(_player);
+        WeaponsRenderer.ShowAvailableWeapons(_player.Weapons);
         Console.WriteLine();
-        ConsumablesRenderer.ShowCurrentConsumable(player);
-        ConsumablesRenderer.ShowAvailableConsumables(player.Consumables);
+        ConsumablesRenderer.ShowCurrentConsumable(_player);
+        ConsumablesRenderer.ShowAvailableConsumables(_player.Consumables);
     }
     public void ShowAttackInfo(ICharacter target, int damage)
     {

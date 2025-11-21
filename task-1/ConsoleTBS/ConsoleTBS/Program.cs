@@ -1,4 +1,5 @@
 ﻿using ConsoleTBS.Effects;
+using ConsoleTBS.PlayerActions;
 using ConsoleTBS.Potions;
 using ConsoleTBS.Weapons;
 using ConsoleTBS.Weapons.Types;
@@ -13,10 +14,21 @@ class Program
         var player = CreatePlayer();
         var enemy = CreateEnemy(rng);
         var shop = CreateShop(player);
-        var renderer = new ConsoleRenderer();
+        
+        var renderer = new ConsoleRenderer(player);
+
+        var attackAction = new AttackAction(player, renderer);
+        var consumeAction = new ConsumeAction(player, renderer);
+        var openShopAction = new OpenShopAction(shop, player, renderer);
+        var switchConsumableAction = new SwitchConsumableAction(player, renderer);
+        var switchWeaponAction = new SwitchWeaponAction(player, renderer);
+        
+        var mainMenu = new MainMenu(attackAction,  consumeAction, openShopAction, 
+            switchConsumableAction, switchWeaponAction, renderer);
+        
         while (true)
         {
-            bool isExitPressed = OpenMenu(renderer, player, enemy, shop);
+            bool isExitPressed = mainMenu.Show(enemy);
             if (isExitPressed) break;
             
             renderer.Clear();
@@ -44,184 +56,6 @@ class Program
             renderer.Clear();
         }
     }
-
-    static bool OpenMenu(ConsoleRenderer renderer, Player player, Enemy enemy, Shop shop)
-    {
-        while (true)
-        {
-            renderer.ShowOptions();
-            if (int.TryParse(Console.ReadLine(), out var option))
-            {
-                renderer.Clear();
-                switch (option)
-                {
-                    case 1:
-                        Attack(player, enemy, renderer);
-                        return false;
-                    case 2:
-                        if (TryConsumeCurrent(player, renderer)) return false;
-                        break;
-                    case 3:
-                        SwitchWeapon(player, renderer);
-                        break;
-                    case 4:
-                        SwitchConsumable(player, renderer);
-                        break;
-                    case 5:
-                        renderer.ShowStatus(player);
-                        Console.ReadLine();
-                        break;
-                    case 6:
-                        OpenShop(shop, player, renderer);
-                        break;
-                    case 0:
-                        return true;
-                    default:
-                        renderer.Clear();
-                        renderer.ShowInvalidInput();
-                        Console.ReadLine();
-                        break;
-                }
-            }
-            else
-            {
-                renderer.Clear();
-                renderer.ShowInvalidInput();
-                Console.ReadLine();
-            }
-            renderer.Clear();
-        }
-    }
-
-    static void Attack(Player player, Enemy enemy, ConsoleRenderer renderer)
-    {
-        player.EffectProcessor.ApplyEffects();
-        var damage = player.Attack(enemy);
-        renderer.ShowAttackInfo(enemy, damage);
-        Console.ReadLine();
-    }
-    static bool TryConsumeCurrent(Player player, ConsoleRenderer renderer)
-    {
-        if (player.TryConsumeCurrent(out IConsumable? consumable))
-        {
-            player.EffectProcessor.ApplyEffects();
-            renderer.ConsumablesRenderer.ShowConsumedMessage(consumable);
-            Console.ReadLine();
-            return true;
-        }
-        renderer.ConsumablesRenderer.ShowConsumableNotEquipped();
-        Console.ReadLine();
-        return false;
-    }
-    static void SwitchWeapon(Player player, ConsoleRenderer renderer)
-    {
-        renderer.Clear();
-        if (!player.Weapons.Any())
-        {
-            renderer.ShowEmpty();
-            Console.ReadLine();
-            return;
-        }
-        
-        renderer.WeaponsRenderer.ShowAvailableWeapons(player.Weapons);
-        Console.WriteLine("0 - Exit");
-        if (int.TryParse(Console.ReadLine(), out var index))
-        {
-            if (index == 0) return;
-            renderer.Clear();
-            index--;
-            if (index >= player.Weapons.Count())
-            {
-                renderer.ShowInvalidInput();
-                Console.ReadLine();
-                return;
-            }
-            player.SwitchCurrentWeapon(index);
-            renderer.WeaponsRenderer.ShowCurrentWeapon(player);
-        }
-        else
-        {
-            renderer.Clear();
-            renderer.ShowInvalidInput();
-        }
-        Console.ReadLine();
-        renderer.Clear();
-    }
-
-    static void SwitchConsumable(Player player, ConsoleRenderer renderer)
-    {
-        renderer.Clear();
-        if (!player.Consumables.Any())
-        {
-            renderer.ShowEmpty();
-            Console.ReadLine();
-            return;
-        }
-        
-        renderer.ConsumablesRenderer.ShowAvailableConsumables(player.Consumables);
-        Console.WriteLine("0 - Exit");
-        if (int.TryParse(Console.ReadLine(), out var index))
-        {
-            if (index == 0) return;
-            renderer.Clear();
-            index--;
-            if (index >= player.Consumables.Count())
-            {
-                renderer.ShowInvalidInput();
-                Console.ReadLine();
-                return;
-            }
-            player.SwitchCurrentConsumable(index);
-            renderer.ConsumablesRenderer.ShowCurrentConsumable(player);
-        }
-        else
-        {
-            renderer.Clear();
-            renderer.ShowInvalidInput();
-        }
-        Console.ReadLine();
-        renderer.Clear();
-    }
-
-    static void OpenShop(Shop shop, Player player,  ConsoleRenderer renderer)
-    {
-        renderer.Clear();
-        if (!shop.Items.Any())
-        {
-            renderer.ShowEmpty();
-            Console.ReadLine();
-            return;
-        }
-        renderer.ShopRenderer.ShowShop(shop, player);
-        Console.WriteLine("0 - Exit");
-        if (int.TryParse(Console.ReadLine(), out var index))
-        {
-            if (index == 0) return;
-            renderer.Clear();
-            index--;
-            if (index >= shop.Items.Count())
-            {
-                renderer.ShowInvalidInput();
-                Console.ReadLine();
-                return;
-            }
-
-            if (shop.TryBuyItem(index, out var item))
-            {
-                renderer.ShopRenderer.ShowPurchase(item);
-            }
-            else
-            {
-                renderer.ShopRenderer.ShowNotEnoughMoney(item, player);
-            }
-        }
-        else
-        {
-            renderer.Clear();
-            renderer.ShowInvalidInput();
-        }
-        Console.ReadLine();
-    }
     static Enemy CreateEnemy(Random rng)
     {
         var character = new Character(rng.Next(10, 31), rng.Next(0,3));
@@ -243,7 +77,6 @@ class Program
         enemy.EquipWeapon(weapon);
         return enemy;
     }
-
     static Player CreatePlayer()
     {
         var character = new Character(40, 2);
@@ -257,7 +90,6 @@ class Program
         player.CoinsLeft += 100;
         return player;
     }
-
     static Shop CreateShop(Player player)
     {
         var shop = new Shop(player);

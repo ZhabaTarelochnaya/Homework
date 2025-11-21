@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Projects\\Tasks\\Homework\\Homework\\ConsoleTBS\\ConsoleTBS\\ConsoleTBS.csproj",
+      "projectUniqueName": "D:\\Projects\\Tasks\\Homework\\Homework\\task-1\\ConsoleTBS\\ConsoleTBS\\ConsoleTBS.csproj",
       "projectName": "ConsoleTBS",
-      "projectPath": "D:\\Projects\\Tasks\\Homework\\Homework\\ConsoleTBS\\ConsoleTBS\\ConsoleTBS.csproj",
+      "projectPath": "D:\\Projects\\Tasks\\Homework\\Homework\\task-1\\ConsoleTBS\\ConsoleTBS\\ConsoleTBS.csproj",
       "packagesPath": "C:\\Users\\yarik\\.nuget\\packages\\",
-      "outputPath": "D:\\Projects\\Tasks\\Homework\\Homework\\ConsoleTBS\\ConsoleTBS\\obj\\",
+      "outputPath": "D:\\Projects\\Tasks\\Homework\\Homework\\task-1\\ConsoleTBS\\ConsoleTBS\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\yarik\\AppData\\Roaming\\NuGet\\NuGet.Config",
