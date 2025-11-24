@@ -2,6 +2,7 @@ using System.Collections;
 using _1.Gameplay;
 using _1.MainMenu;
 using _1.Utils;
+using TestPlatformer.Scripts;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,6 +11,7 @@ public class GameEntryPoint
 {
     static GameEntryPoint _gameRoot;
     Coroutines _coroutines;
+    UIRoot _uiRoot;
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void AutostartGame()
     {
@@ -20,6 +22,10 @@ public class GameEntryPoint
     {
         _coroutines = new GameObject("Coroutines").AddComponent<Coroutines>();
         Object.DontDestroyOnLoad(_coroutines.gameObject);
+        
+        var uIRootPrefab = Resources.Load<UIRoot>("Prefabs/UIRoot");
+        _uiRoot = Object.Instantiate(uIRootPrefab);
+        Object.DontDestroyOnLoad(_uiRoot.gameObject);
     }
     void RunGame()
     {
@@ -45,18 +51,22 @@ public class GameEntryPoint
 
     IEnumerator LoadAndStartMainMenu()
     {
+        _uiRoot.ShowLoadingScreen();
         yield return LoadScene(SceneNames.Boot);
         yield return LoadScene(SceneNames.MainMenu);
         var sceneEntryPoint = Object.FindFirstObjectByType<MainMenuEntryPoint>();
         sceneEntryPoint.Bind();
+        _uiRoot.HideLoadingScreen();
     }
 
     IEnumerator LoadAndStartGameplay()
     {
+        _uiRoot.ShowLoadingScreen();
         yield return LoadScene(SceneNames.Boot);
         yield return LoadScene(SceneNames.Gameplay);
         var sceneEntryPoint = Object.FindFirstObjectByType<GameplayEntryPoint>();
         sceneEntryPoint.Bind();
+        _uiRoot.HideLoadingScreen();
     }
 
     IEnumerator LoadScene(SceneNames sceneName)
