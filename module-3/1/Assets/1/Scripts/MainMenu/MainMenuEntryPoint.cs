@@ -1,12 +1,17 @@
+using _1.MainMenu.UI;
+using TestPlatformer.Scripts;
 using UnityEngine;
 
 namespace _1.MainMenu
 {
     public class MainMenuEntryPoint : MonoBehaviour
     {
-        public void Bind()
+        [SerializeField] GameObject _mainMenuUIPrefab;
+        public void Bind(MainMenuRequests requests, UIRoot uiRoot)
         {
-            
+            var mainMenuUIInstance = Instantiate(_mainMenuUIPrefab, uiRoot.transform);
+            var mainMenuUI = mainMenuUIInstance.GetComponent<MainMenuUI>();
+            mainMenuUI.Bind(requests);
         }
     }
 }

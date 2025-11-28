@@ -7,7 +7,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d221a328-b2cf-42e3-ad96-6b68f18adcc5" name="Changes" comment="" />
+    <list default="true" id="d221a328-b2cf-42e3-ad96-6b68f18adcc5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../module-3/1/Assets/1/Scripts/MainMenu/MainMenuRequests.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../module-3/1/Assets/1/Scripts/MainMenu/MainMenuRequests.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../module-3/1/Assets/1/Scripts/MainMenu/UI.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../module-3/1/Assets/1/Scripts/MainMenu/UI/MainMenuUI.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../module-3/1/Assets/1/Scripts/MainMenu/UI/MainMenuUI.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../module-3/1/Assets/1/Scripts/MainMenu/UI/Screens.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../module-3/1/Assets/1/Scripts/MainMenu/UI/Screens/MainScreen.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../module-3/1/Assets/1/Scripts/MainMenu/UI/Screens/MainScreen.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../module-3/1/Assets/1/Prefabs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../module-3/1/Assets/1/Prefabs/UIRoot.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../module-3/1/Assets/1/Prefabs/UIRoot.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../module-3/1/Assets/1/Scenes/Gameplay.unity" beforeDir="false" afterPath="$PROJECT_DIR$/../../module-3/1/Assets/1/Scenes/Gameplay.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../module-3/1/Assets/1/Scenes/MainMenu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/../../module-3/1/Assets/1/Scenes/MainMenu.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../module-3/1/Assets/1/Scripts/GameEntryPoint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../module-3/1/Assets/1/Scripts/GameEntryPoint.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../module-3/1/Assets/1/Scripts/MainMenu/MainMenuEntryPoint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../module-3/1/Assets/1/Scripts/MainMenu/MainMenuEntryPoint.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.StateMachineExamples/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.StateMachineExamples/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,9 +40,9 @@
     <setting file="file://$PROJECT_DIR$/StateMachineExamples/InheritanceBased/ExampleInheritanceState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/StateMachineExamples/StateName.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="35uBbYhIkhos9iNSol75FAuM1q1" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -36,7 +53,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "module-3",
+    "git-widget-placeholder": "task-1",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -78,6 +95,7 @@
       <option name="presentableId" value="Default" />
       <updated>1763950148173</updated>
       <workItem from="1763950149313" duration="3846000" />
+      <workItem from="1764086207233" duration="19000" />
     </task>
     <servers />
   </component>
