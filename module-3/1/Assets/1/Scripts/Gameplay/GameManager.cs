@@ -6,6 +6,7 @@ namespace _1.Gameplay
     public class GameManager
     {
         SpawnZone _spawnZone;
+        int _spawnCount;
         public float SpawnCoolDown = 4f;
         public GameManager(SpawnZone spawnZone)
         {
@@ -16,6 +17,7 @@ namespace _1.Gameplay
             while (true)
             {
                 _spawnZone.Spawn();
+                Debug.Log($"Targets spawned:{++_spawnCount}");
                 yield return new WaitForSeconds(SpawnCoolDown);
             }
         }
