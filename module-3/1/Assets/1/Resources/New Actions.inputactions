@@ -1,0 +1,63 @@
+{
+    "version": 1,
+    "name": "New Actions",
+    "maps": [
+        {
+            "name": "UI",
+            "id": "0ea120ec-a84a-4148-9583-ab26216e28e0",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "08a8529e-b698-49d4-84af-66f8bccebd0d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c08c9559-38f9-4816-ab7e-178f474c3d21",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Gameplay",
+            "id": "a72ecf03-cec3-47d5-991f-ffd09ac36b98",
+            "actions": [
+                {
+                    "name": "Exit",
+                    "type": "Button",
+                    "id": "3f4ae582-6414-4e46-aa91-db57fe820352",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "47d0ab04-ac39-4e8d-aedb-79d2476a322a",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Exit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

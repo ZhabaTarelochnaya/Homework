@@ -12,7 +12,7 @@ public class GameEntryPoint
     static GameEntryPoint _gameRoot;
     Coroutines _coroutines;
     UIRoot _uiRoot;
-    MainMenuRequests _mainMenurequests;
+    InputActions _inputActions = new ();
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void AutostartGame()
     {
@@ -28,8 +28,8 @@ public class GameEntryPoint
         _uiRoot = Object.Instantiate(uIRootPrefab);
         Object.DontDestroyOnLoad(_uiRoot.gameObject);
 
-        _mainMenurequests = new MainMenuRequests(Exit,
-            () => _coroutines.StartCoroutine(LoadAndStartGameplay()));
+        
+        
     }
     void RunGame()
     {
@@ -53,6 +53,7 @@ public class GameEntryPoint
         _coroutines.StartCoroutine(LoadAndStartMainMenu());
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     IEnumerator LoadAndStartMainMenu()
     {
         _uiRoot.ShowLoadingScreen();
@@ -60,8 +61,11 @@ public class GameEntryPoint
         yield return LoadScene(SceneNames.Boot);
         yield return LoadScene(SceneNames.MainMenu);
         
+        var mainMenurequests = new MainMenuRequests(Exit,
+            () => _coroutines.StartCoroutine(LoadAndStartGameplay()));
+        
         var sceneEntryPoint = Object.FindFirstObjectByType<MainMenuEntryPoint>();
-        sceneEntryPoint.Bind(_mainMenurequests, _uiRoot);
+        sceneEntryPoint.Bind(mainMenurequests, _uiRoot, _inputActions);
         
         _uiRoot.HideLoadingScreen();
     }
@@ -73,8 +77,11 @@ public class GameEntryPoint
         yield return LoadScene(SceneNames.Boot);
         yield return LoadScene(SceneNames.Gameplay);
         
+        var gameplayRequests = new GameplayRequests(() => 
+            _coroutines.StartCoroutine(LoadAndStartMainMenu()));
+        
         var sceneEntryPoint = Object.FindFirstObjectByType<GameplayEntryPoint>();
-        sceneEntryPoint.Bind();
+        sceneEntryPoint.Bind(gameplayRequests, _uiRoot, _inputActions);
         
         _uiRoot.HideLoadingScreen();
     }
