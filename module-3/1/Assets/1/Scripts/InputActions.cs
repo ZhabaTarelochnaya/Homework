@@ -137,6 +137,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Restart"",
+                    ""type"": ""Button"",
+                    ""id"": ""021e49fd-a375-4dd8-a422-f4512070cc79"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -161,6 +170,17 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dcea463f-e40b-403b-9fbd-88f841a5a2c4"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Restart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -174,6 +194,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Exit = m_Gameplay.FindAction("Exit", throwIfNotFound: true);
         m_Gameplay_Shoot = m_Gameplay.FindAction("Shoot", throwIfNotFound: true);
+        m_Gameplay_Restart = m_Gameplay.FindAction("Restart", throwIfNotFound: true);
     }
 
     ~@InputActions()
@@ -353,6 +374,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
     private readonly InputAction m_Gameplay_Exit;
     private readonly InputAction m_Gameplay_Shoot;
+    private readonly InputAction m_Gameplay_Restart;
     /// <summary>
     /// Provides access to input actions defined in input action map "Gameplay".
     /// </summary>
@@ -372,6 +394,10 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Gameplay/Shoot".
         /// </summary>
         public InputAction @Shoot => m_Wrapper.m_Gameplay_Shoot;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/Restart".
+        /// </summary>
+        public InputAction @Restart => m_Wrapper.m_Gameplay_Restart;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -404,6 +430,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Shoot.started += instance.OnShoot;
             @Shoot.performed += instance.OnShoot;
             @Shoot.canceled += instance.OnShoot;
+            @Restart.started += instance.OnRestart;
+            @Restart.performed += instance.OnRestart;
+            @Restart.canceled += instance.OnRestart;
         }
 
         /// <summary>
@@ -421,6 +450,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Shoot.started -= instance.OnShoot;
             @Shoot.performed -= instance.OnShoot;
             @Shoot.canceled -= instance.OnShoot;
+            @Restart.started -= instance.OnRestart;
+            @Restart.performed -= instance.OnRestart;
+            @Restart.canceled -= instance.OnRestart;
         }
 
         /// <summary>
@@ -490,5 +522,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnShoot(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Restart" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRestart(InputAction.CallbackContext context);
     }
 }

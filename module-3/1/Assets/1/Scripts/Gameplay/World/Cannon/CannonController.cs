@@ -43,4 +43,10 @@ public class CannonController : MonoBehaviour
         var ballRigidBody = ball.GetComponent<Rigidbody>();
         ballRigidBody.AddForce(transform.forward * _cannonStats.ProjectileSpeed, ForceMode.Impulse);
     }
+
+    void OnDestroy()
+    {
+        if (_inputActions == null) return;
+        _inputActions.Gameplay.Shoot.started -= OnShootStarted;
+    }
 }

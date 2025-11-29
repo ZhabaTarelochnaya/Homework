@@ -29,6 +29,7 @@ namespace _1.Gameplay
             inputActions.Gameplay.Enable();
 
             _inputActions.Gameplay.Exit.performed += OnExit;
+            _inputActions.Gameplay.Restart.performed += OnRestart;
             
             var gameManager = new GameManager(_spawnZone);
             StartCoroutine(gameManager.Run());
@@ -38,11 +39,15 @@ namespace _1.Gameplay
         {
             _gameplayRequests.LoadMainMenuRequested.Invoke();
         }
-
+        void OnRestart(InputAction.CallbackContext obj)
+        {
+            _gameplayRequests.ReloadGameplayRequested.Invoke();
+        }
         void OnDestroy()
         {
             if (_inputActions == null) return;
             _inputActions.Gameplay.Exit.performed -= OnExit;
+            _inputActions.Gameplay.Restart.performed -= OnRestart;
         }
     }
 }

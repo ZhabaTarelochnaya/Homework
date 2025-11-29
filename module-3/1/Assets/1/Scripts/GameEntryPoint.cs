@@ -78,7 +78,8 @@ public class GameEntryPoint
         yield return LoadScene(SceneNames.Gameplay);
         
         var gameplayRequests = new GameplayRequests(() => 
-            _coroutines.StartCoroutine(LoadAndStartMainMenu()));
+            _coroutines.StartCoroutine(LoadAndStartMainMenu()), 
+            () => _coroutines.StartCoroutine(LoadAndStartGameplay()));
         
         var sceneEntryPoint = Object.FindFirstObjectByType<GameplayEntryPoint>();
         sceneEntryPoint.Bind(gameplayRequests, _uiRoot, _inputActions);
