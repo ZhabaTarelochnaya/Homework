@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Target : MonoBehaviour
 {
@@ -7,11 +9,15 @@ public class Target : MonoBehaviour
     [field: SerializeField] public float ScaleAnimationSpeed { get; set; } = 2f; 
     [field: SerializeField] public float RotateAnimationSpeed { get; set; } = 1f;
 
-    
+    void OnTriggerEnter(Collider other)
+    {
+        Destroy(gameObject);
+    }
+
     void Start()
     {
         Debug.Log("Target created");
-        StartCoroutine(RunLifeCycle());
+        StartCoroutine(LateDestroy());
         var animationNumber = Random.Range(0, 2);
         if (animationNumber == 0)
         {
@@ -23,7 +29,7 @@ public class Target : MonoBehaviour
         }
         
     }
-    IEnumerator RunLifeCycle()
+    IEnumerator LateDestroy()
     {
         yield return new WaitForSeconds(1f);
         for (int i = 0; i < LifeTime - 1; i++)
