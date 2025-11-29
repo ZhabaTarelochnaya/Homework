@@ -118,4 +118,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e22a114ec4d417e4f93b71b5f149b1ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LifeTime: 3
+  <LifeTime>k__BackingField: 3
+  <ScaleAnimationSpeed>k__BackingField: 2
+  <RotateAnimationSpeed>k__BackingField: 1

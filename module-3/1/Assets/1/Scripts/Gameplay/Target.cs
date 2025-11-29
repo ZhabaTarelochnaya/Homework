@@ -1,20 +1,65 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Target : MonoBehaviour
 {
     [field: SerializeField] public int LifeTime { get; set; } = 3;
-    IEnumerator Start()
+    [field: SerializeField] public float ScaleAnimationSpeed { get; set; } = 2f; 
+    [field: SerializeField] public float RotateAnimationSpeed { get; set; } = 1f;
+
+    
+    void Start()
     {
         Debug.Log("Target created");
+        StartCoroutine(RunLifeCycle());
+        var animationNumber = Random.Range(0, 2);
+        if (animationNumber == 0)
+        {
+            StartCoroutine(ScaleAnimation());
+        }
+        else if (animationNumber == 1)
+        {
+            StartCoroutine(RotateAnimation());
+        }
+        
+    }
+    IEnumerator RunLifeCycle()
+    {
         yield return new WaitForSeconds(1f);
         for (int i = 0; i < LifeTime - 1; i++)
         {
             Debug.Log("Target still alive");
             yield return new WaitForSeconds(1f);
         }
-        Debug.Log("Target destroyed");
         Destroy(gameObject);
     }
+    IEnumerator ScaleAnimation()
+    {
+        while (true)
+        {
+            while (true)
+            {
+                transform.localScale = Vector3.MoveTowards(transform.localScale, Vector3.one * 2,
+                    Time.deltaTime * ScaleAnimationSpeed);
+                if (transform.localScale.x < 2) yield return null;
+                else break;
+            }
+            while (true)
+            {
+                transform.localScale = Vector3.MoveTowards(transform.localScale, Vector3.one,
+                    Time.deltaTime * ScaleAnimationSpeed);
+                if (transform.localScale.x > 1) yield return null;
+                else break;
+            }
+        }
+    }
+    IEnumerator RotateAnimation()
+    {
+        while (true)
+        {
+            transform.Rotate(Vector3.up, RotateAnimationSpeed * 360 * Time.deltaTime);
+            yield return null;
+        }
+    }
+    void OnDestroy() => Debug.Log("Target destroyed");
 }
