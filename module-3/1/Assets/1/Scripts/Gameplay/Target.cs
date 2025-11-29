@@ -5,7 +5,6 @@ using UnityEngine;
 public class Target : MonoBehaviour
 {
     [field: SerializeField] public int LifeTime { get; set; } = 3;
-
     IEnumerator Start()
     {
         Debug.Log("Target created");
