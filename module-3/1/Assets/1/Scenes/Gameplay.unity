@@ -394,7 +394,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &500480296
 Transform:
@@ -573,7 +573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c81d1a351d87e748b6293eeb1a17244, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Size>k__BackingField: {x: 23, y: 12, z: 10}
+  <Size>k__BackingField: {x: 23, y: 8, z: 10}
 --- !u!4 &1656421773
 Transform:
   m_ObjectHideFlags: 0
@@ -583,7 +583,7 @@ Transform:
   m_GameObject: {fileID: 1656421771}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.41, y: 7.52, z: -4.62}
+  m_LocalPosition: {x: 0.41, y: 5.9, z: -4.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -620,7 +620,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1718582415
 Transform:
@@ -723,7 +723,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1885872474
 Transform:
@@ -799,6 +799,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8463373336379328378, guid: 660d4ddaa5362e9468ce35cb3629789e,
         type: 3}
+      propertyPath: _cannonStats
+      value: 
+      objectReference: {fileID: 11400000, guid: a18a0fb210fede94c95a25968ee58f63,
+        type: 2}
+    - target: {fileID: -8463373336379328378, guid: 660d4ddaa5362e9468ce35cb3629789e,
+        type: 3}
       propertyPath: maxXRotation
       value: 30
       objectReference: {fileID: 0}
@@ -810,11 +816,17 @@ PrefabInstance:
     - target: {fileID: -8463373336379328378, guid: 660d4ddaa5362e9468ce35cb3629789e,
         type: 3}
       propertyPath: maxShootForce
-      value: 200
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: -8463373336379328378, guid: 660d4ddaa5362e9468ce35cb3629789e,
         type: 3}
       propertyPath: cannonBallPrefab
+      value: 
+      objectReference: {fileID: 3212406834976615999, guid: 9f701924d1e23de4c939e4d0f6c734bc,
+        type: 3}
+    - target: {fileID: -8463373336379328378, guid: 660d4ddaa5362e9468ce35cb3629789e,
+        type: 3}
+      propertyPath: _cannonBallPrefab
       value: 
       objectReference: {fileID: 3212406834976615999, guid: 9f701924d1e23de4c939e4d0f6c734bc,
         type: 3}
