@@ -13,7 +13,7 @@ public class GameEntryPoint
     Coroutines _coroutines;
     UIRoot _uiRoot;
     InputActions _inputActions = new ();
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
     public static void AutostartGame()
     {
         _gameRoot = new GameEntryPoint();
@@ -34,7 +34,8 @@ public class GameEntryPoint
     void RunGame()
     {
 #if UNITY_EDITOR
-        var sceneName = SceneManager.GetActiveScene().name;
+        // var sceneName = SceneManager.GetActiveScene().name;
+        var sceneName = EditorPrefs.GetString("OpennedScene");
         if (sceneName == nameof(SceneNames.Gameplay))
         {
             _coroutines.StartCoroutine(LoadAndStartGameplay());
@@ -52,8 +53,7 @@ public class GameEntryPoint
 #endif
         _coroutines.StartCoroutine(LoadAndStartMainMenu());
     }
-
-    // ReSharper disable Unity.PerformanceAnalysis
+    
     IEnumerator LoadAndStartMainMenu()
     {
         _uiRoot.ShowLoadingScreen();

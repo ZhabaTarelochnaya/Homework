@@ -7,13 +7,23 @@ namespace _1.Gameplay
 {
     public class GameplayEntryPoint : MonoBehaviour
     {
+        [SerializeField] Camera mainCamera;
         [SerializeField] SpawnZone _spawnZone;
+        [SerializeField] CannonController _cannon;
         GameplayRequests _gameplayRequests;
         InputActions _inputActions;
+
+        void Awake()
+        {
+            Debug.Log("Awake");
+        }
+
         public void Bind(GameplayRequests gameplayRequests, UIRoot uiRoot, InputActions inputActions)
         {
             _gameplayRequests = gameplayRequests;
             _inputActions = inputActions;
+
+            _cannon.Bind(inputActions, mainCamera);
             
             inputActions.Disable();
             inputActions.Gameplay.Enable();
@@ -31,6 +41,7 @@ namespace _1.Gameplay
 
         void OnDestroy()
         {
+            if (_inputActions == null) return;
             _inputActions.Gameplay.Exit.performed -= OnExit;
         }
     }
