@@ -15,20 +15,23 @@ namespace _1.Gameplay
         [SerializeField] GameObject _gameplayUI;
         GameplayRequests _gameplayRequests;
         InputActions _inputActions;
+        GameplayData _gameplayData;
+        GameplayData _record;
 
         public void Bind(GameplayRequests gameplayRequests, UIRoot uiRoot, InputActions inputActions)
         {
             _gameplayRequests = gameplayRequests;
             _inputActions = inputActions;
-
-            var gameplayData = new GameplayData();
-            var gameplayDataProxy = new GameplayDataProxy(gameplayData);
+            
+            _record = LoadOrCreateData();
+            _gameplayData = new GameplayData();
+            var gameplayDataProxy = new GameplayDataProxy(_gameplayData);
             
             var gameplayUIInstance = Instantiate(_gameplayUI, uiRoot.transform);
             var gameplayUI = gameplayUIInstance.GetComponent<GameplayUI>();
             
             _cannon.Bind(inputActions, mainCamera, gameplayDataProxy);
-            gameplayUI.Bind(gameplayRequests, gameplayDataProxy);
+            gameplayUI.Bind(gameplayRequests, gameplayDataProxy, _record.TargetsHit);
             
             inputActions.Disable();
             inputActions.Gameplay.Enable();
@@ -52,6 +55,27 @@ namespace _1.Gameplay
             if (_inputActions == null) return;
             _inputActions.Gameplay.Exit.performed -= OnExit;
             _inputActions.Gameplay.Restart.performed -= OnRestart;
+            SaveIfRecord();
+        }
+
+        void SaveIfRecord()
+        {
+            if (_gameplayData.TargetsHit > _record.TargetsHit)
+            {
+                PlayerPrefs.SetString("GameplayData", JsonUtility.ToJson(_gameplayData));
+            }
+        }
+        GameplayData LoadOrCreateData()
+        {
+            var gameplayDataJson = PlayerPrefs.GetString("GameplayData");
+            if (string.IsNullOrEmpty(gameplayDataJson))
+            {
+                return new GameplayData();
+            }
+            else
+            {
+                return JsonUtility.FromJson<GameplayData>(gameplayDataJson);
+            }
         }
     }
 }

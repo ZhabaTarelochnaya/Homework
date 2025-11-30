@@ -8,12 +8,12 @@ namespace _1.Gameplay.UI
         [SerializeField] GameObject _hud;
         [SerializeField] Transform _screens;
         [SerializeField] Transform _popUps;
-        public void Bind(GameplayRequests gameplayRequests, GameplayDataProxy dataProxy)
+        public void Bind(GameplayRequests gameplayRequests, GameplayDataProxy dataProxy, int recordTargetsHit)
         {
             var hudInstance = Instantiate(_hud, _screens);
             var hud = hudInstance.GetComponent<HUD>();
             
-            hud.Bind(dataProxy, gameplayRequests);
+            hud.Bind(dataProxy, gameplayRequests, recordTargetsHit);
 
             gameplayRequests.ReloadGameplayRequested += Destroy;
             gameplayRequests.LoadMainMenuRequested += Destroy;
