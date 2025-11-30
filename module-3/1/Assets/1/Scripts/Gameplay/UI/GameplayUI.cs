@@ -13,7 +13,7 @@ namespace _1.Gameplay.UI
             var hudInstance = Instantiate(_hud, _screens);
             var hud = hudInstance.GetComponent<HUD>();
             
-            hud.Bind(dataProxy);
+            hud.Bind(dataProxy, gameplayRequests);
 
             gameplayRequests.ReloadGameplayRequested += Destroy;
             gameplayRequests.LoadMainMenuRequested += Destroy;

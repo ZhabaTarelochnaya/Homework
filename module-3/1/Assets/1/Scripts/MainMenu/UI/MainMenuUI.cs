@@ -11,7 +11,6 @@ namespace _1.MainMenu.UI
             _mainScreen.Bind(requests);
             requests.LoadGameplayRequested += Destroy;
         }
-
         void Destroy()
         {
             Destroy(gameObject);
