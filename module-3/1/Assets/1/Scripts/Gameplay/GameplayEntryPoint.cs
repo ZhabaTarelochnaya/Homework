@@ -62,6 +62,7 @@ namespace _1.Gameplay
         {
             if (_gameplayData.TargetsHit > _record.TargetsHit)
             {
+                Debug.Log("Saving new record");
                 PlayerPrefs.SetString("GameplayData", JsonUtility.ToJson(_gameplayData));
             }
         }

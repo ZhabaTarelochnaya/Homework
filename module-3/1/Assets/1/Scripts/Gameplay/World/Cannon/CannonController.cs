@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using _1.Gameplay.Data;
@@ -17,6 +18,14 @@ public class CannonController : MonoBehaviour
     [SerializeField] float _minXRotation = 0;
     [SerializeField] CannonStats _cannonStats;
     [SerializeField] GameObject _cannonBallPrefab;
+
+    void Awake()
+    {
+        if (_cannonStats == null)
+        {
+            Debug.LogError("CannonStats not found");
+        }
+    }
 
     public void Bind(InputActions inputActions, Camera mainCamera, GameplayDataProxy gameplayDataProxy)
     {
@@ -40,6 +49,7 @@ public class CannonController : MonoBehaviour
     }
     void OnShootStarted(InputAction.CallbackContext obj)
     {
+        Debug.LogWarning("Cannon is on cooldown");
         if (_timer > 0) return;
         _timer = _cannonStats.ShootCoolDown;
         _gameplayDataProxy.ShotsFired.Value += 1;

@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CannonBall : MonoBehaviour
 {
+    bool didHit;
     const float LifeTime = 5f;
     IEnumerator Start()
     {
@@ -14,6 +15,16 @@ public class CannonBall : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         Debug.Log("Target hit!");
+        didHit = true;
         Destroy(gameObject);
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (!didHit)
+        {
+            Debug.Log("Shot missed!");
+            didHit = true;
+        }
     }
 }
