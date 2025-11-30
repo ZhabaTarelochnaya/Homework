@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3965845268779693444}
   - component: {fileID: 3836470624297023714}
   - component: {fileID: 329158709679501424}
+  - component: {fileID: 472006944185537055}
   m_Layer: 0
   m_Name: Target
   m_TagString: Untagged
@@ -121,3 +122,20 @@ MonoBehaviour:
   <LifeTime>k__BackingField: 3
   <ScaleAnimationSpeed>k__BackingField: 2
   <RotateAnimationSpeed>k__BackingField: 1
+--- !u!111 &472006944185537055
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7728760659738162187}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: e1e4d372a8be31b4a8f96fc10b613e34, type: 2}
+  - {fileID: 7400000, guid: 045fb9c348198414587b9d87d5d5b6ba, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0

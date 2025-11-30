@@ -7,9 +7,17 @@ using Random = UnityEngine.Random;
 public class Target : MonoBehaviour
 {
     GameplayDataProxy _gameplayDataProxy;
+    Animation _animation;
+    Collider _collider;
     [field: SerializeField] public int LifeTime { get; set; } = 3;
     [field: SerializeField] public float ScaleAnimationSpeed { get; set; } = 2f; 
     [field: SerializeField] public float RotateAnimationSpeed { get; set; } = 1f;
+
+    void Awake()
+    {
+        _animation = GetComponent<Animation>();
+        _collider = GetComponent<Collider>();
+    }
 
     public void Bind(GameplayDataProxy gameplayDataProxy)
     {
@@ -18,7 +26,8 @@ public class Target : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         _gameplayDataProxy.TargetsHit.Value += 1;
-        Destroy(gameObject);
+        _collider.enabled = false;
+        StartCoroutine(HitDestroy());
     }
 
     void Start()
@@ -44,6 +53,16 @@ public class Target : MonoBehaviour
             Debug.Log("Target still alive");
             yield return new WaitForSeconds(1f);
         }
+
+        _animation.Play("Vanish");
+        yield return new WaitWhile(() => _animation.IsPlaying("Vanish"));
+        Destroy(gameObject);
+    }
+
+    IEnumerator HitDestroy()
+    {
+        _animation.Play("Hit");
+        yield return new WaitWhile(() => _animation.IsPlaying("Hit"));
         Destroy(gameObject);
     }
     IEnumerator ScaleAnimation()

@@ -11,7 +11,7 @@ public class CannonController : MonoBehaviour
     GameplayDataProxy _gameplayDataProxy;
     InputActions _inputActions;
     float _timer;
-    Camera _mainCamera;
+    Animation _animation;
     [SerializeField] float _maxYRotation = 50f;
     [SerializeField] float _minYRotation = -50f;
     [SerializeField] float _maxXRotation = 30f;
@@ -25,12 +25,12 @@ public class CannonController : MonoBehaviour
         {
             Debug.LogError("CannonStats not found");
         }
+        _animation = GetComponent<Animation>();
     }
 
-    public void Bind(InputActions inputActions, Camera mainCamera, GameplayDataProxy gameplayDataProxy)
+    public void Bind(InputActions inputActions, GameplayDataProxy gameplayDataProxy)
     {
         _inputActions = inputActions;
-        _mainCamera = mainCamera;
         _gameplayDataProxy = gameplayDataProxy;
         inputActions.Gameplay.Shoot.started += OnShootStarted;
     }
@@ -50,12 +50,16 @@ public class CannonController : MonoBehaviour
     void OnShootStarted(InputAction.CallbackContext obj)
     {
         Debug.LogWarning("Cannon is on cooldown");
+        
         if (_timer > 0) return;
         _timer = _cannonStats.ShootCoolDown;
+        
         _gameplayDataProxy.ShotsFired.Value += 1;
         var ball = Instantiate(_cannonBallPrefab, transform.position, Quaternion.identity);
         var ballRigidBody = ball.GetComponent<Rigidbody>();
         ballRigidBody.AddForce(transform.forward * _cannonStats.ProjectileSpeed, ForceMode.Impulse);
+
+        _animation.Play("Recoil");
     }
 
     void OnDestroy()

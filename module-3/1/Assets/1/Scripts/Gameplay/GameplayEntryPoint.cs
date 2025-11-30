@@ -30,7 +30,7 @@ namespace _1.Gameplay
             var gameplayUIInstance = Instantiate(_gameplayUI, uiRoot.transform);
             var gameplayUI = gameplayUIInstance.GetComponent<GameplayUI>();
             
-            _cannon.Bind(inputActions, mainCamera, gameplayDataProxy);
+            _cannon.Bind(inputActions, gameplayDataProxy);
             gameplayUI.Bind(gameplayRequests, gameplayDataProxy, _record.TargetsHit);
             
             inputActions.Disable();
