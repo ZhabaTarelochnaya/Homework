@@ -1,6 +1,6 @@
 using System;
 
-namespace _TestPlatformer.Scripts.Utils
+namespace _1.Scripts.Utils
 {
     public class Subscription : IDisposable
     {

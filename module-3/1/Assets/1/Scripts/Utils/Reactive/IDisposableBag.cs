@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace _TestPlatformer.Scripts.Utils
+namespace _1.Scripts.Utils
 {
     public class IDisposableBag : IDisposable
     {

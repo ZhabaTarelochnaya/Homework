@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using _1.Gameplay.Data;
 using _1.Gameplay.World.Cannon;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CannonController : MonoBehaviour
 {
+    GameplayDataProxy _gameplayDataProxy;
     InputActions _inputActions;
     float _timer;
     Camera _mainCamera;
@@ -16,10 +18,11 @@ public class CannonController : MonoBehaviour
     [SerializeField] CannonStats _cannonStats;
     [SerializeField] GameObject _cannonBallPrefab;
 
-    public void Bind(InputActions inputActions, Camera mainCamera)
+    public void Bind(InputActions inputActions, Camera mainCamera, GameplayDataProxy gameplayDataProxy)
     {
         _inputActions = inputActions;
         _mainCamera = mainCamera;
+        _gameplayDataProxy = gameplayDataProxy;
         inputActions.Gameplay.Shoot.started += OnShootStarted;
     }
     public void Update()
@@ -39,6 +42,7 @@ public class CannonController : MonoBehaviour
     {
         if (_timer > 0) return;
         _timer = _cannonStats.ShootCoolDown;
+        _gameplayDataProxy.ShotsFired.Value += 1;
         var ball = Instantiate(_cannonBallPrefab, transform.position, Quaternion.identity);
         var ballRigidBody = ball.GetComponent<Rigidbody>();
         ballRigidBody.AddForce(transform.forward * _cannonStats.ProjectileSpeed, ForceMode.Impulse);

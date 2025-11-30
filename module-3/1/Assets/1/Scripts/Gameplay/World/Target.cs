@@ -1,16 +1,23 @@
 using System;
 using System.Collections;
+using _1.Gameplay.Data;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class Target : MonoBehaviour
 {
+    GameplayDataProxy _gameplayDataProxy;
     [field: SerializeField] public int LifeTime { get; set; } = 3;
     [field: SerializeField] public float ScaleAnimationSpeed { get; set; } = 2f; 
     [field: SerializeField] public float RotateAnimationSpeed { get; set; } = 1f;
 
+    public void Bind(GameplayDataProxy gameplayDataProxy)
+    {
+        _gameplayDataProxy = gameplayDataProxy;
+    }
     void OnTriggerEnter(Collider other)
     {
+        _gameplayDataProxy.TargetsHit.Value += 1;
         Destroy(gameObject);
     }
 

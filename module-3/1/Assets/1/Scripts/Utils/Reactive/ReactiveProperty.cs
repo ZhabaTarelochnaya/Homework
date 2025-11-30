@@ -1,4 +1,4 @@
-namespace _TestPlatformer.Scripts.Utils
+namespace _1.Scripts.Utils
 {
     public class ReactiveProperty<T> : ReadOnlyReactiveProperty<T> where T : struct
     {

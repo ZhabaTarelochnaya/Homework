@@ -1,11 +1,14 @@
 
+using System;
 using _1.Gameplay;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SpawnZone : MonoBehaviour
 {
     IShape shape;
     [SerializeField] GameObject prefabToSpawn;
+    public event Action<GameObject> Spawned; 
     void Awake()
     {
         shape = gameObject.GetComponent<IShape>();
@@ -14,7 +17,8 @@ public class SpawnZone : MonoBehaviour
     public void Spawn()
     {
         var pos = GetRandomPosInBounds();
-        Instantiate(prefabToSpawn, pos, Quaternion.identity);
+        var instance = Instantiate(prefabToSpawn, pos, Quaternion.identity);
+        Spawned?.Invoke(instance);
     }
     Vector3 GetRandomPosInBounds()
     {

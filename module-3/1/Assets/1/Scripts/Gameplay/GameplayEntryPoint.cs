@@ -1,4 +1,6 @@
 using System;
+using _1.Gameplay.Data;
+using _1.Gameplay.UI;
 using TestPlatformer.Scripts;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,28 +12,30 @@ namespace _1.Gameplay
         [SerializeField] Camera mainCamera;
         [SerializeField] SpawnZone _spawnZone;
         [SerializeField] CannonController _cannon;
+        [SerializeField] GameObject _gameplayUI;
         GameplayRequests _gameplayRequests;
         InputActions _inputActions;
-
-        void Awake()
-        {
-            Debug.Log("Awake");
-        }
 
         public void Bind(GameplayRequests gameplayRequests, UIRoot uiRoot, InputActions inputActions)
         {
             _gameplayRequests = gameplayRequests;
             _inputActions = inputActions;
 
-            _cannon.Bind(inputActions, mainCamera);
+            var gameplayData = new GameplayData();
+            var gameplayDataProxy = new GameplayDataProxy(gameplayData);
+            
+            var gameplayUIInstance = Instantiate(_gameplayUI, uiRoot.transform);
+            var gameplayUI = gameplayUIInstance.GetComponent<GameplayUI>();
+            
+            _cannon.Bind(inputActions, mainCamera, gameplayDataProxy);
+            gameplayUI.Bind(gameplayRequests, gameplayDataProxy);
             
             inputActions.Disable();
             inputActions.Gameplay.Enable();
-
             _inputActions.Gameplay.Exit.performed += OnExit;
             _inputActions.Gameplay.Restart.performed += OnRestart;
             
-            var gameManager = new GameManager(_spawnZone);
+            var gameManager = new GameManager(_spawnZone, gameplayDataProxy);
             StartCoroutine(gameManager.Run());
         }
 
