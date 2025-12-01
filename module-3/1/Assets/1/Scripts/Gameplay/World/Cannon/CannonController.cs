@@ -49,9 +49,11 @@ public class CannonController : MonoBehaviour
     }
     void OnShootStarted(InputAction.CallbackContext obj)
     {
-        Debug.LogWarning("Cannon is on cooldown");
-        
-        if (_timer > 0) return;
+        if (_timer > 0)
+        {
+            Debug.LogWarning("Cannon is on cooldown");
+            return;
+        }
         _timer = _cannonStats.ShootCoolDown;
         
         _gameplayDataProxy.ShotsFired.Value += 1;
