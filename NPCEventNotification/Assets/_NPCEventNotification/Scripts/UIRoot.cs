@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace TestPlatformer.Scripts
+namespace NPCEventNotification.Scripts
 {
     public class UIRoot : MonoBehaviour
     {

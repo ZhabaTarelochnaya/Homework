@@ -1,4 +1,4 @@
-namespace TestPlatformer.Scripts.Gameplay
+namespace NPCEventNotification.Scripts.Gameplay
 {
     public enum GameEventName
     {

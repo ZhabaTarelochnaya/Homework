@@ -1,7 +1,7 @@
 using System.Collections;
-using TestPlatformer.Scripts;
-using TestPlatformer.Scripts.Gameplay;
-using TestPlatformer.Scripts.Utils;
+using NPCEventNotification.Scripts;
+using NPCEventNotification.Scripts.Gameplay;
+using NPCEventNotification.Scripts.Utils;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;

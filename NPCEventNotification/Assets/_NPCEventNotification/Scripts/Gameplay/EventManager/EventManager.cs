@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace TestPlatformer.Scripts.Gameplay
+namespace NPCEventNotification.Scripts.Gameplay
 {
     public class EventManager
     {

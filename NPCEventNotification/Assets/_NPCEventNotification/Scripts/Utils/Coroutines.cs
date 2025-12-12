@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace TestPlatformer.Scripts.Utils
+namespace NPCEventNotification.Scripts.Utils
 {
     public class Coroutines : MonoBehaviour { }
 }

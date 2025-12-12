@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace TestPlatformer.Scripts.Gameplay
+namespace NPCEventNotification.Scripts.Gameplay
 {
     public class GameplayEntryPoint : MonoBehaviour
     {
