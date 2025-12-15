@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace NPCEventNotification.Scripts.Utils.FiniteStateMachine
 {
@@ -14,18 +15,24 @@ namespace NPCEventNotification.Scripts.Utils.FiniteStateMachine
             set
             {
                 _isInitialized = _isActive == value ? _isInitialized : false;
+                if (CurrentState != null && _isActive && !value)
+                {
+                    CurrentState.OnExit();
+                }
                 _isActive = value;
             }
         }
         public FSMState<T> CurrentState {get; private set;}
         public void Tick(float deltaTime)
         {
+            if (CurrentState == null) Debug.LogError("FSM: CurrentState is null");
             if (!IsActive) return;
             if (!_isInitialized)
             {
                 _isInitialized = true;
                 CurrentState.OnEnter();
             }
+            
             CurrentState.Tick(deltaTime);
             var nextStateKey = CurrentState.GetNextState();
             if (!nextStateKey.Equals(CurrentState.StateName))
@@ -38,7 +45,7 @@ namespace NPCEventNotification.Scripts.Utils.FiniteStateMachine
             var newState = _states[stateName];
             if (newState == null)
             {
-                throw new Exception($"State with name {stateName} doesn't exist");
+                Debug.LogError($"State with name {stateName} doesn't exist");
             }
             CurrentState.OnExit();
             CurrentState = newState;

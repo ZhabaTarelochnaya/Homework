@@ -606,6 +606,7 @@ GameObject:
   - component: {fileID: 994011418}
   - component: {fileID: 994011417}
   - component: {fileID: 994011416}
+  - component: {fileID: 994011420}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -637,7 +638,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 0
@@ -717,6 +718,18 @@ Transform:
   - {fileID: 1189510959}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &994011420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 994011415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e39f6090724e4a4a8aadeb042afa2bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1166053319
 GameObject:
   m_ObjectHideFlags: 0
@@ -791,7 +804,7 @@ Transform:
   m_GameObject: {fileID: 1166053319}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.6626325, y: -0.59169686, z: 9.142326}
+  m_LocalPosition: {x: -0.6626325, y: -0.59169686, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -808,6 +821,7 @@ GameObject:
   - component: {fileID: 1189510959}
   - component: {fileID: 1189510961}
   - component: {fileID: 1189510960}
+  - component: {fileID: 1189510962}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -968,6 +982,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!210 &1189510962
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189510958}
+  m_Enabled: 1
+  m_SortingLayerID: 1038284463
+  m_SortingLayer: 2
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!4 &1431709187 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3619324806579642891, guid: aae47a6d8ff70b9489cd27a4766c985a, type: 3}
@@ -1313,6 +1339,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 307499667}
     m_Modifications:
+    - target: {fileID: 7730742998841430, guid: 98d98176694516d479a0d93fca19f631, type: 3}
+      propertyPath: m_DrawMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1587624625899303540, guid: 98d98176694516d479a0d93fca19f631, type: 3}
       propertyPath: m_LocalPosition.x
       value: 18.958237
