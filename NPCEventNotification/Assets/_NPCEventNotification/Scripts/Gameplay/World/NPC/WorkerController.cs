@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 namespace NPCEventNotification.Scripts.Gameplay.NPC
 {
-    public class NPCController : MonoBehaviour
+    public class WorkerController : MonoBehaviour
     {
         BehaviourManager _behaviourManager = new ();
         NavMeshAgent _agent;

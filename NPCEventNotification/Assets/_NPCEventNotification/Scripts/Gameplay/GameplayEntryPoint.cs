@@ -7,7 +7,7 @@ namespace NPCEventNotification.Scripts.Gameplay
     public class GameplayEntryPoint : MonoBehaviour
     {
         EventManager eventManager;
-        [SerializeField] NPCController npcController;
+        [SerializeField] WorkerController workerController;
         [SerializeField] Light2D globalLight;
         public void Bind()
         {
@@ -15,8 +15,8 @@ namespace NPCEventNotification.Scripts.Gameplay
             if (!globalLight) Debug.LogError("GameplayEntryPoint: globalLight is null");
             var dayNightCycle = new DayNightCycle(eventManager, globalLight);
             
-            if (!npcController) Debug.LogError("GameplayEntryPoint: npcController is null");
-            npcController.Bind(eventManager);
+            if (!workerController) Debug.LogError("GameplayEntryPoint: npcController is null");
+            workerController.Bind(eventManager);
             
             dayNightCycle.StartCycle();
         }

@@ -11,7 +11,7 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ResourceCollectio
             : base(BehaviourName.ResourceCollection)
         {
             _fsm.AddState(new GoToResourceZone(_resourceZone, _agent))
-                .AddState(new CollectResources(20f))
+                .AddState(new CollectResources(2f))
                 .AddState(new GoToStorage(_agent, _storage.position));
         }
         public override void Tick(float deltaTime)

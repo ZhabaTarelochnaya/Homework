@@ -4,6 +4,7 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours
     {
         Default,
         ResourceCollection,
-        ToTownHall
+        ToTownHall,
+        Wander
     }
 }
