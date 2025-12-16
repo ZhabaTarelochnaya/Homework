@@ -6,10 +6,10 @@ namespace NPCEventNotification.Scripts.Gameplay
         public float Time { get; }
         public string Description { get; }
 
-        public GameEvent(GameEventName name, float time, string description)
+        public GameEvent(GameEventName name, string description)
         {
             Name = name;
-            Time = time;
+            Time = UnityEngine.Time.time;
             Description = description;
         }
     }
