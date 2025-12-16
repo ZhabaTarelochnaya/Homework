@@ -2,6 +2,7 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ResourceCollectio
 {
     public enum ResourceCollectionStateName
     {
+        Default,
         GoToResourceZone,
         Collect,
         GoToStorage,

@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using NPCEventNotification.Scripts.Utils.FiniteStateMachine;
 using UnityEngine;
@@ -8,7 +9,8 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ResourceCollectio
     public class CollectResources : FSMState<ResourceCollectionStateName>
     {
         readonly float _collectionTime;
-        bool _isCollected;
+        ResourceCollectionStateName _nextState;
+        CancellationTokenSource _cts;
 
         public CollectResources(float collectionTime) : base(ResourceCollectionStateName.Collect)
         {
@@ -16,25 +18,45 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ResourceCollectio
         }
         public override void OnEnter()
         {
-            Collect();
+            _cts = new CancellationTokenSource();
+            if (_nextState == ResourceCollectionStateName.GoToResourceZone) return;
+            _nextState = ResourceCollectionStateName.Collect;
+            Collect(_cts.Token);
+        }
+
+        public override void OnExit()
+        {
+            _cts?.Cancel();
         }
         public override ResourceCollectionStateName GetNextState()
         {
-            if (_isCollected)
+            if (_nextState == ResourceCollectionStateName.GoToResourceZone)
             {
-                _isCollected = false;
-                return ResourceCollectionStateName.GoToStorage;
+                _nextState = ResourceCollectionStateName.Default;
+                return ResourceCollectionStateName.GoToResourceZone;
             }
-            return ResourceCollectionStateName.Collect;
+            return _nextState;
         }
-        async void Collect()
+        async void Collect(CancellationToken token)
         {
-            var time = Time.time + _collectionTime;
-            while (Time.time < time)
+            try
             {
-                await Task.Yield();
+                var time = Time.time + _collectionTime;
+                while (Time.time < time)
+                {
+                    token.ThrowIfCancellationRequested();
+                    await Task.Yield();
+                }
+                _nextState = ResourceCollectionStateName.GoToStorage;
             }
-            _isCollected = true;
+            catch (OperationCanceledException)
+            {
+                _nextState = ResourceCollectionStateName.GoToResourceZone;
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
         }
     }
 }
