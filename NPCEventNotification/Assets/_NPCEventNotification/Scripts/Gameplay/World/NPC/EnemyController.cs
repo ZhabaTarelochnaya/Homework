@@ -17,7 +17,7 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC
             
             if (!_agent) Debug.LogError($"{gameObject.name}: _agent is not set");
             
-            _behaviourManager.Add(new WanderBehaviour(_agent, 10, 1));
+            _behaviourManager.Add(new WanderBehaviour(_agent, 10, 1, this));
         }
 
         void FixedUpdate()

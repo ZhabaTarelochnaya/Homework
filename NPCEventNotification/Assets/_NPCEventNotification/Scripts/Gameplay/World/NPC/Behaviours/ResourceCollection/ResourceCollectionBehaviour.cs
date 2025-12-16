@@ -1,3 +1,4 @@
+using System;
 using NPCEventNotification.Scripts.Utils.FiniteStateMachine;
 using UnityEngine;
 using UnityEngine.AI;
@@ -11,7 +12,7 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ResourceCollectio
             : base(BehaviourName.ResourceCollection)
         {
             _fsm.AddState(new GoToResourceZone(_resourceZone, _agent))
-                .AddState(new CollectResources(2f))
+                .AddState(new CollectResources(_resourceZone.CollectionTime))
                 .AddState(new GoToStorage(_agent, _storage.position));
         }
         public override void Tick(float deltaTime)

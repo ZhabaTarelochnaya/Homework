@@ -18,7 +18,7 @@ namespace NPCEventNotification.Scripts.Gameplay
             if (!workerController) Debug.LogError("GameplayEntryPoint: npcController is null");
             workerController.Bind(eventManager);
             
-            dayNightCycle.StartCycle();
+            StartCoroutine(dayNightCycle.StartCycle());
         }
     }
 }

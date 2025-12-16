@@ -1,7 +1,4 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using NPCEventNotification.Scripts.Utils.Extansions;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
@@ -13,49 +10,41 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.Wander
         readonly NavMeshAgent _agent;
         readonly float _wanderDistance;
         readonly float _waitTime;
-        CancellationTokenSource _cts;
+        readonly MonoBehaviour _actor;
 
-        public WanderBehaviour(NavMeshAgent agent, float wanderDistance, float waitTime) 
+        public WanderBehaviour(NavMeshAgent agent, float wanderDistance, float waitTime, MonoBehaviour actor) 
             : base(BehaviourName.Wander)
         {
             _agent = agent;
             _wanderDistance = wanderDistance;
             _waitTime = waitTime;
+            _actor = actor;
         }
 
         public override void OnEnter()
         {
-            _cts = new CancellationTokenSource();
-            Wander(_cts);
+            _actor.StartCoroutine(Wander());
         }
 
         public override void OnExit()
         {
-            _cts.Cancel();
+            _actor.StopCoroutine(Wander());
+            _agent.SetDestination(_agent.transform.position);
+        }
+        IEnumerator Wander()
+        {
+            while (true)
+            {
+                Vector3 randomDirection = Random.insideUnitSphere * _wanderDistance;
+                randomDirection += _agent.transform.position;
+                NavMeshHit hit;
+                NavMesh.SamplePosition(randomDirection, out hit, _wanderDistance, _agent.areaMask);
+                _agent.SetDestination(hit.position);
+                yield return new WaitWhile(IsMoving);
+                yield return new WaitForSeconds(_waitTime);
+            }
         }
 
-        async void Wander(CancellationTokenSource cts)
-        {
-            try
-            {
-                while (!cts.IsCancellationRequested)
-                {
-                    Vector3 randomDirection = Random.insideUnitSphere * _wanderDistance;
-                    randomDirection += _agent.transform.position;
-                    NavMeshHit hit;
-                    NavMesh.SamplePosition(randomDirection, out hit, _wanderDistance, _agent.areaMask);
-                    _agent.SetDestination(hit.position);
-                    while (_agent.remainingDistance > _agent.stoppingDistance || _agent.pathPending)
-                    {
-                        await Task.Yield();
-                    }
-                    await UnityTask.WaitForSeconds(_waitTime);
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
-        }
+        bool IsMoving() => _agent.remainingDistance > _agent.stoppingDistance || _agent.pathPending;
     }
 }

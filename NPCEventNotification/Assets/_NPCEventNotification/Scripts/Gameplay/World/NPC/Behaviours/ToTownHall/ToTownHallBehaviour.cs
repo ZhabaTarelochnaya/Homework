@@ -1,5 +1,6 @@
-using System.Threading.Tasks;
+using System.Collections;
 using NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ResourceCollection;
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ToTownHall
@@ -8,26 +9,33 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ToTownHall
     {
         readonly NavMeshAgent _agent;
         readonly TownHall _townHall;
+        readonly MonoBehaviour _actor;
 
-        public ToTownHallBehaviour(NavMeshAgent agent, TownHall townHall) : base(BehaviourName.ToTownHall)
+        public ToTownHallBehaviour(NavMeshAgent agent, TownHall townHall, MonoBehaviour actor) 
+            : base(BehaviourName.ToTownHall)
         {
             _agent = agent;
             _townHall = townHall;
+            _actor = actor;
         }
 
         public override void OnEnter()
         {
             _agent.SetDestination(_townHall.transform.position);
-            HideWhenArrived();
+            _actor.StartCoroutine(HideWhenArrived());
         }
 
-        async void HideWhenArrived()
+        public override void OnExit()
         {
-            while (_agent.remainingDistance > _agent.stoppingDistance || _agent.pathPending)
-            {
-                await Task.Yield();
-            }
+            _actor.StopCoroutine(HideWhenArrived());
+            _agent.SetDestination(_agent.transform.position);
+        }
+
+        IEnumerator HideWhenArrived()
+        {
+            yield return new WaitWhile(IsTargetReached);
             _townHall.Hide();
         }
+        bool IsTargetReached() => _agent.remainingDistance > _agent.stoppingDistance || _agent.pathPending;
     }
 }

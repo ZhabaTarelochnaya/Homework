@@ -39,11 +39,12 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC
             if (!_storage) Debug.LogError($"{gameObject.name}: _storage is not set");
             
             _behaviourManager.Add(new ResourceCollectionBehaviour(_resourceZone, _agent, _storage))
-                .Add(new ToTownHallBehaviour(_agent, _townHall));
+                .Add(new ToTownHallBehaviour(_agent, _townHall, this));
         }
 
         void FixedUpdate()
         {
+            if(Input.GetKeyDown(KeyCode.Space)) Destroy(this);
             _behaviourManager.Tick(Time.fixedDeltaTime);
         }
     }

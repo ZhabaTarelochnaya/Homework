@@ -10,23 +10,30 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ResourceCollectio
     {
         readonly float _collectionTime;
         ResourceCollectionStateName _nextState;
-        CancellationTokenSource _cts;
-
+        float _timer;
         public CollectResources(float collectionTime) : base(ResourceCollectionStateName.Collect)
         {
             _collectionTime = collectionTime;
         }
         public override void OnEnter()
         {
-            _cts = new CancellationTokenSource();
             if (_nextState == ResourceCollectionStateName.GoToResourceZone) return;
             _nextState = ResourceCollectionStateName.Collect;
-            Collect(_cts.Token);
+            _timer = _collectionTime;
+        }
+
+        public override void Tick(float deltaTime)
+        {
+            _timer -= deltaTime;
         }
 
         public override void OnExit()
         {
-            _cts?.Cancel();
+            if (_timer > 0)
+            {
+                _nextState = ResourceCollectionStateName.GoToResourceZone;
+                _timer = 0;
+            }
         }
         public override ResourceCollectionStateName GetNextState()
         {
@@ -35,28 +42,8 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ResourceCollectio
                 _nextState = ResourceCollectionStateName.Default;
                 return ResourceCollectionStateName.GoToResourceZone;
             }
+            if (_timer <= 0) return ResourceCollectionStateName.GoToStorage; 
             return _nextState;
-        }
-        async void Collect(CancellationToken token)
-        {
-            try
-            {
-                var time = Time.time + _collectionTime;
-                while (Time.time < time)
-                {
-                    token.ThrowIfCancellationRequested();
-                    await Task.Yield();
-                }
-                _nextState = ResourceCollectionStateName.GoToStorage;
-            }
-            catch (OperationCanceledException)
-            {
-                _nextState = ResourceCollectionStateName.GoToResourceZone;
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
-            }
         }
     }
 }

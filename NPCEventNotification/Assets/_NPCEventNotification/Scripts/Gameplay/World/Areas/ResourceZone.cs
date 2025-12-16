@@ -6,6 +6,7 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ResourceCollectio
     public class ResourceZone : MonoBehaviour
     {
         SpriteRenderer _spriteRenderer;
+        [field: SerializeField] public float CollectionTime { get; private set; } = 2f;
         public Vector2 Size => _spriteRenderer.size;
 
         void Awake()

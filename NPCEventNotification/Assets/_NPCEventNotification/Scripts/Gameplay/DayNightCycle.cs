@@ -1,6 +1,5 @@
 using System;
-using System.Threading.Tasks;
-using NPCEventNotification.Scripts.Utils.Extansions;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -10,44 +9,35 @@ namespace NPCEventNotification.Scripts.Gameplay
     {
         readonly EventManager _eventManager;
         readonly Light2D _globalLight;
-        public float DayDuration = 15;
-        public float NightDuration = 5;
-        public float SwitchDuration = 2;
-        public float NightLightLevel = 0.1f;
-        public float DayLightLevel = 1f;
-        
-
+        public float DayDuration { get; set; } = 15;
+        public float NightDuration { get; set; } = 5;
+        public float SwitchDuration { get; set; } = 2;
+        public float NightLightLevel { get; set; } = 0.1f;
+        public float DayLightLevel  { get; set; } = 1f;
         public DayNightCycle(EventManager eventManager, Light2D globalLight)
         {
             _eventManager = eventManager;
             _globalLight = globalLight;
         }
 
-        public async void StartCycle()
+        public IEnumerator StartCycle()
         {
-            try
+            while (true)
             {
-                while (true)
+                _eventManager.TriggerEvent(new GameEvent(GameEventName.Day, "Day started"));
+                yield return new WaitForSeconds(DayDuration - SwitchDuration);
+                while (_globalLight.intensity >= NightLightLevel)
                 {
-                    _eventManager.TriggerEvent(new GameEvent(GameEventName.Day, "Day started"));
-                    await UnityTask.WaitForSeconds(DayDuration - SwitchDuration);
-                    while (_globalLight.intensity >= NightLightLevel)
-                    {
-                        _globalLight.intensity -= (DayLightLevel -  NightLightLevel) * Time.deltaTime / SwitchDuration;
-                        await Task.Yield();
-                    }
-                    _eventManager.TriggerEvent(new GameEvent(GameEventName.Night, "Night started"));
-                    await UnityTask.WaitForSeconds(NightDuration - SwitchDuration);
-                    while (_globalLight.intensity <= DayLightLevel)
-                    {
-                        _globalLight.intensity += (DayLightLevel -  NightLightLevel) * Time.deltaTime / SwitchDuration;
-                        await Task.Yield();
-                    }
+                    _globalLight.intensity -= (DayLightLevel -  NightLightLevel) * Time.deltaTime / SwitchDuration;
+                    yield return null;
                 }
-            }
-            catch (Exception e)
-            {
-                Debug.LogException(e);
+                _eventManager.TriggerEvent(new GameEvent(GameEventName.Night, "Night started"));
+                yield return new WaitForSeconds(NightDuration - SwitchDuration);
+                while (_globalLight.intensity <= DayLightLevel)
+                {
+                    _globalLight.intensity += (DayLightLevel -  NightLightLevel) * Time.deltaTime / SwitchDuration;
+                    yield return null;
+                }
             }
         }
     }

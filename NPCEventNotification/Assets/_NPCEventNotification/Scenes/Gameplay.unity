@@ -276,7 +276,8 @@ GameObject:
   - component: {fileID: 423901603}
   - component: {fileID: 423901602}
   - component: {fileID: 423901601}
-  m_Layer: 0
+  - component: {fileID: 423901606}
+  m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -397,6 +398,41 @@ Transform:
   - {fileID: 2078614925}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &423901606
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 423901600}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 10
 --- !u!1 &510338272
 GameObject:
   m_ObjectHideFlags: 0
@@ -743,7 +779,7 @@ GameObject:
   - component: {fileID: 994011417}
   - component: {fileID: 994011416}
   - component: {fileID: 994011420}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: NPC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1756,6 +1792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79247379ab554cedaaa44a32e809d0f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <CollectionTime>k__BackingField: 2
 --- !u!1001 &8197854880667577518
 PrefabInstance:
   m_ObjectHideFlags: 0

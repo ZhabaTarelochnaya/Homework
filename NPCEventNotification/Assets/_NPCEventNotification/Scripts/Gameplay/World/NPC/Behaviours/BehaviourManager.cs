@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours
@@ -8,7 +10,6 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours
         Dictionary<BehaviourName, Behaviour> _behaviours = new();
         Behaviour CurrentBehaviour;
         bool _isInitialized = false;
-
         public void Tick(float deltaTime)
         {
             if (CurrentBehaviour == null) Debug.LogError("CurrentBehaviour is null");
