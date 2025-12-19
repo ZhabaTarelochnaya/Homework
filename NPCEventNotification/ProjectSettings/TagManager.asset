@@ -14,8 +14,8 @@ TagManager:
   - Navigation
   - Enemy
   - NPC
-  - 
-  - 
+  - NPCTrigger
+  - EnemyTrigger
   - 
   - 
   - 

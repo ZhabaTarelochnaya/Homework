@@ -10,6 +10,7 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ToTownHall
         readonly NavMeshAgent _agent;
         readonly TownHall _townHall;
         readonly MonoBehaviour _actor;
+        Coroutine _coroutine;
 
         public ToTownHallBehaviour(NavMeshAgent agent, TownHall townHall, MonoBehaviour actor) 
             : base(BehaviourName.ToTownHall)
@@ -22,13 +23,13 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ToTownHall
         public override void OnEnter()
         {
             _agent.SetDestination(_townHall.transform.position);
-            _actor.StartCoroutine(HideWhenArrived());
+            _coroutine = _actor.StartCoroutine(HideWhenArrived());
         }
 
         public override void OnExit()
         {
-            _actor.StopCoroutine(HideWhenArrived());
             _agent.SetDestination(_agent.transform.position);
+            _actor.StopCoroutine(_coroutine);
         }
 
         IEnumerator HideWhenArrived()

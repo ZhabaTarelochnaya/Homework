@@ -5,6 +5,8 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours
         Default,
         ResourceCollection,
         ToTownHall,
-        Wander
+        Wander,
+        Chase,
+        Attack
     }
 }

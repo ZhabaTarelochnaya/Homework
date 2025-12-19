@@ -8,11 +8,11 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours
     public class BehaviourManager
     {
         Dictionary<BehaviourName, Behaviour> _behaviours = new();
-        Behaviour CurrentBehaviour;
         bool _isInitialized = false;
+        public Behaviour CurrentBehaviour { get; private set; }
         public void Tick(float deltaTime)
         {
-            if (CurrentBehaviour == null) Debug.LogError("CurrentBehaviour is null");
+            if (CurrentBehaviour == null) Debug.LogError("BehaviourManager have no behaviour set");
             if (!_isInitialized)
             {
                 _isInitialized = true;
@@ -22,6 +22,7 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours
         }
         public void SwitchBehaviour(BehaviourName behaviourName)
         {
+            if (CurrentBehaviour.Name == behaviourName) return;
             var behaviour = _behaviours[behaviourName];
             if (behaviour == null)
             {

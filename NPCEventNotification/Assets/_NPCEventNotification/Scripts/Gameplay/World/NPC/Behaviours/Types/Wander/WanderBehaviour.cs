@@ -11,24 +11,25 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.Wander
         readonly float _wanderDistance;
         readonly float _waitTime;
         readonly MonoBehaviour _actor;
+        Coroutine _corutine;
 
-        public WanderBehaviour(NavMeshAgent agent, float wanderDistance, float waitTime, MonoBehaviour actor) 
+        public WanderBehaviour(NavMeshAgent agent, IWandererData wandererData, MonoBehaviour actor) 
             : base(BehaviourName.Wander)
         {
             _agent = agent;
-            _wanderDistance = wanderDistance;
-            _waitTime = waitTime;
+            _wanderDistance = wandererData.WanderDistance;
+            _waitTime = wandererData.WanderStopTime;
             _actor = actor;
         }
 
         public override void OnEnter()
         {
-            _actor.StartCoroutine(Wander());
+            _corutine = _actor.StartCoroutine(Wander());
         }
 
         public override void OnExit()
         {
-            _actor.StopCoroutine(Wander());
+            _actor.StopCoroutine(_corutine);
             _agent.SetDestination(_agent.transform.position);
         }
         IEnumerator Wander()
