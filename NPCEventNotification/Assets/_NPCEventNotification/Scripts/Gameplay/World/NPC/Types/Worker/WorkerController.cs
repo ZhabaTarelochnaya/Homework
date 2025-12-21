@@ -49,11 +49,11 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC
 
         void OnGameEvent(GameEvent e)
         {
-            if (e.Name == GameEventName.Day)
+            if (e.Name == GameEventName.Morning)
             {
                 _behaviourManager.SwitchBehaviour(BehaviourName.ResourceCollection);
             } 
-            else if (e.Name == GameEventName.Night)
+            else if (e.Name == GameEventName.Evening)
             {
                 _behaviourManager.SwitchBehaviour(BehaviourName.ToTownHall);
             }

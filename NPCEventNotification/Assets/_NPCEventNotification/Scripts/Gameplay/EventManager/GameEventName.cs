@@ -6,5 +6,7 @@ namespace NPCEventNotification.Scripts.Gameplay
         BattleStart,
         Day,
         Night,
+        Evening,
+        Morning,
     }
 }

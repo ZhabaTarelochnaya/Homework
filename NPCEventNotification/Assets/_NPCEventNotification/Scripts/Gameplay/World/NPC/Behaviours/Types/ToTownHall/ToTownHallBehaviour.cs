@@ -30,6 +30,7 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ToTownHall
 
         public override void OnExit()
         {
+            _townHall.Release(_actor.gameObject);
             _agent.areaMask &= ~_area;
             _agent.SetDestination(_agent.transform.position);
             _actor.StopCoroutine(_coroutine);
@@ -38,7 +39,7 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ToTownHall
         IEnumerator HideWhenArrived()
         {
             yield return new WaitWhile(IsTargetReached);
-            _townHall.Hide();
+            _townHall.Hide(_actor.gameObject);
         }
         bool IsTargetReached() => _agent.remainingDistance > _agent.stoppingDistance || _agent.pathPending;
     }
