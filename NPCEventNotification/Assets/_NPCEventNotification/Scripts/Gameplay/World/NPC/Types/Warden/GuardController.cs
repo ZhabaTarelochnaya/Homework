@@ -1,26 +1,25 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using NPCEventNotification.Scripts.Gameplay.NPC;
 using NPCEventNotification.Scripts.Gameplay.NPC.Behaviours;
 using NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.Types.Attack;
 using NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.Types.Chase;
 using NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.Wander;
 using NPCEventNotification.Scripts.Utils;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace NPCEventNotification.Scripts.Gameplay.NPC
+namespace NPCEventNotification.Scripts.Gameplay.World.NPC.Types.Warden
 {
-    public class EnemyController : MonoBehaviour, IHealthUser
+    public class GuardController : MonoBehaviour, IHealthUser
     {
         BehaviourManager _behaviourManager = new ();
         NavMeshAgent _agent;
         Transform _target;
-        [SerializeField] Detector2D _npcDetector;
-        [SerializeField] EnemyDataSO _enemyDataSo;
+        [SerializeField] GuardDataSO guardDataSo;
+        [SerializeField] Detector2D _enemyDetector;
         [SerializeField] AttackZone _attackZone;
-        EnemyData _enemyData = new ();
+        GuardData _guardData = new ();
 
         public Health Health { get; private set; }
 
@@ -29,21 +28,21 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC
             _agent = GetComponent<NavMeshAgent>();
 
             if (!_agent) Debug.LogError($"{gameObject.name}: _agent is not set");
-            if (!_npcDetector) Debug.LogError($"{gameObject.name}: _npcDetector is not set");
-            if (!_enemyDataSo) Debug.LogError($"{gameObject.name}: _enemyDataSo is not set");
+            if (!_enemyDetector) Debug.LogError($"{gameObject.name}: _enemyDetector is not set");
+            if (!guardDataSo) Debug.LogError($"{gameObject.name}: _wardenDataSO is not set");
             if (!_attackZone) Debug.LogError($"{gameObject.name}: _attackZone is not set");
 
-            _enemyDataSo.FillData(_enemyData);
-            _enemyData.CurrentHealth = _enemyData.MaxHealth;
-            Health = new Health(_enemyData);
-            _agent.speed = _enemyData.Speed;
+            guardDataSo.FillData(_guardData);
+            _guardData.CurrentHealth = _guardData.MaxHealth;
+            Health = new Health(_guardData);
+            _agent.speed = _guardData.Speed;
 
-            _behaviourManager.Add(new WanderBehaviour(_agent, _enemyData, this))
-                .Add(new ChaseBehaviour(_agent, _enemyData))
-                .Add(new AttackBehaviour(_attackZone, _enemyData));
+            _behaviourManager.Add(new WanderBehaviour(_agent, _guardData, this))
+                .Add(new ChaseBehaviour(_agent, _guardData))
+                .Add(new AttackBehaviour(_attackZone, _guardData));
 
 
-            _npcDetector.TriggerEntered += NpcDetectorOnTriggerEntered;
+            _enemyDetector.TriggerEntered += NpcDetectorOnTriggerEntered;
             _attackZone.TargetEntered += AttackZoneOnTargetEntered;
             _attackZone.TargetExited += AttackZoneOnTargetExited;
             Health.Died += () => Destroy(gameObject);
@@ -76,15 +75,14 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC
         {
             if (_target)
             {
-                _enemyData.Destination = _target.position;
+                _guardData.Destination = _target.position;
             }
             _behaviourManager.Tick(Time.fixedDeltaTime);
-            Debug.Log(_behaviourManager.CurrentBehaviour.Name);
         }
 
         void OnDestroy()
         {
-            _npcDetector.TriggerEntered -= NpcDetectorOnTriggerEntered;
+            _enemyDetector.TriggerEntered -= NpcDetectorOnTriggerEntered;
             _attackZone.TargetEntered -= AttackZoneOnTargetEntered;
             _attackZone.TargetExited -= AttackZoneOnTargetExited;
         }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace NPCEventNotification.Scripts.Gameplay.NPC
 {
-    [CreateAssetMenu(fileName = "ScriptableObjects", menuName = "ScriptableObjects/EnemyDataSO")]
+    [CreateAssetMenu(fileName = "EnemyData", menuName = "ScriptableObjects/EnemyData")]
     public class EnemyDataSO : ScriptableObject
     {
         [field: SerializeField] public float SetDestinationFrequency { get; private set; }

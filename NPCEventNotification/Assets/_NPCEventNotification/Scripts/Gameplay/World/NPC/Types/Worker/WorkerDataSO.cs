@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace NPCEventNotification.Scripts.Gameplay.NPC
 {
-    [CreateAssetMenu(fileName = "ScriptableObjects", menuName = "ScriptableObjects/WorkerData")]
+    [CreateAssetMenu(fileName = "WorkerData", menuName = "ScriptableObjects/WorkerData")]
     public class WorkerDataSO : ScriptableObject
     {
         [field: SerializeField] public int MaxHealth { get; private set; }

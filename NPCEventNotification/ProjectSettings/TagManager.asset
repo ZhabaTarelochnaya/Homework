@@ -13,8 +13,8 @@ TagManager:
   - UI
   - Navigation
   - Enemy
-  - NPC
-  - NPCTrigger
+  - Ally
+  - AllyTrigger
   - EnemyTrigger
   - Building
   - 
