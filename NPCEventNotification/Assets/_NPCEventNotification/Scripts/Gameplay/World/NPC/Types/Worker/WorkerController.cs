@@ -36,7 +36,6 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC
         void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
-
             if (!_agent) Debug.LogError($"{gameObject.name}: _agent is not set");
             if (!_resourceZone) Debug.LogError($"{gameObject.name}: _resourceZone is not set");
             if (!_storage) Debug.LogError($"{gameObject.name}: _storage is not set");

@@ -7,13 +7,16 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ResourceCollectio
 {
     public class ResourceCollectionBehaviour : Behaviour
     {
+        readonly NavMeshAgent _agent;
         FSM<ResourceCollectionStateName> _fsm = new();
-        public ResourceCollectionBehaviour(ResourceZone _resourceZone, NavMeshAgent _agent, Transform _storage)
+        readonly int _area = 1 << NavMesh.GetAreaFromName("Worker");
+        public ResourceCollectionBehaviour(ResourceZone resourceZone, NavMeshAgent agent, Transform storage)
             : base(BehaviourName.ResourceCollection)
         {
-            _fsm.AddState(new GoToResourceZone(_resourceZone, _agent))
-                .AddState(new CollectResources(_resourceZone.CollectionTime))
-                .AddState(new GoToStorage(_agent, _storage.position));
+            _agent = agent;
+            _fsm.AddState(new GoToResourceZone(resourceZone, agent))
+                .AddState(new CollectResources(resourceZone.CollectionTime))
+                .AddState(new GoToStorage(agent, storage.position));
         }
         public override void Tick(float deltaTime)
         {
@@ -23,11 +26,13 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ResourceCollectio
         public override void OnEnter()
         {
             _fsm.IsActive = true;
+            _agent.areaMask |= _area;
         }
 
         public override void OnExit()
         {
             _fsm.IsActive = false;
+            _agent.areaMask &= ~_area;
         }
     }
 }
