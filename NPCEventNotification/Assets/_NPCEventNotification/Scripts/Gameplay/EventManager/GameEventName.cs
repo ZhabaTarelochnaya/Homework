@@ -7,7 +7,11 @@ namespace NPCEventNotification.Scripts.Gameplay
         Night,
         Evening,
         Morning,
-        EnemiesRoaming,
-        EnemiesDefeated,
+        /// <summary>
+        /// args: Transform enemy
+        /// </summary>
+        EnemyDetected,
+        EnemyKilled,
+        AllEnemiesKilled,
     }
 }

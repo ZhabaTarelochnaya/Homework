@@ -35,6 +35,7 @@ namespace _NPCEventNotification.Scripts.Gameplay.World.NPC.Types
         public GuardController CreateGuard(Vector2 position)
         {
             var guard = _allyFactory.CreateGuard(position);
+            guard.Bind(_eventManager);
             return guard;
         }
     }

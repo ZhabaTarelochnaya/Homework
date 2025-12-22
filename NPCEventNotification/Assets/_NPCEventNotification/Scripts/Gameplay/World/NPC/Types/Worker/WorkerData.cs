@@ -6,5 +6,6 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC
     {
         public int MaxHealth { get; set; }
         public int CurrentHealth { get; set; }
+        public bool IsAvoidingEnemies { get; set; }
     }
 }

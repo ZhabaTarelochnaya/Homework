@@ -19,7 +19,10 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.Types.Chase
 
         public override void OnEnter()
         {
-            _agent.SetDestination(_agentData.Destination);
+            if (_agent.isOnNavMesh)
+            {
+                _agent.SetDestination(_agentData.Destination);
+            }
         }
         public override void Tick(float deltaTime)
         {

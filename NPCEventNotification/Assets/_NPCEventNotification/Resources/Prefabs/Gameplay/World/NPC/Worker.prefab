@@ -309,7 +309,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46b59b9f5c61439da510ce02c24aaaf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _workerData: {fileID: 11400000, guid: 240d2c10c04ff71468b56e69f9780604, type: 2}
+  _workerDataSO: {fileID: 11400000, guid: 240d2c10c04ff71468b56e69f9780604, type: 2}
+  _enemyDetector: {fileID: 5584739979291987915}
 --- !u!114 &7537094147934538491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -459,6 +460,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b74227a3ed28ee041a71d4dcb311f881, type: 3}
+--- !u!114 &5584739979291987915 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7472569125743315709, guid: b74227a3ed28ee041a71d4dcb311f881, type: 3}
+  m_PrefabInstance: {fileID: 3040806520144282934}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 192e7f69380846459470a8714aea8e54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &6041969668911419886 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8784972620606084312, guid: b74227a3ed28ee041a71d4dcb311f881, type: 3}
