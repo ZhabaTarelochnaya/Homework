@@ -46,7 +46,7 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC
             _npcDetector.TriggerEntered += NpcDetectorOnTriggerEntered;
             _attackZone.TargetEntered += AttackZoneOnTargetEntered;
             _attackZone.TargetExited += AttackZoneOnTargetExited;
-            Health.Died += () => Destroy(gameObject);
+            Health.Died += () => DestroyImmediate(gameObject);
         }
 
         void AttackZoneOnTargetEntered(Health arg1, IEnumerable<Health> arg2)

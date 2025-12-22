@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _NPCEventNotification.Scripts.Gameplay.World.NPC.Types;
 using UnityEngine;
 
 namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ResourceCollection
@@ -7,6 +8,20 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.ResourceCollectio
     public class TownHall : MonoBehaviour
     {
         List<GameObject> _npcs = new ();
+        [SerializeField] int _startWorkerAmount = 3;
+        [SerializeField] int _startGuardAmount = 2;
+        public void Bind(AllyFactory allyFactory)
+        {
+            for (int i = 0; i < _startWorkerAmount; i++)
+            {
+                allyFactory.CreateWorker(transform.position);
+            }
+
+            for (int i = 0; i < _startGuardAmount; i++)
+            {
+                allyFactory.CreateGuard(transform.position);
+            }
+        }
 
         public void ReleaseAll()
         {

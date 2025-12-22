@@ -14,14 +14,20 @@ namespace NPCEventNotification.Scripts.Gameplay.World.NPC.Types.Warden
     public class GuardController : MonoBehaviour, IHealthUser
     {
         BehaviourManager _behaviourManager = new ();
+        EventManager _eventManager;
         NavMeshAgent _agent;
         Transform _target;
         [SerializeField] GuardDataSO guardDataSo;
         [SerializeField] Detector2D _enemyDetector;
         [SerializeField] AttackZone _attackZone;
         GuardData _guardData = new ();
-
+        
         public Health Health { get; private set; }
+
+        public void Bind(EventManager manager)
+        {
+            _eventManager = manager;
+        }
 
         void Awake()
         {
@@ -45,11 +51,12 @@ namespace NPCEventNotification.Scripts.Gameplay.World.NPC.Types.Warden
             _enemyDetector.TriggerEntered += NpcDetectorOnTriggerEntered;
             _attackZone.TargetEntered += AttackZoneOnTargetEntered;
             _attackZone.TargetExited += AttackZoneOnTargetExited;
-            Health.Died += () => Destroy(gameObject);
+            Health.Died += () => DestroyImmediate(gameObject);
         }
 
         void AttackZoneOnTargetEntered(Health arg1, IEnumerable<Health> arg2)
         {
+            
             _behaviourManager.SwitchBehaviour(BehaviourName.Attack);
         }
 
@@ -67,6 +74,11 @@ namespace NPCEventNotification.Scripts.Gameplay.World.NPC.Types.Warden
         void NpcDetectorOnTriggerEntered(Collider2D obj)
         {
             if (_target) return;
+            
+            var e = new GameEvent(GameEventName.EnemiesRoaming, 
+                $"Guard {gameObject.name} detected enemies");
+            _eventManager.TriggerEvent(e);
+            
             _target = obj.transform;
             _behaviourManager.SwitchBehaviour(BehaviourName.Chase);
         }
