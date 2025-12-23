@@ -261,6 +261,7 @@ Transform:
   - {fileID: 1431709187}
   - {fileID: 4537580807298870001}
   - {fileID: 8197854880667577519}
+  - {fileID: 580243774}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &510338272
@@ -497,6 +498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ef01f2b7aea409f870c2939f3e34dbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameplayUIPrefab: {fileID: 691401566493856874, guid: b167e4fdaf337db43a2d035360555b74, type: 3}
   _enemySpawner: {fileID: 580243775}
   _globalLight: {fileID: 619394801}
   _allyFactory: {fileID: 11400000, guid: 6b8ffd632953824469784d2fc934aa64, type: 2}
@@ -614,12 +616,12 @@ Transform:
   m_GameObject: {fileID: 580243771}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10.14, y: -4.2, z: -9.161947}
+  m_LocalPosition: {x: -1.6817646, y: -3.846772, z: -9.161947}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1169767372}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 307499667}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &580243775
 MonoBehaviour:
@@ -634,7 +636,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 760284122671593926, guid: 110019f60ea50f84fb03f92873267c1c, type: 3}
-  _minEnemySpawnAmount: 2
+  _minEnemySpawnAmount: 1
   _maxEnemySpawnAmount: 2
 --- !u!1 &619394800
 GameObject:
@@ -1281,4 +1283,3 @@ SceneRoots:
   - {fileID: 510338275}
   - {fileID: 307499667}
   - {fileID: 1350817660}
-  - {fileID: 580243774}

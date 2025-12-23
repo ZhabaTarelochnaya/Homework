@@ -79,7 +79,6 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC
                 _enemyData.Destination = _target.position;
             }
             _behaviourManager.Tick(Time.fixedDeltaTime);
-            Debug.Log(_behaviourManager.CurrentBehaviour.Name);
         }
 
         void OnDestroy()

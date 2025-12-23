@@ -23,7 +23,7 @@ namespace NPCEventNotification.Scripts.Gameplay
 
         public override string ToString()
         {
-            return $"({Time}) {Name}: {Description}";
+            return $"({Time:F2}) {Name}: {Description}";
         }
     }
 }
