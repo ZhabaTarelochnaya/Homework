@@ -27,7 +27,7 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.Types.Chase
         public override void Tick(float deltaTime)
         {
             _timer -= deltaTime;
-            if (_timer <= 0)
+            if (_timer <= 0 && _agent.isOnNavMesh)
             {
                 _agent.SetDestination(_agentData.Destination);
                 _timer = 1 / _agentData.SetDestinationFrequency;
@@ -35,7 +35,8 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.Types.Chase
         }
         public override void OnExit()
         {
-            _agent.SetDestination(_agent.transform.position);
+            if ( !_agent || !_agent.isOnNavMesh) return;
+            _agent?.SetDestination(_agent.transform.position);
         }
     }
 }

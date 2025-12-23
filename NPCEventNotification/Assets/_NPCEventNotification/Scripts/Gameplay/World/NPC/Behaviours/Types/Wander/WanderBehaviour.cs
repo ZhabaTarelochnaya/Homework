@@ -30,17 +30,21 @@ namespace NPCEventNotification.Scripts.Gameplay.NPC.Behaviours.Wander
         public override void OnExit()
         {
             _actor.StopCoroutine(_corutine);
+            if ( !_agent || !_agent.isOnNavMesh) return;
             _agent.SetDestination(_agent.transform.position);
         }
         IEnumerator Wander()
         {
             while (true)
             {
-                Vector3 randomDirection = Random.insideUnitSphere * _wanderDistance;
+                Vector3 randomDirection = Random.insideUnitCircle * _wanderDistance;
                 randomDirection += _agent.transform.position;
                 NavMeshHit hit;
-                NavMesh.SamplePosition(randomDirection, out hit, _wanderDistance, _agent.areaMask);
-                _agent.SetDestination(hit.position);
+                var pointFound = NavMesh.SamplePosition(randomDirection, out hit, _wanderDistance, _agent.areaMask);
+                if (pointFound && _agent && _agent.isOnNavMesh)
+                {
+                    _agent.SetDestination(hit.position);
+                }
                 yield return new WaitWhile(IsMoving);
                 yield return new WaitForSeconds(_waitTime);
             }
