@@ -20,5 +20,10 @@ namespace NPCEventNotification.Scripts.Gameplay
             Description = description;
             Args = args;
         }
+
+        public override string ToString()
+        {
+            return $"({Time}) {Name}: {Description}";
+        }
     }
 }

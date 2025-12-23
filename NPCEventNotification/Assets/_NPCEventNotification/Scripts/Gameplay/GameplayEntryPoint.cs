@@ -11,7 +11,8 @@ namespace NPCEventNotification.Scripts.Gameplay
 {
     public class GameplayEntryPoint : MonoBehaviour
     {
-        EventManager eventManager;
+        EventManager _eventManager;
+        [SerializeField] GameObject _gameplayUIPrefab;
         [SerializeField] EnemySpawner _enemySpawner;
         [SerializeField] Light2D _globalLight;
         [SerializeField] AllyFactorySO _allyFactory;
@@ -21,20 +22,27 @@ namespace NPCEventNotification.Scripts.Gameplay
 
         void Awake()
         {
-            if (!_globalLight) Debug.LogError("GameplayEntryPoint: _globalLight is null");
+            if (!_gameplayUIPrefab) Debug.LogError("GameplayEntryPoint: _gameplayUIPrefab is null");
             if (!_enemySpawner) Debug.LogError("GameplayEntryPoint: _enemySpawner is null");
+            if (!_globalLight) Debug.LogError("GameplayEntryPoint: _globalLight is null");
             if (!_allyFactory) Debug.LogError("GameplayEntryPoint: _allyFactory is null");
             if (!_townHall) Debug.LogError("GameplayEntryPoint: _townHall is null");
+            if (!_storage) Debug.LogError("GameplayEntryPoint: _storage is null");
+            if (!_resourceZone) Debug.LogError("GameplayEntryPoint: _resourceZone is null");
         }
 
-        public void Bind()
+        public void Bind(UIRoot uiRoot)
         {
-            eventManager = new EventManager();
-            var dayNightCycle = new DayNightCycle(eventManager, _globalLight);
-            var allyFactory = new AllyFactory(_allyFactory,eventManager, _resourceZone, _townHall, _storage);
+            _eventManager = new EventManager();
+            var dayNightCycle = new DayNightCycle(_eventManager, _globalLight);
+            var allyFactory = new AllyFactory(_allyFactory,_eventManager, _resourceZone, _townHall, _storage);
+            
+            var gameplayUIInstance = Instantiate(_gameplayUIPrefab, uiRoot.transform);
+            var gameplayUI = gameplayUIInstance.GetComponent<GameplayUI>();
+            gameplayUI.Bind(_eventManager);
             
             _townHall.Bind(allyFactory);
-            _enemySpawner.Bind(eventManager);
+            _enemySpawner.Bind(_eventManager);
             
             StartCoroutine(dayNightCycle.StartCycle());
         }

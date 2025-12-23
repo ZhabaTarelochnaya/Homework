@@ -5,11 +5,15 @@ namespace NPCEventNotification.Scripts.Gameplay
     public class EventManager
     {
         List<GameEvent> gameEvents = new();
-        public IEnumerator<GameEvent> GameEvents => gameEvents.GetEnumerator();
+        public IEnumerable<GameEvent> GameEvents => gameEvents;
         
         public delegate void GameEventHandler(GameEvent e);
         public event GameEventHandler OnGameEvent;
         
-        public void TriggerEvent(GameEvent e) => OnGameEvent?.Invoke(e);
+        public void TriggerEvent(GameEvent e)
+        {
+            gameEvents.Add(e);
+            OnGameEvent?.Invoke(e);
+        }
     }
 }

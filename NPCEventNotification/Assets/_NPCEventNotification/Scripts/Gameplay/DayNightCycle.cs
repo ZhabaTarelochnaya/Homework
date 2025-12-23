@@ -23,6 +23,7 @@ namespace NPCEventNotification.Scripts.Gameplay
 
         public IEnumerator StartCycle()
         {
+            _globalLight.intensity = NightLightLevel;
             while (true)
             {
                 _eventManager.TriggerEvent(new GameEvent(GameEventName.Morning, "Morning started"));
