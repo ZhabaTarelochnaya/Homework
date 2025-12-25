@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using _RSS.Scripts.Utils;
 

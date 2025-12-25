@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using _RSS.Scripts;
 using _RSS.Scripts.Data;
@@ -14,6 +15,7 @@ public class GameEntryPoint
 {
     static GameEntryPoint _gameRoot;
     readonly UIRoot _uiRoot;
+    readonly RSSFeed _rssFeed;
     readonly Coroutines _coroutines;
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void AutostartGame()
@@ -30,7 +32,11 @@ public class GameEntryPoint
         _uiRoot = Object.Instantiate(prefabUIRoot);
         Object.DontDestroyOnLoad(_uiRoot.gameObject);
 
+        var rssFeed = Resources.Load<RSSFeed>("Prefabs/UI/RSSFeed");
+        _rssFeed = Object.Instantiate(rssFeed, _uiRoot.transform);
         
+        var cts = new CancellationTokenSource();
+        LoadNews(_rssFeed, cts.Token);
     }
     void RunGame()
     {
@@ -68,5 +74,13 @@ public class GameEntryPoint
     {
         Boot,
         Gameplay,
+    }
+
+    async void LoadNews(RSSFeed feed, CancellationToken ct)
+    {
+        var newsData = await NewsLoader.LoadNewsAsync("/TestNews", ct);
+        var newsList = newsData.Select(n => new NewsItem(n)).ToList();
+        var news = new News(newsList);
+        feed.Bind(news);
     }
 }
