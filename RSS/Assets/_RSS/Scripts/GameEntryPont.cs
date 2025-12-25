@@ -1,12 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using _RSS.Scripts;
+using _RSS.Scripts.Data;
 using _RSS.Scripts.Gameplay;
 using _RSS.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
-public class GameEntryPoint
+public class GameEntryPoint 
 {
     static GameEntryPoint _gameRoot;
     readonly UIRoot _uiRoot;
@@ -25,6 +29,7 @@ public class GameEntryPoint
         var prefabUIRoot = Resources.Load<UIRoot>("Prefabs/UIRoot");
         _uiRoot = Object.Instantiate(prefabUIRoot);
         Object.DontDestroyOnLoad(_uiRoot.gameObject);
+
         
     }
     void RunGame()

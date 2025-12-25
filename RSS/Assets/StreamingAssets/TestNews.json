@@ -1,0 +1,32 @@
+{
+    "Items": [
+        {
+            "Title": "Unity 2025 released!",
+            "Content": "New AI features, better performance...",
+            "Timestamp": {
+                "value": 133981344000000000
+            }
+        },
+        {
+            "Title": "",
+            "Content": "Some news without a title",
+            "Timestamp": {
+                "value": 122080608000000000
+            }
+        },
+        {
+            "Title": "Some news without contents",
+            "Content": "",
+            "Timestamp": {
+                "value": 134110836000000000
+            }
+        },
+        {
+            "Title": "Some news without date",
+            "Content": "Some news without date",
+            "Timestamp": {
+                "value": 0
+            }
+        }
+    ]
+}
