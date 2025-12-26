@@ -37,7 +37,7 @@ public class RSSFeed : MonoBehaviour
 
     IEnumerator Start()
     {
-        while (_startNews == null) yield return null;
+        yield return new WaitWhile(() => _startNews == null);
         _loadingRoutine = StartCoroutine(ShowNewsCoroutine(_startNews));
     }
     
@@ -76,7 +76,7 @@ public class RSSFeed : MonoBehaviour
         _loadingItem.SetActive(true);
         foreach (var newsItem in newsItems)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
             var instance = Instantiate(_newsItemViewPrefab, _scrollRect.content);
             var newsItemView = instance.GetComponent<NewsItemView>();
             newsItemView.Bind(newsItem);

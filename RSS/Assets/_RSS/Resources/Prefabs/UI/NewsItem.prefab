@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7679358237704136341}
   - component: {fileID: 1444274588893338207}
   - component: {fileID: 9189046355948227758}
+  - component: {fileID: 9107763366070973527}
   m_Layer: 5
   m_Name: NewsItem
   m_TagString: Untagged
@@ -53,9 +54,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2d364c9c11e451a93d168f923ab130a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _showUpTime: 0.2
   _title: {fileID: 4236236400211432368}
   _content: {fileID: 4940765426432042808}
   _data: {fileID: 1488808602268285978}
+  _group: {fileID: 9107763366070973527}
 --- !u!222 &1444274588893338207
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -94,6 +97,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!225 &9107763366070973527
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2122749266181435593}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6478663267317427543
 GameObject:
   m_ObjectHideFlags: 0
