@@ -3,42 +3,99 @@ using System.Collections;
 using System.Collections.Generic;
 using _RSS.Scripts.Data;
 using _RSS.Scripts.UI;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class RSSFeed : MonoBehaviour
 {
-    [SerializeField] GameObject NewsItemViewPrefab;
-    [SerializeField] GameObject LoadingItem;
-    News _news;
-    ScrollRect _scrollRect;
+    bool _isLoadFast;
+    List<NewsItem> _startNews;
+    Coroutine _loadingRoutine;
+    RSSFeedEvents _feedEvents;
+    [SerializeField] ScrollRect _scrollRect;
+    [SerializeField] GameObject _newsItemViewPrefab;
+    [SerializeField] GameObject _loadingItem;
+    [SerializeField] TMP_InputField _inputField;
 
-    public void Bind(News news)
+    public void Bind(List<NewsItem> startNews, RSSFeedEvents feedEvents)
     {
-        _news = news;
+        _startNews = startNews;
+        _feedEvents = feedEvents;
+        feedEvents.NewsLoaded += FeedEventsOnNewsLoaded;
     }
     void Awake()
     {
-        _scrollRect = GetComponent<ScrollRect>();
         if (!_scrollRect) Debug.LogError("RSSFeed: _scrollRect is not set");
+        if  (!_loadingItem) Debug.LogError("RSSFeed: _newsItemViewPrefab is not set");
+        if (!_newsItemViewPrefab) Debug.LogError("RSSFeed: _loadingItem is not set"); 
     }
 
-    void Start()
+    IEnumerator Start()
     {
-        StartCoroutine(ShowNewsCoroutine());
+        while (_startNews == null) yield return null;
+        _loadingRoutine = StartCoroutine(ShowNewsCoroutine(_startNews));
     }
-
-    public IEnumerator ShowNewsCoroutine()
+    
+    public void OnReloadButtonPressed()
     {
-        LoadingItem.SetActive(true);
-        while (_news == null) yield return null;
-        foreach (var newsItem in _news.NewsItems)
+        ResetFeed();
+        _isLoadFast = false;
+        _feedEvents.RequestLoadNews(_inputField.text);
+    }
+    public void OnFastReloadButtonPressed()
+    {
+        ResetFeed();
+        _isLoadFast = true;
+        _feedEvents.RequestLoadNews(_inputField.text);
+    }
+    
+    void FeedEventsOnNewsLoaded(List<NewsItem> newsItems)
+    {
+        if (_isLoadFast)
+        {
+            ShowNews(newsItems);
+        }
+        else
+        {
+            _loadingRoutine = StartCoroutine(ShowNewsCoroutine(newsItems));
+        }
+    }
+    IEnumerator ShowNewsCoroutine(List<NewsItem> newsItems)
+    {
+        _loadingItem.SetActive(true);
+        foreach (var newsItem in newsItems)
         {
             yield return new WaitForSeconds(1f);
-            var instance = Instantiate(NewsItemViewPrefab, _scrollRect.content);
+            var instance = Instantiate(_newsItemViewPrefab, _scrollRect.content);
             var newsItemView = instance.GetComponent<NewsItemView>();
             newsItemView.Bind(newsItem);
         }
-        LoadingItem.SetActive(false);
+        _loadingItem.SetActive(false);
+    }
+
+    void ShowNews(List<NewsItem> newsItems)
+    {
+        foreach (var newsItem in newsItems)
+        {
+            var instance = Instantiate(_newsItemViewPrefab, _scrollRect.content);
+            var newsItemView = instance.GetComponent<NewsItemView>();
+            newsItemView.Bind(newsItem);
+        }
+    }
+
+    void ClearFeed()
+    {
+        foreach (var newsItemView in _scrollRect.content.GetComponentsInChildren<NewsItemView>())
+        {
+            Destroy(newsItemView.gameObject);
+        }
+    }
+
+    void ResetFeed()
+    {
+        StopCoroutine(_loadingRoutine);
+        _loadingItem.SetActive(false);
+        ClearFeed();
     }
 }

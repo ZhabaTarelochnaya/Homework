@@ -1,11 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using _RSS.Scripts;
 using _RSS.Scripts.Data;
 using _RSS.Scripts.Gameplay;
+using _RSS.Scripts.UI;
 using _RSS.Scripts.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -16,6 +16,7 @@ public class GameEntryPoint
     static GameEntryPoint _gameRoot;
     readonly UIRoot _uiRoot;
     readonly RSSFeed _rssFeed;
+    RSSFeedEvents _rssFeedEvents;
     readonly Coroutines _coroutines;
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void AutostartGame()
@@ -34,10 +35,11 @@ public class GameEntryPoint
 
         var rssFeed = Resources.Load<RSSFeed>("Prefabs/UI/RSSFeed");
         _rssFeed = Object.Instantiate(rssFeed, _uiRoot.transform);
-        
-        var cts = new CancellationTokenSource();
-        LoadNews(_rssFeed, cts.Token);
+        _rssFeedEvents = new RSSFeedEvents();
+        _rssFeedEvents.LoadRequested += RssFeedEventsOnLoadRequested;
+        BindRSSFeed(_rssFeed, _rssFeedEvents);
     }
+
     void RunGame()
     {
 #if UNITY_EDITOR
@@ -76,11 +78,22 @@ public class GameEntryPoint
         Gameplay,
     }
 
-    async void LoadNews(RSSFeed feed, CancellationToken ct)
+    async void BindRSSFeed(RSSFeed feed, RSSFeedEvents feedEvents)
     {
-        var newsData = await NewsLoader.LoadNewsAsync("/TestNews", ct);
+        var news = await LoadNews("TestNews");
+        feed.Bind(news, feedEvents);
+    }
+
+    async Task<List<NewsItem>> LoadNews(string path)
+    {
+        var newsData = await NewsLoader.LoadNewsAsync(path);
         var newsList = newsData.Select(n => new NewsItem(n)).ToList();
-        var news = new News(newsList);
-        feed.Bind(news);
+        return newsList;
+
+    }
+    async void RssFeedEventsOnLoadRequested(string path)
+    {
+        var news = await LoadNews(path);
+        _rssFeedEvents.LoadNews(news);
     }
 }

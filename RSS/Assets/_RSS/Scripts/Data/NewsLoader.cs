@@ -10,25 +10,25 @@ namespace _RSS.Scripts.Data
 {
     public static class NewsLoader
     {
-        public static async void SaveNewsAsync(NewsData newsData, string path, CancellationToken ct)
+        public static async void SaveNewsAsync(NewsData newsData, string path)
         {
             try
             {
                 if (newsData ==  null) Debug.LogError("SaveNews: news is null");
                 var json = JsonUtility.ToJson(newsData, true);
-                await File.WriteAllTextAsync(streamingAssetsPath + path + ".json", json, ct);
+                await File.WriteAllTextAsync(streamingAssetsPath + "/" + path + ".json", json);
             }
             catch (Exception e)
             {
                 Debug.LogError(e);
             }
         }
-        public static async Task<List<NewsItemData>> LoadNewsAsync(string path, CancellationToken ct)
+        public static async Task<List<NewsItemData>> LoadNewsAsync(string path)
         {
             string json = "";
             try
             {
-                json = await File.ReadAllTextAsync(streamingAssetsPath + path + ".json", ct);
+                json = await File.ReadAllTextAsync(streamingAssetsPath + "/" + path + ".json");
                 var news = JsonUtility.FromJson<NewsData>(json);
                 return news.Items;
             }
