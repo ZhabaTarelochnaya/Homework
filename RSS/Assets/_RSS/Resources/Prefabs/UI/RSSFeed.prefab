@@ -1323,7 +1323,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &636178437528141375
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1484,6 +1484,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _scrollRect: {fileID: 3714317780143432823}
   _newsItemViewPrefab: {fileID: 2122749266181435593, guid: fe79512e7c4f64048aa4fa23ed294adc, type: 3}
+  _errorViewPrefab: {fileID: 5488720191532589127, guid: fc69d5443e4658347972c99f97641706, type: 3}
   _loadingItem: {fileID: 3484133058613272646}
   _inputField: {fileID: 3655548689275589012}
 --- !u!114 &8496243860783601909
@@ -1687,7 +1688,7 @@ RectTransform:
   m_Father: {fileID: 4616449015121038189}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}

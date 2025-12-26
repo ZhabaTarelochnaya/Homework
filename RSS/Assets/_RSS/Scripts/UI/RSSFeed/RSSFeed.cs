@@ -15,6 +15,7 @@ public class RSSFeed : MonoBehaviour
     RSSFeedEvents _feedEvents;
     [SerializeField] ScrollRect _scrollRect;
     [SerializeField] GameObject _newsItemViewPrefab;
+    [SerializeField] GameObject _errorViewPrefab;
     [SerializeField] GameObject _loadingItem;
     [SerializeField] TMP_InputField _inputField;
 
@@ -22,13 +23,16 @@ public class RSSFeed : MonoBehaviour
     {
         _startNews = startNews;
         _feedEvents = feedEvents;
-        feedEvents.NewsLoaded += FeedEventsOnNewsLoaded;
+        _feedEvents.NewsLoaded += FeedEventsOnNewsLoaded;
+        _feedEvents.LoadFailed += FeedEventsOnLoadFailed;
     }
     void Awake()
     {
         if (!_scrollRect) Debug.LogError("RSSFeed: _scrollRect is not set");
         if  (!_loadingItem) Debug.LogError("RSSFeed: _newsItemViewPrefab is not set");
         if (!_newsItemViewPrefab) Debug.LogError("RSSFeed: _loadingItem is not set"); 
+        if (!_errorViewPrefab) Debug.LogError("RSSFeed: _errorViewPrefab is not set");
+        if (!_inputField) Debug.LogError("RSSFeed: _inputField is not set");
     }
 
     IEnumerator Start()
@@ -61,6 +65,12 @@ public class RSSFeed : MonoBehaviour
             _loadingRoutine = StartCoroutine(ShowNewsCoroutine(newsItems));
         }
     }
+    void FeedEventsOnLoadFailed(Exception e)
+    {
+        var instance = Instantiate(_errorViewPrefab, _scrollRect.content);
+        var errorView = instance.GetComponent<ErrorView>();
+        errorView.Bind(e);
+    }
     IEnumerator ShowNewsCoroutine(List<NewsItem> newsItems)
     {
         _loadingItem.SetActive(true);
@@ -90,6 +100,11 @@ public class RSSFeed : MonoBehaviour
         {
             Destroy(newsItemView.gameObject);
         }
+
+        foreach (var errorView in _scrollRect.content.GetComponentsInChildren<ErrorView>())
+        {
+            Destroy(errorView.gameObject);
+        }
     }
 
     void ResetFeed()
@@ -97,5 +112,11 @@ public class RSSFeed : MonoBehaviour
         StopCoroutine(_loadingRoutine);
         _loadingItem.SetActive(false);
         ClearFeed();
+    }
+
+    void OnDestroy()
+    {
+        _feedEvents.NewsLoaded -= FeedEventsOnNewsLoaded;
+        _feedEvents.LoadFailed -= FeedEventsOnLoadFailed;
     }
 }

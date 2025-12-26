@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,7 +94,14 @@ public class GameEntryPoint
     }
     async void RssFeedEventsOnLoadRequested(string path)
     {
-        var news = await LoadNews(path);
-        _rssFeedEvents.LoadNews(news);
+        try
+        {
+            var news = await LoadNews(path);
+            _rssFeedEvents.LoadNews(news);
+        }
+        catch (Exception e)
+        {
+            _rssFeedEvents.ThrowLoadException(e);
+        }
     }
 }

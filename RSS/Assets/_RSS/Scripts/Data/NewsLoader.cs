@@ -21,6 +21,7 @@ namespace _RSS.Scripts.Data
             catch (Exception e)
             {
                 Debug.LogError(e);
+                throw;
             }
         }
         public static async Task<List<NewsItemData>> LoadNewsAsync(string path)
@@ -35,7 +36,7 @@ namespace _RSS.Scripts.Data
             catch (Exception e)
             {
                 Debug.LogError(e);
-                return null;
+                throw;
             }
         }
     }

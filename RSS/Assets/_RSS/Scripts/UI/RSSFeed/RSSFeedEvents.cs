@@ -8,7 +8,7 @@ namespace _RSS.Scripts.UI
     {
         public event Action<List<NewsItem>> NewsLoaded;
         public event Action<string> LoadRequested;
-
+        public event Action<Exception> LoadFailed;
         public void LoadNews(List<NewsItem> news)
         {
             NewsLoaded?.Invoke(news);
@@ -17,6 +17,11 @@ namespace _RSS.Scripts.UI
         public void RequestLoadNews(string path)
         {
             LoadRequested?.Invoke(path);
+        }
+
+        public void ThrowLoadException(Exception e)
+        {
+            LoadFailed?.Invoke(e);
         }
     }
 }
