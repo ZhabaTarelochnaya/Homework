@@ -1,15 +1,19 @@
 using System.Collections;
 using DefaultNamespace;
 using DefaultNamespace.Gameplay;
+using DefaultNamespace.Gameplay.Data;
+using DefaultNamespace.Gameplay.World;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
+using Utils.ServiceLocator;
 
 public class GameEntryPoint
 {
     static GameEntryPoint _gameRoot;
     readonly UIRoot _uiRoot;
     readonly Coroutines _coroutines;
+    readonly GameConfig _gameConfig;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void AutostartGame()
@@ -26,6 +30,10 @@ public class GameEntryPoint
         var prefabUIRoot = Resources.Load<UIRoot>("Prefabs/UIRoot");
         _uiRoot = Object.Instantiate(prefabUIRoot);
         Object.DontDestroyOnLoad(_uiRoot.gameObject);
+        
+        _gameConfig = Resources.Load<GameConfig>("Configs/GameConfig");
+        
+        ServiceLocator.Initialize();
     }
 
     void RunGame()
@@ -53,7 +61,7 @@ public class GameEntryPoint
         yield return LoadScene(SceneNames.Gameplay);
 
         var sceneEntryPoint = Object.FindFirstObjectByType<GameplayEntryPoint>();
-        sceneEntryPoint.Bind();
+        sceneEntryPoint.Bind(_gameConfig);
         _uiRoot.HideLoadingScreen();
     }
 

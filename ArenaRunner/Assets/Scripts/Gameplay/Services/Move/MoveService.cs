@@ -1,8 +1,9 @@
 using UnityEngine;
+using Utils.ServiceLocator;
 
 namespace DefaultNamespace.Gameplay.World
 {
-    public class MoveService
+    public class MoveService : IService
     {
         public void Move(
             IMovable movable, 
