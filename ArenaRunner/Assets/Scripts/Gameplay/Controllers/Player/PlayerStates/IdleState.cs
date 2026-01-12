@@ -18,7 +18,7 @@ namespace DefaultNamespace.Gameplay.World.PlayerStates
         }
         public override PlayerStateName GetNextState()
         {
-            if (_playerDataProxy.Direction != Vector3.zero)
+            if (_playerDataProxy.InputMoveDirection != Vector3.zero)
             {
                 return PlayerStateName.Move;
             }

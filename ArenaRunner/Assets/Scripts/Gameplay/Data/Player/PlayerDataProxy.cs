@@ -22,7 +22,7 @@ namespace DefaultNamespace.Gameplay.Data
         }
         public Vector3 Position { get => _playerData.Position; set => _playerData.Position = value; }
         public Vector3 Velocity { get; set; }
-        public Vector3 Direction { get; set; }
+        public Vector3 InputMoveDirection { get; set; }
 
         public Vector3 CameraRotation { get => _playerData.CameraRotation; 
                                         set => _playerData.CameraRotation = value; }
