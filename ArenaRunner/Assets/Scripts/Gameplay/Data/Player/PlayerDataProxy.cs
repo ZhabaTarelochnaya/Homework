@@ -1,10 +1,11 @@
 using System;
+using DefaultNamespace.Gameplay.Services;
 using DefaultNamespace.Gameplay.World;
 using UnityEngine;
 
 namespace DefaultNamespace.Gameplay.Data
 {
-    public class PlayerDataProxy : IMovable
+    public class PlayerDataProxy : IMovable, ICameraUser
     {
         readonly PlayerData _playerData;
         
@@ -20,9 +21,14 @@ namespace DefaultNamespace.Gameplay.Data
             }
         }
         public Vector3 Position { get => _playerData.Position; set => _playerData.Position = value; }
-        public Vector3 Rotation { get => _playerData.Rotation; set => _playerData.Rotation = value; }
         public Vector3 Velocity { get; set; }
         public Vector3 Direction { get; set; }
+
+        public Vector3 CameraRotation { get => _playerData.CameraRotation; 
+                                        set => _playerData.CameraRotation = value; }
+        public float MouseSensitivity { get => _playerData.MouseSensitivity; 
+                                        set => _playerData.MouseSensitivity = value; }
+
         public event Action Died;
 
         public PlayerDataProxy(PlayerData playerData)

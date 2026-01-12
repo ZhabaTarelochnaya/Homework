@@ -1,4 +1,5 @@
 using DefaultNamespace.Gameplay.Data;
+using DefaultNamespace.Gameplay.Services;
 using DefaultNamespace.Gameplay.World.PlayerStates;
 using UnityEngine;
 using Utils.FiniteStateMachine;
@@ -8,7 +9,7 @@ namespace DefaultNamespace.Gameplay.World
 {
     public class PlayerController
     {
-        FSM<PlayerStateName> _fsm = new FSM<PlayerStateName>();
+        readonly FSM<PlayerStateName> _fsm = new ();
         public PlayerController(PlayerDataProxy playerDataProxy)
         {
             var moveService = ServiceLocator.Current.Get<MoveService>();
