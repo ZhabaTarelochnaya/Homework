@@ -1,4 +1,5 @@
 using System;
+using DefaultNamespace.Gameplay.View.PickUp;
 using TMPro;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace DefaultNamespace.Gameplay.World.Player
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerView : MonoBehaviour
     {
+        [SerializeField] PickUpCollectorView pickUpCollectorView;
         PlayerViewModel _viewModel;
         Rigidbody _rigidbody;
         float xRotation = -90;
@@ -18,6 +20,7 @@ namespace DefaultNamespace.Gameplay.World.Player
         public void Bind(PlayerViewModel viewModel)
         {
             _viewModel = viewModel;
+            pickUpCollectorView.Bind(_viewModel.PickUpCollectorViewModel);
         }
 
         void LateUpdate()

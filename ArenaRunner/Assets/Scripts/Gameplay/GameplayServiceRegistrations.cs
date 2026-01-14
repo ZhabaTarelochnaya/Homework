@@ -16,6 +16,8 @@ namespace DefaultNamespace.Gameplay
             ServiceLocator.Current.Register(cameraManager);
             var pickUpSpawnService = new PickUpSpawnService(gameConfig.PickUps);
             ServiceLocator.Current.Register(pickUpSpawnService);
+            var pickUpCollectionService = new PickUpCollectionService();
+            ServiceLocator.Current.Register(pickUpCollectionService);
         }
 
         public static void Unregister()
@@ -23,6 +25,7 @@ namespace DefaultNamespace.Gameplay
             ServiceLocator.Current.Unregister<MoveService>();
             ServiceLocator.Current.Unregister<CameraManager>();
             ServiceLocator.Current.Unregister<PickUpSpawnService>();
+            ServiceLocator.Current.Unregister<PickUpCollectionService>();
         }
     }
 }

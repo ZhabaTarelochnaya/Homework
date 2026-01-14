@@ -5,5 +5,7 @@ namespace Utils.EventBus
         Default,
         PickUpCreated,
         PickUpDestroyed,
+        ScoreChanged,
+        PickUpCollected
     }
 }

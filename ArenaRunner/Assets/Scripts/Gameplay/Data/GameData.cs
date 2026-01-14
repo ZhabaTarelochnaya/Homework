@@ -9,6 +9,8 @@ namespace DefaultNamespace.Gameplay.Data
     public class GameData
     {
         public int ID;
+        public int Score;
+        public GameStateName GameStateName;
         public List<PickUpData> PickUps = new();
         public PlayerData PlayerData;
         public CameraData CameraData;

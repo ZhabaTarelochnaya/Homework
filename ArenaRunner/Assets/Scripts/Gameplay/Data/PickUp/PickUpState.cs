@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace.Gameplay.World;
@@ -12,6 +13,7 @@ namespace DefaultNamespace.Gameplay.Data.PickUp
         public Vector3 Position { get; set; }
         public int ID { get; }
         public GameObject Prefab { get; }
+        public event Action Collected;
 
         public PickUpState(PickUpData pickUpData, GameConfig gameConfig)
         {
@@ -30,5 +32,18 @@ namespace DefaultNamespace.Gameplay.Data.PickUp
             ID = pickUpData.ID;
             Prefab = pickUpConfig?.Prefab;
         }
+
+        public PickUpData ToData()
+        {
+            var pickUpData = new PickUpData();
+            pickUpData.Type = Type;
+            pickUpData.Score = Score;
+            pickUpData.Position = Position;
+            pickUpData.ID = ID;
+            return pickUpData;
+
+        }
+
+        public void Collect() => Collected?.Invoke();
     }
 }

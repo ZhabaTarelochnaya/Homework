@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using DefaultNamespace.Gameplay.Data.PickUp;
 using UnityEngine;
 
@@ -19,6 +20,11 @@ namespace DefaultNamespace.Gameplay.Data
             playerData.Speed = PlayerSpeed;
             playerData.MouseSensitivity = MouseSensitivity;
             return playerData;
+        }
+
+        public PickUpConfig GetPickUpConfig(PickUpType type)
+        {
+            return PickUps.FirstOrDefault(c => c.Type == type);
         }
     }
 }

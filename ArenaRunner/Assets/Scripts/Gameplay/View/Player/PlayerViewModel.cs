@@ -1,5 +1,6 @@
 using System;
 using DefaultNamespace.Gameplay.Data;
+using DefaultNamespace.Gameplay.View.PickUp;
 using UnityEngine;
 
 namespace DefaultNamespace.Gameplay.World.Player
@@ -8,6 +9,7 @@ namespace DefaultNamespace.Gameplay.World.Player
     {
         readonly PlayerState _playerState;
         readonly PlayerController _playerController;
+        public PickUpCollectorViewModel PickUpCollectorViewModel { get; }
         public Vector3 Velocity { get => _playerState.Velocity; set => _playerState.Velocity = value; }
         public Vector3 Position { get => _playerState.Position; set => _playerState.Position = value; }
         public Vector3 Direction { get => _playerState.InputMoveDirection; set => _playerState.InputMoveDirection = value; }
@@ -18,6 +20,7 @@ namespace DefaultNamespace.Gameplay.World.Player
         {
             _playerState = playerState;
             _playerController = playerController;
+            PickUpCollectorViewModel = new PickUpCollectorViewModel();
         }
         public void FixedUpdate() => _playerController.FixedUpdate();
     }

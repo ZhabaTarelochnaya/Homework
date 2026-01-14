@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2f82e0934da44458d14659a588eb6d8, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  <PlayerSpeed>k__BackingField: 0
+  <PlayerSpeed>k__BackingField: 15
+  <MouseSensitivity>k__BackingField: 2
+  <PickUps>k__BackingField:
+  - {fileID: 11400000, guid: f5c36138ad45db24e8b155648f18f0dc, type: 2}
+  <PickUpSpawnFrequency>k__BackingField: 0

@@ -16,6 +16,7 @@ public class Bootstrapper
     readonly UIRoot _uiRoot;
     readonly Coroutines _coroutines;
     readonly GameConfig _gameConfig;
+    readonly GameState _gameState;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void AutostartGame()
@@ -36,14 +37,18 @@ public class Bootstrapper
         _gameConfig = Resources.Load<GameConfig>("Configs/GameConfig");
 
         var gameData = new GameData();
-        var gameState = new GameState(gameData);
+        gameData.PlayerData = new PlayerData();
+        _gameState = new GameState(gameData, _gameConfig);
         
         ServiceLocator.Initialize();
 
         var eventBus = new EventBus();
         ServiceLocator.Current.Register(eventBus);
         
-        var idService = new IDService(gameState);
+        var gameStateService = new GameStateService(_gameState, eventBus);
+        ServiceLocator.Current.Register(gameStateService);
+        
+        var idService = new IDService(_gameState);
         ServiceLocator.Current.Register(idService);
     }
 
@@ -72,7 +77,7 @@ public class Bootstrapper
         yield return LoadScene(SceneNames.Gameplay);
 
         var sceneEntryPoint = Object.FindFirstObjectByType<GameplayEntryPoint>();
-        sceneEntryPoint.Bind(_gameConfig);
+        sceneEntryPoint.Bind(_gameConfig, _gameState);
         _uiRoot.HideLoadingScreen();
     }
 
