@@ -22,9 +22,10 @@ namespace DefaultNamespace.Gameplay.World.PlayerStates
 
         public override void Tick(float deltaTime)
         {
-            var direction = RotateAroundYAxis(_playerDataProxy.InputMoveDirection,
-                _cameraManager.CurrentCamera.Rotation.y);
-            _moveService.Move(_playerDataProxy, direction, deltaTime);
+            var inputDir = _playerDataProxy.InputMoveDirection;
+            var yRotation = _cameraManager.CurrentCamera.Rotation.y;
+            var relativeDirection = _moveService.RotateAroundYAxis(inputDir, yRotation);
+            _moveService.Move(_playerDataProxy, relativeDirection, deltaTime);
         }
 
         public override PlayerStateName GetNextState()
@@ -35,14 +36,6 @@ namespace DefaultNamespace.Gameplay.World.PlayerStates
             }
             return PlayerStateName.Move;
         }
-        Vector3 RotateAroundYAxis(Vector3 dir, float angleDeg)
-        {
-            float a = -angleDeg * Mathf.Deg2Rad;
-            return new Vector3(
-                dir.x * Mathf.Cos(a) - dir.z * Mathf.Sin(a),
-                dir.y,
-                dir.x * Mathf.Sin(a) + dir.z * Mathf.Cos(a)
-            );
-        }
+        
     }
 }

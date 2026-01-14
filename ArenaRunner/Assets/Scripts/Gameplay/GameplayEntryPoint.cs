@@ -24,7 +24,7 @@ namespace DefaultNamespace.Gameplay
             var cameraData = new CameraData();
             var cameraDataProxy = new CameraDataProxy(cameraData);
             
-            GameplayServiceRegistrations.Register(playerDataProxy, cameraDataProxy);
+            GameplayServiceRegistrations.Register(playerDataProxy, cameraDataProxy, gameConfig);
             
             var playerController = new PlayerController(playerDataProxy);
             

@@ -3,14 +3,16 @@ using DefaultNamespace;
 using DefaultNamespace.Gameplay;
 using DefaultNamespace.Gameplay.Data;
 using DefaultNamespace.Gameplay.World;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Utils;
 using Utils.ServiceLocator;
+using EventBus = Utils.EventBus.EventBus;
 
-public class GameEntryPoint
+public class Bootstrapper
 {
-    static GameEntryPoint _gameRoot;
+    static Bootstrapper _gameRoot;
     readonly UIRoot _uiRoot;
     readonly Coroutines _coroutines;
     readonly GameConfig _gameConfig;
@@ -18,11 +20,11 @@ public class GameEntryPoint
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void AutostartGame()
     {
-        _gameRoot = new GameEntryPoint();
+        _gameRoot = new Bootstrapper();
         _gameRoot.RunGame();
     }
 
-    GameEntryPoint()
+    Bootstrapper()
     {
         _coroutines = new GameObject("Coroutines").AddComponent<Coroutines>();
         Object.DontDestroyOnLoad(_coroutines.gameObject);
@@ -34,6 +36,9 @@ public class GameEntryPoint
         _gameConfig = Resources.Load<GameConfig>("Configs/GameConfig");
         
         ServiceLocator.Initialize();
+
+        var eventBus = new EventBus();
+        ServiceLocator.Current.Register(eventBus);
     }
 
     void RunGame()

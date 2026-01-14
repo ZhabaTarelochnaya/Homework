@@ -37,5 +37,15 @@ namespace DefaultNamespace.Gameplay.World
         {
             positionUser.Position = position;
         }
+
+        public Vector3 RotateAroundYAxis(Vector3 dir, float angleDeg)
+        {
+            float a = -angleDeg * Mathf.Deg2Rad;
+            return new Vector3(
+                dir.x * Mathf.Cos(a) - dir.z * Mathf.Sin(a),
+                dir.y,
+                dir.x * Mathf.Sin(a) + dir.z * Mathf.Cos(a)
+            );
+        }
     }
 }
