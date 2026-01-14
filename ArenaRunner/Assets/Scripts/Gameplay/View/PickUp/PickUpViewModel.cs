@@ -5,13 +5,13 @@ namespace DefaultNamespace.Gameplay.View.PickUp
 {
     public class PickUpViewModel
     {
-        readonly PickUpDataProxy _pickUpDataProxy;
-        public int ID { get => _pickUpDataProxy.ID; }
-        public Vector3 Position { get => _pickUpDataProxy.Position; }
+        readonly PickUpState _pickUpState;
+        public int ID { get => _pickUpState.ID; }
+        public Vector3 Position { get => _pickUpState.Position; }
 
-        public PickUpViewModel(PickUpDataProxy pickUpDataProxy)
+        public PickUpViewModel(PickUpState pickUpState)
         {
-            _pickUpDataProxy = pickUpDataProxy;
+            _pickUpState = pickUpState;
         }
     }
 }

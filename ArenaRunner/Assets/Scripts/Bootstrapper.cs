@@ -34,11 +34,17 @@ public class Bootstrapper
         Object.DontDestroyOnLoad(_uiRoot.gameObject);
         
         _gameConfig = Resources.Load<GameConfig>("Configs/GameConfig");
+
+        var gameData = new GameData();
+        var gameState = new GameState(gameData);
         
         ServiceLocator.Initialize();
 
         var eventBus = new EventBus();
         ServiceLocator.Current.Register(eventBus);
+        
+        var idService = new IDService(gameState);
+        ServiceLocator.Current.Register(idService);
     }
 
     void RunGame()

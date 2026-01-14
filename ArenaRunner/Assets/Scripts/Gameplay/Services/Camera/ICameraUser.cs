@@ -5,6 +5,6 @@ namespace DefaultNamespace.Gameplay.Services
 {
     public interface ICameraUser : IPositionUser
     {
-        public Vector3 CameraRotation { get; set; }
+        public Quaternion CameraRotation { get; set; }
     }
 }

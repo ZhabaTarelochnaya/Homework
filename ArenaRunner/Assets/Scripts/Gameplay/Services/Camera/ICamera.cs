@@ -1,10 +1,10 @@
-using DefaultNamespace.Gameplay.World;
 using UnityEngine;
 
-namespace Gameplay.Services
+namespace Gameplay.Services.Camera
 {
-    public interface ICamera : IPositionUser
+    public class ICamera
     {
-        Vector3 Rotation { get; set; }
+        public Vector3 Position { get; set; }
+        public Quaternion Rotation { get; set; }
     }
 }

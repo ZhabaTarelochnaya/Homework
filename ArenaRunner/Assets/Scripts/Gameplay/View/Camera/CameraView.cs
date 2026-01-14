@@ -15,7 +15,7 @@ namespace DefaultNamespace.Gameplay.View
             _viewModel.LateUpdate();
             var pos = _viewModel.Position;
             transform.position = Vector3.Lerp(transform.position, pos, 0.1f);
-            transform.rotation = Quaternion.Euler(_viewModel.CameraRotation);
+            transform.rotation = _viewModel.CameraRotation;
         }
     }
 }

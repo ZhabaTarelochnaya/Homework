@@ -9,28 +9,28 @@ namespace DefaultNamespace.Gameplay.World.PlayerStates
     public class MoveState : FSMState<PlayerStateName>
     {
         readonly MoveService _moveService;
-        readonly PlayerDataProxy _playerDataProxy;
+        readonly PlayerState _playerState;
         readonly CameraManager _cameraManager;
 
-        public MoveState(MoveService moveService, PlayerDataProxy playerDataProxy) 
+        public MoveState(MoveService moveService, PlayerState playerState) 
             : base(PlayerStateName.Move)
         {
             _moveService = moveService;
-            _playerDataProxy = playerDataProxy;
+            _playerState = playerState;
             _cameraManager = ServiceLocator.Current.Get<CameraManager>();
         }
 
         public override void Tick(float deltaTime)
         {
-            var inputDir = _playerDataProxy.InputMoveDirection;
-            var yRotation = _cameraManager.CurrentCamera.Rotation.y;
+            var inputDir = _playerState.InputMoveDirection;
+            var yRotation = _cameraManager.CurrentCamera.Rotation.eulerAngles.y;
             var relativeDirection = _moveService.RotateAroundYAxis(inputDir, yRotation);
-            _moveService.Move(_playerDataProxy, relativeDirection, deltaTime);
+            _moveService.Move(_playerState, relativeDirection, deltaTime);
         }
 
         public override PlayerStateName GetNextState()
         {
-            if (_playerDataProxy.InputMoveDirection == Vector3.zero)
+            if (_playerState.InputMoveDirection == Vector3.zero)
             {
                 return PlayerStateName.Idle;
             }

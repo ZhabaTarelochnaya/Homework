@@ -6,19 +6,19 @@ namespace DefaultNamespace.Gameplay.World.PlayerStates
 {
     public class IdleState : FSMState<PlayerStateName>
     {
-        readonly PlayerDataProxy _playerDataProxy;
-        public IdleState(PlayerDataProxy playerDataProxy) : base(PlayerStateName.Idle)
+        readonly PlayerState _playerState;
+        public IdleState(PlayerState playerState) : base(PlayerStateName.Idle)
         {
-            _playerDataProxy = playerDataProxy;
+            _playerState = playerState;
         }
 
         public override void OnEnter()
         {
-            _playerDataProxy.Velocity = Vector3.zero;
+            _playerState.Velocity = Vector3.zero;
         }
         public override PlayerStateName GetNextState()
         {
-            if (_playerDataProxy.InputMoveDirection != Vector3.zero)
+            if (_playerState.InputMoveDirection != Vector3.zero)
             {
                 return PlayerStateName.Move;
             }

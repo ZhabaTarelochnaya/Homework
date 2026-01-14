@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Utils;
 
 namespace DefaultNamespace.Gameplay.Data
 {
@@ -8,8 +9,8 @@ namespace DefaultNamespace.Gameplay.Data
     {
         public float Speed;
         public bool IsDead;
-        public Vector3 Position;
-        public Vector3 CameraRotation;
+        public SerializableVector3 Position;
+        public SerializableVector3 CameraRotation;
         public float MouseSensitivity;
     }
 }

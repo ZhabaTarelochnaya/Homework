@@ -19,18 +19,18 @@ namespace DefaultNamespace.Gameplay
             isBound = true;
             
             var playerData = gameConfig.CreatePlayerData();
-            var playerDataProxy = new PlayerDataProxy(playerData);
+            var playerState = new PlayerState(playerData);
 
             var cameraData = new CameraData();
-            var cameraDataProxy = new CameraDataProxy(cameraData);
+            var cameraState = new CameraState(cameraData);
             
-            GameplayServiceRegistrations.Register(playerDataProxy, cameraDataProxy, gameConfig);
+            GameplayServiceRegistrations.Register(playerState, cameraState, gameConfig);
             
-            var playerController = new PlayerController(playerDataProxy);
+            var playerController = new PlayerController(playerState);
             
-            var playerViewModel = new PlayerViewModel(playerDataProxy, playerController);
+            var playerViewModel = new PlayerViewModel(playerState, playerController);
             _playerView.Bind(playerViewModel);
-            var cameraViewModel = new CameraViewModel(playerDataProxy);
+            var cameraViewModel = new CameraViewModel(playerState);
             _cameraView.Bind(cameraViewModel);
         }
 

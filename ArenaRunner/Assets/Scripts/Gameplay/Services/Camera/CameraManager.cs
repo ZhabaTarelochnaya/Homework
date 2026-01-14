@@ -3,6 +3,8 @@ using DefaultNamespace.Gameplay.Data.Camera;
 using DefaultNamespace.Gameplay.Services;
 using DefaultNamespace.Gameplay.World;
 using Gameplay.Services;
+using Gameplay.Services.Camera;
+using UnityEngine;
 using Utils.ServiceLocator;
 
 namespace DefaultNamespace.Gameplay.Controllers
@@ -14,9 +16,9 @@ namespace DefaultNamespace.Gameplay.Controllers
         public ICamera CurrentCamera { get; set; }
         readonly ICameraUser _player;
         
-        public CameraManager(PlayerDataProxy playerDataProxy, ICamera camera)
+        public CameraManager(PlayerState playerState, ICamera camera)
         {
-            _player = playerDataProxy;
+            _player = playerState;
             CurrentTarget =  _player;
             CurrentCamera = camera;
         }

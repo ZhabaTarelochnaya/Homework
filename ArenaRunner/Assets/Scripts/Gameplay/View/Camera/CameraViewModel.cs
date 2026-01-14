@@ -7,18 +7,18 @@ namespace DefaultNamespace.Gameplay.View.Camera
 {
     public class CameraViewModel
     {
-        readonly PlayerDataProxy _playerDataProxy;
+        readonly PlayerState _playerState;
         readonly CameraManager _cameraManager;
-        public Vector3 Position { get =>  _playerDataProxy.Position; }
-        public Vector3 CameraRotation
+        public Vector3 Position { get =>  _playerState.Position; }
+        public Quaternion CameraRotation
         {
-            get => _playerDataProxy.CameraRotation;
-            set => _playerDataProxy.CameraRotation = value;
+            get => _playerState.CameraRotation;
+            set => _playerState.CameraRotation = value;
         }
 
-        public CameraViewModel(PlayerDataProxy playerDataProxy)
+        public CameraViewModel(PlayerState playerState)
         {
-            _playerDataProxy = playerDataProxy;
+            _playerState = playerState;
             _cameraManager = ServiceLocator.Current.Get<CameraManager>();
         }
 

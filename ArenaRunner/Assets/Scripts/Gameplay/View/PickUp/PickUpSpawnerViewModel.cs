@@ -30,7 +30,7 @@ namespace DefaultNamespace.Gameplay.View.PickUp
         {
             if (e.Name == EventName.PickUpCreated)
             {
-                var pickUpDataProxy = (PickUpDataProxy)e.Args[0];
+                var pickUpDataProxy = (PickUpState)e.Args[0];
                 var pickUpViewModel = new PickUpViewModel(pickUpDataProxy);
                 var config = _gameConfig.PickUps
                     .FirstOrDefault(c => c.Type == pickUpDataProxy.Type);

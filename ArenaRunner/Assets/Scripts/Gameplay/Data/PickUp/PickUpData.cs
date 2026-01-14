@@ -1,6 +1,7 @@
 using System;
 using DefaultNamespace.Gameplay.World;
 using UnityEngine;
+using Utils;
 
 namespace DefaultNamespace.Gameplay.Data.PickUp
 {
@@ -8,8 +9,8 @@ namespace DefaultNamespace.Gameplay.Data.PickUp
     public class PickUpData
     {
         public PickUpType Type;
-        public int Price;
-        public Vector3 Position;
+        public int Score;
+        public SerializableVector3 Position;
         public int ID;
     }
 }

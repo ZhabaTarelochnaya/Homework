@@ -10,11 +10,11 @@ namespace DefaultNamespace.Gameplay.World
     public class PlayerController
     {
         readonly FSM<PlayerStateName> _fsm = new ();
-        public PlayerController(PlayerDataProxy playerDataProxy)
+        public PlayerController(PlayerState playerState)
         {
             var moveService = ServiceLocator.Current.Get<MoveService>();
-            _fsm.AddState(new MoveState(moveService, playerDataProxy))
-                .AddState(new IdleState(playerDataProxy));
+            _fsm.AddState(new MoveState(moveService, playerState))
+                .AddState(new IdleState(playerState));
         }
         public void FixedUpdate()
         {
