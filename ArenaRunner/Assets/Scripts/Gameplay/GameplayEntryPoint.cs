@@ -15,6 +15,7 @@ namespace DefaultNamespace.Gameplay
         [SerializeField] PlayerView _playerView;
         [SerializeField] CameraView _cameraView;
         [SerializeField] Transform _pickUps;
+        [SerializeField] EnemySpawnerView _enemySpawnerView;
         public void Bind(GameConfig gameConfig, GameState gameState)
         {
             isBound = true;
@@ -33,7 +34,8 @@ namespace DefaultNamespace.Gameplay
             _playerView.Bind(playerViewModel);
             var cameraViewModel = new CameraViewModel(playerState);
             _cameraView.Bind(cameraViewModel);
-
+            var enemySpawnerViewModel = new EnemySpawnerViewModel();
+            _enemySpawnerView.Bind(enemySpawnerViewModel);
             BindPickUps(gameConfig, gameState);
         }
 

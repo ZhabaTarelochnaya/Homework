@@ -20,7 +20,7 @@ namespace DefaultNamespace.Gameplay.Data
             var pickUp = _gameStateService.GameState.PickUps.FirstOrDefault(p => p.ID == id);
             pickUp.Collect();
             _gameStateService.GameState.PickUps.Remove(pickUp);
-            _eventBus.TriggerEvent(new GameEvent(EventName.PickUpCollected, 
+            _eventBus.TriggerEvent(new GameEvent(EventName.ItemPicked, 
                 $"Pick up {pickUp.Type} id:{pickUp.ID} collected"));
             _gameStateService.AddScore(pickUp.Score);
         }

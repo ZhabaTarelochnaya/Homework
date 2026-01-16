@@ -19,7 +19,7 @@ namespace DefaultNamespace.Gameplay.Data
             pickUpData.Score = Score;
             var idService = ServiceLocator.Current.Get<IDService>();
             pickUpData.ID = idService.CreateID();
-            var pickUpState = new PickUpState(pickUpData, this);
+            var pickUpState = new PickUpState(pickUpData);
             return pickUpState;
         }
     }

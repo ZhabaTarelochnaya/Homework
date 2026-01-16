@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace.Gameplay.Data.Camera;
+using DefaultNamespace.Gameplay.Data.Enemy;
 using DefaultNamespace.Gameplay.Data.PickUp;
 
 namespace DefaultNamespace.Gameplay.Data
@@ -13,13 +14,14 @@ namespace DefaultNamespace.Gameplay.Data
         public List<PickUpState> PickUps { get; } = new();
         public PlayerState PlayerState {get; set;}
         public CameraState CameraData {get; set;}
+        public List<EnemyState> Enemies { get; } = new();
 
         public GameState(GameData gameData, GameConfig gameConfig)
         {
             ID = gameData.ID;
             Score = gameData.Score;
             GameStateName = gameData.GameStateName;
-            PickUps = gameData.PickUps.Select(p => new PickUpState(p, gameConfig)).ToList();
+            PickUps = gameData.PickUps.Select(p => new PickUpState(p)).ToList();
         }
 
         public int CreateID() => ID++;
@@ -33,6 +35,7 @@ namespace DefaultNamespace.Gameplay.Data
             gameData.PickUps = PickUps.Select(p => p.ToData()).ToList();
             gameData.PlayerData = PlayerState.ToData();
             gameData.CameraData = CameraData.ToData();
+            gameData.Enemies = Enemies.Select(e => e.ToData()).ToList();
             return gameData;
         }
     }

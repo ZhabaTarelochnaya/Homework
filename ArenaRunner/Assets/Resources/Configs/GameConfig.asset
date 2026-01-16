@@ -16,4 +16,6 @@ MonoBehaviour:
   <MouseSensitivity>k__BackingField: 2
   <PickUps>k__BackingField:
   - {fileID: 11400000, guid: f5c36138ad45db24e8b155648f18f0dc, type: 2}
-  <PickUpSpawnFrequency>k__BackingField: 0
+  <EnemyConfigs>k__BackingField:
+  - {fileID: 11400000, guid: 287384d40649ef9459a627eec947635e, type: 2}
+  <EnemySpawnDelay>k__BackingField: 0

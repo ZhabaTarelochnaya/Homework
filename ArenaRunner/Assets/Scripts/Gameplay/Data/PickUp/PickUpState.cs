@@ -12,27 +12,15 @@ namespace DefaultNamespace.Gameplay.Data.PickUp
         public int Score { get; }
         public Vector3 Position { get; set; }
         public int ID { get; }
-        public GameObject Prefab { get; }
         public event Action Collected;
 
-        public PickUpState(PickUpData pickUpData, GameConfig gameConfig)
+        public PickUpState(PickUpData pickUpData)
         {
             Type = pickUpData.Type;
             Score = pickUpData.Score;
             Position = pickUpData.Position;
             ID = pickUpData.ID;
-            var config = gameConfig.PickUps.FirstOrDefault(p => p.Type == Type);
-            Prefab = config?.Prefab;
         }
-        public PickUpState(PickUpData pickUpData, PickUpConfig pickUpConfig)
-        {
-            Type = pickUpData.Type;
-            Score = pickUpData.Score;
-            Position = pickUpData.Position;
-            ID = pickUpData.ID;
-            Prefab = pickUpConfig?.Prefab;
-        }
-
         public PickUpData ToData()
         {
             var pickUpData = new PickUpData();
@@ -43,7 +31,6 @@ namespace DefaultNamespace.Gameplay.Data.PickUp
             return pickUpData;
 
         }
-
         public void Collect() => Collected?.Invoke();
     }
 }

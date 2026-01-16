@@ -1,6 +1,7 @@
 using DefaultNamespace.Gameplay.Controllers;
 using DefaultNamespace.Gameplay.Data;
 using DefaultNamespace.Gameplay.World;
+using Gameplay.Services;
 using Gameplay.Services.Camera;
 using Utils.ServiceLocator;
 
@@ -14,18 +15,21 @@ namespace DefaultNamespace.Gameplay
             ServiceLocator.Current.Register(moveService);
             var cameraManager = new CameraManager(playerState, camera);
             ServiceLocator.Current.Register(cameraManager);
-            var pickUpSpawnService = new PickUpSpawnService(gameConfig.PickUps);
+            var pickUpSpawnService = new SpawnService(gameConfig);
             ServiceLocator.Current.Register(pickUpSpawnService);
             var pickUpCollectionService = new PickUpCollectionService();
             ServiceLocator.Current.Register(pickUpCollectionService);
+            var playerStateService = new PlayerStateService(playerState);
+            ServiceLocator.Current.Register(playerStateService);
         }
 
         public static void Unregister()
         {
             ServiceLocator.Current.Unregister<MoveService>();
             ServiceLocator.Current.Unregister<CameraManager>();
-            ServiceLocator.Current.Unregister<PickUpSpawnService>();
+            ServiceLocator.Current.Unregister<SpawnService>();
             ServiceLocator.Current.Unregister<PickUpCollectionService>();
+            ServiceLocator.Current.Unregister<PlayerStateService>();
         }
     }
 }

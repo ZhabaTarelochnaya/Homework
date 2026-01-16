@@ -11,7 +11,8 @@ namespace DefaultNamespace.Gameplay.Data
         [field: SerializeField] public float PlayerSpeed { get; private set; } = 15f;
         [field: SerializeField] public float MouseSensitivity { get; private set; } = 2f;
         [field: SerializeField] public List<PickUpConfig> PickUps { get; private set; }
-        [field: SerializeField] public float PickUpSpawnFrequency { get; private set; }
+        [field: SerializeField] public List<EnemyConfig> EnemyConfigs { get; private set; }
+        [field: SerializeField] public float EnemySpawnDelay { get; private set; }
         
 
         public PlayerData CreatePlayerData()

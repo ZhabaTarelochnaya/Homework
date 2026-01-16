@@ -6,6 +6,7 @@ namespace Utils.EventBus
         PickUpCreated,
         PickUpDestroyed,
         ScoreChanged,
-        PickUpCollected
+        ItemPicked,
+        EnemySpawned
     }
 }
