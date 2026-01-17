@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using DefaultNamespace.AnalyticsTab;
 using Utils.EventBus;
 using Utils.ServiceLocator;
@@ -7,6 +9,7 @@ namespace DefaultNamespace
     public class HUDViewModel
     {
         EventBus _eventBus;
+        public IEnumerable<GameEvent> GameEvents => _eventBus.GameEvents;
 
         public event EventBus.GameEventHandler OnGameEvent
         {

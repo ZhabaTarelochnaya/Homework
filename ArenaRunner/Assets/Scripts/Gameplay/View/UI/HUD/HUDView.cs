@@ -25,5 +25,13 @@ namespace DefaultNamespace
                 _score.text = $"Score: {score}";
             }
         }
+
+        public void OnShowHistoryButtonPressed()
+        {
+            foreach (var gameEvent in _hudViewModel.GameEvents)
+            {
+                Debug.Log(gameEvent);
+            }
+        }
     }
 }
