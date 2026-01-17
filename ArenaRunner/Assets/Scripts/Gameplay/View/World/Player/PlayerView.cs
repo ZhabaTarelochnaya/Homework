@@ -1,20 +1,17 @@
-using System;
 using DefaultNamespace.Gameplay.View.PickUp;
-using TMPro;
 using UnityEngine;
 
 namespace DefaultNamespace.Gameplay.World.Player
 {
-    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(Rigidbody2D))]
     public class PlayerView : MonoBehaviour
     {
         [SerializeField] PickUpCollectorView pickUpCollectorView;
         PlayerViewModel _viewModel;
-        Rigidbody _rigidbody;
-        float xRotation = -90;
+        Rigidbody2D _rigidbody;
         void Awake()
         {
-            _rigidbody = GetComponent<Rigidbody>();
+            _rigidbody = GetComponent<Rigidbody2D>();
         }
 
         public void Bind(PlayerViewModel viewModel)
@@ -22,18 +19,9 @@ namespace DefaultNamespace.Gameplay.World.Player
             _viewModel = viewModel;
             pickUpCollectorView.Bind(_viewModel.PickUpCollectorViewModel);
         }
-
-        void LateUpdate()
-        {
-            var mouseX = Input.GetAxis("Mouse X") * _viewModel.MouseSensitivity;
-            var mouseY = Input.GetAxis("Mouse Y") * _viewModel.MouseSensitivity;
-            xRotation -= mouseY;
-            xRotation = Math.Clamp(xRotation, -90f, 90f);
-            _viewModel.CameraRotation = Quaternion.Euler(xRotation, _viewModel.CameraRotation.eulerAngles.y + mouseX, 0.0f);
-        }
         void FixedUpdate()
         {
-            _viewModel.Direction = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            _viewModel.Direction = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             _viewModel.FixedUpdate();
             
             _rigidbody.velocity = _viewModel.Velocity;

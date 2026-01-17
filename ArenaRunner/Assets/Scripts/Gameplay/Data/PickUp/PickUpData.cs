@@ -10,7 +10,7 @@ namespace DefaultNamespace.Gameplay.Data.PickUp
     {
         public PickUpType Type;
         public int Score;
-        public SerializableVector3 Position;
+        public SerializableVector2 Position;
         public int ID;
     }
 }

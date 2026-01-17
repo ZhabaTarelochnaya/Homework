@@ -25,25 +25,22 @@ namespace DefaultNamespace.Gameplay.View.PickUp
         void OnDrawGizmos()
         {
             if (!_showBounds) return;
-            Vector3 center = transform.position;
-            Vector3 halfBounds = new Vector3(_bounds.x / 2f, 0, _bounds.y / 2f);
+            Vector2 center = transform.position;
+            Vector2 halfBounds = new Vector2(_bounds.x / 2f, _bounds.y / 2f);
             
-            Vector3 p1 = center + new Vector3(-halfBounds.x, 0, -halfBounds.z);
-            Vector3 p2 = center + new Vector3(halfBounds.x, 0, -halfBounds.z);
-            Vector3 p3 = center + new Vector3(halfBounds.x, 0, halfBounds.z);
-            Vector3 p4 = center + new Vector3(-halfBounds.x, 0, halfBounds.z);
+            Vector2 p1 = center + new Vector2(-halfBounds.x, -halfBounds.y);
+            Vector2 p2 = center + new Vector2(halfBounds.x, -halfBounds.y);
+            Vector2 p3 = center + new Vector2(halfBounds.x, halfBounds.y);
+            Vector2 p4 = center + new Vector2(-halfBounds.x, halfBounds.y);
             
             Gizmos.color = new Color(1, 0, 0, 0.3f); 
-            Gizmos.DrawCube(center, new Vector3(_bounds.x, 0.1f, _bounds.y));
+            Gizmos.DrawCube(center, new Vector3(_bounds.x, _bounds.y, 0));
             
             Gizmos.color = Color.red;
             Gizmos.DrawLine(p1, p2);
             Gizmos.DrawLine(p2, p3);
             Gizmos.DrawLine(p3, p4);
             Gizmos.DrawLine(p4, p1);
-    
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawSphere(center, 0.2f);
         }
     }
 }

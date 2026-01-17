@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace DefaultNamespace.Gameplay.View.Enemies.Types
 {
-    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(Rigidbody2D))]
     public class EnemyView : MonoBehaviour
     {
-        Rigidbody _rb;
+        Rigidbody2D _rb;
         EnemyViewModel _enemyViewModel;
         public int ID => _enemyViewModel.ID;
         public EnemyType Type => _enemyViewModel.Type;
 
         void Awake()
         {
-            _rb = GetComponent<Rigidbody>();
+            _rb = GetComponent<Rigidbody2D>();
         }
         public void Bind(EnemyViewModel enemyViewModel)
         {

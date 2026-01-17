@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: GameConfig
   m_EditorClassIdentifier: 
   <PlayerSpeed>k__BackingField: 15
-  <MouseSensitivity>k__BackingField: 2
   <PickUps>k__BackingField:
-  - {fileID: 11400000, guid: f5c36138ad45db24e8b155648f18f0dc, type: 2}
+  - {fileID: 11400000, guid: c1a5c26a09adb504db88ef131e9cb362, type: 2}
   <EnemyConfigs>k__BackingField:
-  - {fileID: 11400000, guid: 287384d40649ef9459a627eec947635e, type: 2}
+  - {fileID: 11400000, guid: 1cc35626f5d3f08489e9244039ff7719, type: 2}
   <EnemySpawnDelay>k__BackingField: 5
-  <UIConfig>k__BackingField: {fileID: 11400000, guid: cf03bdad892ea0346869ff6cf74f23b7, type: 2}
+  <UIConfig>k__BackingField: {fileID: 11400000, guid: 3bd36480bb605a64e8a4633407531dc2, type: 2}

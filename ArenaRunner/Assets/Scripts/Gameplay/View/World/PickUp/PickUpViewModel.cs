@@ -8,7 +8,7 @@ namespace DefaultNamespace.Gameplay.View.PickUp
     {
         readonly PickUpState _pickUpState;
         public int ID { get => _pickUpState.ID; }
-        public Vector3 Position { get => _pickUpState.Position; }
+        public Vector2 Position { get => _pickUpState.Position; }
         public PickUpType PickUpType { get => _pickUpState.Type; }
         public event Action Collected;
 

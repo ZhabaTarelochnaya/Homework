@@ -8,7 +8,7 @@ namespace DefaultNamespace.Gameplay.Data.Enemy
     {
         public int ID;
         public float Speed;
-        public SerializableVector3 Position;
+        public SerializableVector2 Position;
         public EnemyType Type;
     }
 }

@@ -7,7 +7,7 @@ namespace DefaultNamespace.Gameplay.World
     {
         public void Move(
             IMovable movable, 
-            Vector3 direction, 
+            Vector2 direction, 
             float deltaTime)
         {
             movable.Velocity = direction * movable.Speed;
@@ -16,16 +16,16 @@ namespace DefaultNamespace.Gameplay.World
         
         public void MoveTowards(
             IMovable movable,
-            Vector3 targetPosition,
+            Vector2 targetPosition,
             float deltaTime,
             float stoppingDistance = 0.1f)
         {
-            Vector3 toTarget = targetPosition - movable.Position;
+            Vector2 toTarget = targetPosition - movable.Position;
             float distance = (targetPosition - movable.Position).magnitude;
             
             if (distance <= stoppingDistance)
             {
-                movable.Velocity = Vector3.zero;
+                movable.Velocity = Vector2.zero;
                 return;
             }
 
@@ -33,19 +33,9 @@ namespace DefaultNamespace.Gameplay.World
             movable.Position += movable.Velocity * deltaTime;
         }
         
-        public void Teleport(IPositionUser positionUser, Vector3 position)
+        public void Teleport(IPositionUser positionUser, Vector2 position)
         {
             positionUser.Position = position;
-        }
-
-        public Vector3 RotateAroundYAxis(Vector3 dir, float angleDeg)
-        {
-            float a = -angleDeg * Mathf.Deg2Rad;
-            return new Vector3(
-                dir.x * Mathf.Cos(a) - dir.z * Mathf.Sin(a),
-                dir.y,
-                dir.x * Mathf.Sin(a) + dir.z * Mathf.Cos(a)
-            );
         }
     }
 }

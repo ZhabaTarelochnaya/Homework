@@ -11,7 +11,7 @@ namespace DefaultNamespace.Gameplay.View.PickUp
         {
             _viewModel = viewModel;
         }
-        void OnTriggerEnter(Collider other)
+        void OnTriggerEnter2D(Collider2D other)
         {
             var pickUp = other.GetComponent<PickUpView>();
             _viewModel.Collect(pickUp.ID);

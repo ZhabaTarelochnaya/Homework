@@ -9,8 +9,6 @@ namespace DefaultNamespace.Gameplay.Data
     {
         public float Speed;
         public bool IsDead;
-        public SerializableVector3 Position;
-        public SerializableVector3 CameraRotation;
-        public float MouseSensitivity;
+        public SerializableVector2 Position;
     }
 }

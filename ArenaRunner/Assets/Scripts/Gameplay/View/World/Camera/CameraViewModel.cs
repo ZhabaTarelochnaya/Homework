@@ -9,12 +9,7 @@ namespace DefaultNamespace.Gameplay.View.Camera
     {
         readonly PlayerState _playerState;
         readonly CameraManager _cameraManager;
-        public Vector3 Position { get =>  _playerState.Position; }
-        public Quaternion CameraRotation
-        {
-            get => _playerState.CameraRotation;
-            set => _playerState.CameraRotation = value;
-        }
+        public Vector2 Position => _playerState.Position;
 
         public CameraViewModel(PlayerState playerState)
         {

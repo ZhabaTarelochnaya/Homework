@@ -14,11 +14,11 @@ namespace DefaultNamespace.Gameplay.World.PlayerStates
 
         public override void OnEnter()
         {
-            _playerState.Velocity = Vector3.zero;
+            _playerState.Velocity = Vector2.zero;
         }
         public override PlayerStateName GetNextState()
         {
-            if (_playerState.InputMoveDirection != Vector3.zero)
+            if (_playerState.InputMoveDirection != Vector2.zero)
             {
                 return PlayerStateName.Move;
             }

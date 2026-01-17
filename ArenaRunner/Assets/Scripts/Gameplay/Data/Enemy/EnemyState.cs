@@ -10,8 +10,8 @@ namespace DefaultNamespace.Gameplay.Data.Enemy
         public EnemyType Type { get; }
         public int ID { get; }
         public float Speed { get; set; }
-        public Vector3 Position { get; set; } 
-        public Vector3 Velocity { get; set; }
+        public Vector2 Position { get; set; } 
+        public Vector2 Velocity { get; set; }
 
         public EnemyState(EnemyData enemyData)
         {

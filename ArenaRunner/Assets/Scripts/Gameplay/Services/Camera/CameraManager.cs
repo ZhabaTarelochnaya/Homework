@@ -1,39 +1,33 @@
-using DefaultNamespace.Gameplay.Data;
-using DefaultNamespace.Gameplay.Data.Camera;
-using DefaultNamespace.Gameplay.Services;
 using DefaultNamespace.Gameplay.World;
-using Gameplay.Services;
 using Gameplay.Services.Camera;
-using UnityEngine;
 using Utils.ServiceLocator;
 
 namespace DefaultNamespace.Gameplay.Controllers
 {
     public class CameraManager : IService
     {
-        public bool IsFollowingTarget = true;
-        public ICameraUser CurrentTarget { get; set; }
+        readonly IPositionUser _cameraUser;
+        public bool IsFollowingTarget { get; set; } = true;
+        public IPositionUser CurrentTarget { get; set; }
         public ICamera CurrentCamera { get; set; }
-        readonly ICameraUser _player;
         
-        public CameraManager(PlayerState playerState, ICamera camera)
+        public CameraManager(IPositionUser cameraUser, ICamera camera)
         {
-            _player = playerState;
-            CurrentTarget =  _player;
+            _cameraUser = cameraUser;
+            CurrentTarget =  _cameraUser;
             CurrentCamera = camera;
         }
 
-        public void FollowPlayer() => CurrentTarget = _player;
+        public void FollowPlayer() => CurrentTarget = _cameraUser;
         public void LateUpdate()
         {
             if (!IsFollowingTarget) return;
-            FollowTarget(CurrentTarget, CurrentCamera);
+            FollowTarget(CurrentCamera);
         }
 
-        void FollowTarget(ICameraUser currentTarget, ICamera currentCamera)
+        void FollowTarget(ICamera currentCamera)
         {
-            currentCamera.Position = _player.Position;
-            currentCamera.Rotation = currentTarget.CameraRotation;
+            currentCamera.Position = _cameraUser.Position;
         }
     }
 }

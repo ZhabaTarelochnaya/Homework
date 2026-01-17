@@ -13,9 +13,8 @@ namespace DefaultNamespace.Gameplay.View
         void LateUpdate()
         {
             _viewModel.LateUpdate();
-            var pos = _viewModel.Position;
-            transform.position = Vector3.Lerp(transform.position, pos, 0.1f);
-            transform.rotation = _viewModel.CameraRotation;
+            var pos = Vector2.Lerp(transform.position, _viewModel.Position, 0.1f);
+            transform.position = new Vector3(pos.x, pos.y, transform.position.z);
         }
     }
 }

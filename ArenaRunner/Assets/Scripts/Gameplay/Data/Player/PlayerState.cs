@@ -1,11 +1,10 @@
 using System;
-using DefaultNamespace.Gameplay.Services;
 using DefaultNamespace.Gameplay.World;
 using UnityEngine;
 
 namespace DefaultNamespace.Gameplay.Data
 {
-    public class PlayerState : IMovable, ICameraUser
+    public class PlayerState : IMovable
     {
         bool _isDead = false;
         public float Speed { get; set; }
@@ -19,12 +18,9 @@ namespace DefaultNamespace.Gameplay.Data
                 if (_isDead) Died?.Invoke();
             }
         }
-        public Vector3 Position { get; set; }
-        public Vector3 Velocity { get; set; }
-        public Vector3 InputMoveDirection { get; set; }
-
-        public Quaternion CameraRotation { get; set; }
-        public float MouseSensitivity { get; set; }
+        public Vector2 Position { get; set; }
+        public Vector2 Velocity { get; set; }
+        public Vector2 InputMoveDirection { get; set; }
         
         public event Action Died;
 
@@ -33,8 +29,6 @@ namespace DefaultNamespace.Gameplay.Data
             Speed = playerData.Speed;
             IsDead = playerData.IsDead;
             Position = playerData.Position;
-            CameraRotation = Quaternion.Euler(playerData.CameraRotation);
-            MouseSensitivity = playerData.MouseSensitivity;
         }
 
         public PlayerData ToData()
@@ -43,8 +37,6 @@ namespace DefaultNamespace.Gameplay.Data
             playerData.Speed = Speed;
             playerData.IsDead = IsDead;
             playerData.Position = Position;
-            playerData.CameraRotation = CameraRotation.eulerAngles;
-            playerData.MouseSensitivity = MouseSensitivity;
             return playerData;
         }
     }

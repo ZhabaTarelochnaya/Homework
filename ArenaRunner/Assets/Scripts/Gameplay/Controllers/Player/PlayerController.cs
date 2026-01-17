@@ -1,5 +1,4 @@
 using DefaultNamespace.Gameplay.Data;
-using DefaultNamespace.Gameplay.Services;
 using DefaultNamespace.Gameplay.World.PlayerStates;
 using UnityEngine;
 using Utils.FiniteStateMachine;

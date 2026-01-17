@@ -22,15 +22,12 @@ namespace DefaultNamespace.Gameplay.World.PlayerStates
 
         public override void Tick(float deltaTime)
         {
-            var inputDir = _playerState.InputMoveDirection;
-            var yRotation = _cameraManager.CurrentCamera.Rotation.eulerAngles.y;
-            var relativeDirection = _moveService.RotateAroundYAxis(inputDir, yRotation);
-            _moveService.Move(_playerState, relativeDirection, deltaTime);
+            _moveService.Move(_playerState, _playerState.InputMoveDirection, deltaTime);
         }
 
         public override PlayerStateName GetNextState()
         {
-            if (_playerState.InputMoveDirection == Vector3.zero)
+            if (_playerState.InputMoveDirection == Vector2.zero)
             {
                 return PlayerStateName.Idle;
             }
