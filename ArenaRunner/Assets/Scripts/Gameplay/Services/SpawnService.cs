@@ -32,12 +32,12 @@ namespace DefaultNamespace.Gameplay.World
                 yield return new WaitForSeconds(_gameConfig.EnemySpawnDelay);
                 var type = GetRandomEnemyType();
                 var x = Random.Range(0, bounds.x);
-                var z = Random.Range(0, bounds.y);
-                var position = new Vector3(x, 0, z);
+                var y = Random.Range(0, bounds.y);
+                var position = new Vector2(x, y);
                 SpawnAtPosition(type, parent, position);
             }
         }
-        public void SpawnAtPosition(EnemyType enemyType, Transform parent, Vector3 position)
+        public void SpawnAtPosition(EnemyType enemyType, Transform parent, Vector2 position)
         {
             var config = _gameConfig.EnemyConfigs.FirstOrDefault(p => p.Type == enemyType);
             if (!config) throw new Exception($"Enemy config {enemyType} not found");
