@@ -6,7 +6,7 @@ namespace Utils.EventBus
     {
         public EventName Name { get; }
         public string Description { get; }
-        public DateTime Time { get; } = DateTime.UtcNow;
+        public float Time => UnityEngine.Time.time;
         public object[] Args { get; }
         
         public GameEvent(EventName name, string description)

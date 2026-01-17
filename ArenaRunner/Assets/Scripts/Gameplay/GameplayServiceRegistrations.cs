@@ -21,6 +21,10 @@ namespace DefaultNamespace.Gameplay
             ServiceLocator.Current.Register(pickUpCollectionService);
             var playerStateService = new PlayerStateService(playerState);
             ServiceLocator.Current.Register(playerStateService);
+            var windowManagerService = new WindowManagerService(gameConfig.UIConfig);
+            ServiceLocator.Current.Register(windowManagerService);
+            var analyticsService = new AnalyticsService();
+            ServiceLocator.Current.Register(analyticsService);
         }
 
         public static void Unregister()
@@ -30,6 +34,8 @@ namespace DefaultNamespace.Gameplay
             ServiceLocator.Current.Unregister<SpawnService>();
             ServiceLocator.Current.Unregister<PickUpCollectionService>();
             ServiceLocator.Current.Unregister<PlayerStateService>();
+            ServiceLocator.Current.Unregister<WindowManagerService>();
+            ServiceLocator.Current.Unregister<AnalyticsService>();
         }
     }
 }

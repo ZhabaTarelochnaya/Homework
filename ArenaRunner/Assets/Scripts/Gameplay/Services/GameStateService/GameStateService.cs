@@ -17,7 +17,8 @@ namespace DefaultNamespace.Gameplay.Data
         {
             GameState.Score += score;
             _eventBus.TriggerEvent(new GameEvent(EventName.ScoreChanged, 
-                $"Score changed to {GameState.Score}"));
+                $"Score changed to {GameState.Score}",
+                GameState.Score));
         }
     }
 }

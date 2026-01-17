@@ -77,7 +77,7 @@ public class Bootstrapper
         yield return LoadScene(SceneNames.Gameplay);
 
         var sceneEntryPoint = Object.FindFirstObjectByType<GameplayEntryPoint>();
-        sceneEntryPoint.Bind(_gameConfig, _gameState);
+        sceneEntryPoint.Bind(_uiRoot, _gameConfig, _gameState);
         _uiRoot.HideLoadingScreen();
     }
 

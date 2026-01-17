@@ -13,6 +13,7 @@ namespace DefaultNamespace.Gameplay.Data
         [field: SerializeField] public List<PickUpConfig> PickUps { get; private set; }
         [field: SerializeField] public List<EnemyConfig> EnemyConfigs { get; private set; }
         [field: SerializeField] public float EnemySpawnDelay { get; private set; }
+        [field : SerializeField] public UIConfig UIConfig { get; private set; }
         
 
         public PlayerData CreatePlayerData()
