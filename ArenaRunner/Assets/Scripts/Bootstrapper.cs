@@ -73,6 +73,7 @@ public class Bootstrapper
     IEnumerator LoadAndStartGameplay()
     {
         _uiRoot.ShowLoadingScreen();
+        _gameState.GameStateName = GameStateName.Init;
         yield return LoadScene(SceneNames.Boot);
         yield return LoadScene(SceneNames.Gameplay);
 
