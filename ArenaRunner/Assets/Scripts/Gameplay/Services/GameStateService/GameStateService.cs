@@ -12,7 +12,17 @@ namespace DefaultNamespace.Gameplay.Data
         {
             GameState = gameState;
             _eventBus = eventBus;
+            _eventBus.OnGameEvent += EventBusOnGameEvent;
         }
+
+        void EventBusOnGameEvent(GameEvent e)
+        {
+            if (e.Name == EventName.GameStateChanged)
+            {
+                GameState.GameStateName = (GameStateName)e.Args[0];
+            }
+        }
+
         public void AddScore(int score)
         {
             GameState.Score += score;

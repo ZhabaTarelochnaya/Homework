@@ -17,6 +17,7 @@ public class Bootstrapper
     readonly Coroutines _coroutines;
     readonly GameConfig _gameConfig;
     readonly GameState _gameState;
+    readonly LoadGameplayCommand _loadGameplayCommand;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void AutostartGame()
@@ -50,6 +51,8 @@ public class Bootstrapper
         
         var idService = new IDService(_gameState);
         ServiceLocator.Current.Register(idService);
+
+        _loadGameplayCommand = new LoadGameplayCommand(_coroutines, _uiRoot, _gameState, _gameConfig);
     }
 
     void RunGame()
@@ -58,7 +61,7 @@ public class Bootstrapper
         var sceneName = SceneManager.GetActiveScene().name;
         if (sceneName == nameof(SceneNames.Gameplay))
         {
-            _coroutines.StartCoroutine(LoadAndStartGameplay());
+            _loadGameplayCommand.Execute();
             return;
         }
 
@@ -67,29 +70,6 @@ public class Bootstrapper
             return;
         }
 #endif
-        _coroutines.StartCoroutine(LoadAndStartGameplay());
-    }
-
-    IEnumerator LoadAndStartGameplay()
-    {
-        _uiRoot.ShowLoadingScreen();
-        _gameState.GameStateName = GameStateName.Init;
-        yield return LoadScene(SceneNames.Boot);
-        yield return LoadScene(SceneNames.Gameplay);
-
-        var sceneEntryPoint = Object.FindFirstObjectByType<GameplayEntryPoint>();
-        sceneEntryPoint.Bind(_uiRoot, _gameConfig, _gameState);
-        _uiRoot.HideLoadingScreen();
-    }
-
-    IEnumerator LoadScene(SceneNames sceneName)
-    {
-        yield return SceneManager.LoadSceneAsync(sceneName.ToString());
-    }
-
-    enum SceneNames
-    {
-        Boot,
-        Gameplay,
+        _loadGameplayCommand.Execute();
     }
 }
