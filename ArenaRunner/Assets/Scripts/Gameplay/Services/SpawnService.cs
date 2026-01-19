@@ -32,8 +32,8 @@ namespace DefaultNamespace.Gameplay.World
             {
                 yield return new WaitForSeconds(_gameConfig.EnemySpawnDelay);
                 var type = GetRandomEnemyType();
-                var x = Random.Range(0, bounds.x);
-                var y = Random.Range(0, bounds.y);
+                var x = Random.Range(parent.position.x - bounds.x / 2, parent.position.x + bounds.x / 2);
+                var y = Random.Range(parent.position.y - bounds.y / 2, parent.position.y + bounds.y / 2);
                 var position = new Vector2(x, y);
                 SpawnAtPosition(type, parent, position);
             }
