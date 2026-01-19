@@ -32,6 +32,7 @@ namespace DefaultNamespace.Gameplay
             
             var playerData = gameConfig.CreatePlayerData();
             var playerState = new PlayerState(playerData);
+            gameState.PlayerState = playerState;
             var cameraData = new CameraData();
             var cameraState = new CameraState(cameraData);
 

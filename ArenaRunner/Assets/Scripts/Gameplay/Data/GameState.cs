@@ -10,6 +10,7 @@ namespace DefaultNamespace.Gameplay.Data
     {
         public int ID { get; set; }
         public int Score { get; set; }
+        public int WinScore { get; set; }
         public GameStateName GameStateName { get; set; }
         public List<PickUpState> PickUps { get; } = new();
         public PlayerState PlayerState {get; set;}
@@ -20,6 +21,7 @@ namespace DefaultNamespace.Gameplay.Data
         {
             ID = gameData.ID;
             Score = gameData.Score;
+            WinScore = gameData.WinScore;
             GameStateName = gameData.GameStateName;
             PickUps = gameData.PickUps.Select(p => new PickUpState(p)).ToList();
         }
@@ -30,6 +32,7 @@ namespace DefaultNamespace.Gameplay.Data
             var gameData = new GameData();
             gameData.ID = ID;
             gameData.Score = Score;
+            gameData.WinScore = WinScore;
             gameData.GameStateName = GameStateName;
             gameData.PickUps = PickUps.Select(p => p.ToData()).ToList();
             gameData.PlayerData = PlayerState.ToData();

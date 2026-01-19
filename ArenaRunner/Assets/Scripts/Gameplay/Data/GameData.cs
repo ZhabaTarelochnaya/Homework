@@ -11,6 +11,7 @@ namespace DefaultNamespace.Gameplay.Data
     {
         public int ID;
         public int Score;
+        public int WinScore;
         public GameStateName GameStateName;
         public List<PickUpData> PickUps = new();
         public List<EnemyData> Enemies = new();

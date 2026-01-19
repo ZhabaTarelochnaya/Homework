@@ -39,6 +39,12 @@ namespace DefaultNamespace.Gameplay.Data
             _eventBus.TriggerEvent(new GameEvent(EventName.ScoreChanged, 
                 $"Score changed to {GameState.Score}",
                 GameState.Score));
+            if (GameState.Score >= GameState.WinScore)
+            {
+                _eventBus.TriggerEvent(new GameEvent(EventName.GameStateChanged,
+                    $"Score maxed. Player won.",
+                    GameStateName.Win));
+            }
         }
     }
 }

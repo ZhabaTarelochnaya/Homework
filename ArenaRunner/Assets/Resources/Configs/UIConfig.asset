@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <GameplayUI>k__BackingField: {fileID: 6409880409736057529, guid: 5f8972332a498734ba064ea994572c6b, type: 3}
   <HUDPrefab>k__BackingField: {fileID: 5471468798604734352, guid: 4ca8164b6b615384e84ee45bbb41ad76, type: 3}
+  <WinPopUpPrefab>k__BackingField: {fileID: 3693032055084673879, guid: 6cf7cd9afcf6d094289a4350ff86db58, type: 3}
+  <LosePopUpPrefab>k__BackingField: {fileID: 9121308004473937889, guid: d57a66f2c7d3fd646a9500b31e1a0f2d, type: 3}

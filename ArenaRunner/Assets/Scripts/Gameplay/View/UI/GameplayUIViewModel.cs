@@ -12,8 +12,7 @@ namespace DefaultNamespace
         {
             _windowManagerService = ServiceLocator.Current.Get<WindowManagerService>();
         }
-
-        // public void CreateHUD();
+        
         public void SetContainers(Transform screens,  Transform popUps)
         {
             _windowManagerService.SetContainers(screens, popUps);

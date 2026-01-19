@@ -4,6 +4,7 @@ namespace Gameplay.Services
     {
         Default, 
         HUD,
-        AnalyticsTab,
+        LosePopUp,
+        WinPopUp
     }
 }

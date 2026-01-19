@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using DefaultNamespace.AnalyticsTab;
 using DefaultNamespace.Gameplay.Data;
 using Gameplay.Services;
+using UnityEngine;
 using Utils.EventBus;
 using Utils.ServiceLocator;
 
 namespace DefaultNamespace
 {
-    public class HUDViewModel
+    public class HUDViewModel : IScreenViewModel
     {
         readonly EventBus _eventBus;
-        readonly PlayerStateService _playerStateService;
+        readonly GameStateService _gameStateService;
         public IEnumerable<GameEvent> GameEvents => _eventBus.GameEvents;
-        public int CurrentHealth => _playerStateService.PlayerState.CurrentHealth;
-
+        public WindowName Name => WindowName.HUD;
+        public int CurrentHealth => _gameStateService.GameState.PlayerState.CurrentHealth;
+        public int MaxScore => _gameStateService.GameState.WinScore;
+        public GameObject HUDInstance { get; set; }
         public event EventBus.GameEventHandler OnGameEvent
         {
             add => _eventBus.OnGameEvent += value;
@@ -25,7 +28,7 @@ namespace DefaultNamespace
         {
             AnalyticsTabViewModel = new AnalyticsTabViewModel();
             _eventBus = ServiceLocator.Current.Get<EventBus>();
-            _playerStateService = ServiceLocator.Current.Get<PlayerStateService>();
+            _gameStateService = ServiceLocator.Current.Get<GameStateService>();
         }
 
         public void Restart()
@@ -47,6 +50,11 @@ namespace DefaultNamespace
             _eventBus.TriggerEvent(new GameEvent(EventName.GameStateChanged, 
                 "Resume button was pressed",
                 GameStateName.Playing));
+        }
+        
+        public void Close()
+        {
+            Object.Destroy(HUDInstance);
         }
     }
 }

@@ -38,7 +38,7 @@ public class Bootstrapper
         _gameConfig = Resources.Load<GameConfig>("Configs/GameConfig");
 
         var gameData = new GameData();
-        gameData.PlayerData = new PlayerData();
+        gameData.WinScore = _gameConfig.WinScore;
         _gameState = new GameState(gameData);
         
         ServiceLocator.Initialize();

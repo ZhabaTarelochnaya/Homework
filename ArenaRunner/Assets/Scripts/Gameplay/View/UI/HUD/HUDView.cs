@@ -15,7 +15,9 @@ namespace DefaultNamespace
         public void Bind(HUDViewModel hudViewModel)
         {
             _hudViewModel = hudViewModel;
+            _hudViewModel.HUDInstance = gameObject;
             _health.text = $"Health: {hudViewModel.CurrentHealth}";
+            _score.text = $"Score: 0 / {_hudViewModel.MaxScore}";
             _analyticsTab.Bind(_hudViewModel.AnalyticsTabViewModel);
             _hudViewModel.OnGameEvent += HudViewModelOnGameEvent;
         }
@@ -25,7 +27,7 @@ namespace DefaultNamespace
             if (e.Name == EventName.ScoreChanged)
             {
                 int score = (int)e.Args[0];
-                _score.text = $"Score: {score}";
+                _score.text = $"Score: {score} / {_hudViewModel.MaxScore}";
             }
             else if (e.Name == EventName.PlayerDamaged)
             {
