@@ -1,4 +1,5 @@
 using System;
+using Gameplay.Data.Enemy;
 using Utils;
 
 namespace DefaultNamespace.Gameplay.Data.Enemy
@@ -10,5 +11,6 @@ namespace DefaultNamespace.Gameplay.Data.Enemy
         public float Speed;
         public SerializableVector2 Position;
         public EnemyType Type;
+        public EnemyStrategyName StrategyName;
     }
 }

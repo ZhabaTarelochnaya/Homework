@@ -17,5 +17,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c1a5c26a09adb504db88ef131e9cb362, type: 2}
   <EnemyConfigs>k__BackingField:
   - {fileID: 11400000, guid: 1cc35626f5d3f08489e9244039ff7719, type: 2}
+  - {fileID: 11400000, guid: c2763265ab705d049826a75703f69130, type: 2}
   <EnemySpawnDelay>k__BackingField: 5
   <UIConfig>k__BackingField: {fileID: 11400000, guid: 3bd36480bb605a64e8a4633407531dc2, type: 2}

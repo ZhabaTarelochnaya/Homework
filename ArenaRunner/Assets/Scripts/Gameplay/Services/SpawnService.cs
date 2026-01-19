@@ -17,6 +17,7 @@ namespace DefaultNamespace.Gameplay.World
         readonly EventBus _eventBus;
         readonly GameConfig _gameConfig;
         readonly GameStateService _gameStateService;
+        
 
         public SpawnService(GameConfig gameConfig)
         {

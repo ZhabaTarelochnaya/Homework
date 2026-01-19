@@ -10,18 +10,17 @@ namespace DefaultNamespace.Gameplay.Controllers
     public class EnemyController
     {
         readonly EnemyState _enemyState;
-        readonly PlayerState _playerState;
-        readonly MoveService _moveService;
+        IEnemyStrategy _strategy;
         public EnemyController(EnemyState enemyState)
         {
             _enemyState = enemyState;
-            _playerState = ServiceLocator.Current.Get<PlayerStateService>().PlayerState;
-            _moveService = ServiceLocator.Current.Get<MoveService>();
+            var strategyFactory = ServiceLocator.Current.Get<EnemyStrategyFactory>();
+            _strategy = strategyFactory.Create(_enemyState);
         }
 
         public void FixedUpdate()
         {
-            _moveService.MoveTowards(_enemyState, _playerState.Position, Time.fixedDeltaTime);
+            _strategy.Move();
         }
     }
 }

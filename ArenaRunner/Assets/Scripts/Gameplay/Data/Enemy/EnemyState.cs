@@ -1,6 +1,7 @@
 
 
 using DefaultNamespace.Gameplay.World;
+using Gameplay.Data.Enemy;
 using UnityEngine;
 
 namespace DefaultNamespace.Gameplay.Data.Enemy
@@ -8,6 +9,7 @@ namespace DefaultNamespace.Gameplay.Data.Enemy
     public class EnemyState : IMovable
     {
         public EnemyType Type { get; }
+        public EnemyStrategyName StrategyName { get; }
         public int ID { get; }
         public float Speed { get; set; }
         public Vector2 Position { get; set; } 
@@ -16,6 +18,7 @@ namespace DefaultNamespace.Gameplay.Data.Enemy
         public EnemyState(EnemyData enemyData)
         {
             Type = enemyData.Type;
+            StrategyName = enemyData.StrategyName;
             ID = enemyData.ID;
             Speed = enemyData.Speed;
             Position = enemyData.Position;
@@ -25,6 +28,7 @@ namespace DefaultNamespace.Gameplay.Data.Enemy
         {
             var enemyData = new EnemyData();
             enemyData.Type = Type;
+            enemyData.StrategyName = StrategyName;
             enemyData.ID = ID;
             enemyData.Speed = Speed;
             enemyData.Position = Position;

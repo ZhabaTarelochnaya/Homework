@@ -1,5 +1,6 @@
 using DefaultNamespace.Gameplay.Data.Enemy;
 using DefaultNamespace.Gameplay.World;
+using Gameplay.Data.Enemy;
 using UnityEngine;
 using Utils.ServiceLocator;
 
@@ -9,6 +10,7 @@ namespace DefaultNamespace.Gameplay.Data
     public class EnemyConfig : ScriptableObject
     {
         [field: SerializeField] public EnemyType Type { get; private set; }
+        [field: SerializeField] public EnemyStrategyConfig StrategyConfig { get; private set; }
         [field: SerializeField] public float Speed { get; private set; }
         [field: SerializeField] public GameObject Prefab { get; private set; }
 
@@ -17,6 +19,7 @@ namespace DefaultNamespace.Gameplay.Data
             var enemyData = new EnemyData();
             enemyData.Speed = Speed;
             enemyData.Type = Type;
+            enemyData.StrategyName = StrategyConfig.StrategyName;
             var idService = ServiceLocator.Current.Get<IDService>();
             enemyData.ID = idService.CreateID();
             var enemyState = new EnemyState(enemyData);

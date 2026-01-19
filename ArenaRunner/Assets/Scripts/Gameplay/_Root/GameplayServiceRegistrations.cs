@@ -25,6 +25,8 @@ namespace DefaultNamespace.Gameplay
             ServiceLocator.Current.Register(windowManagerService);
             var analyticsService = new AnalyticsService();
             ServiceLocator.Current.Register(analyticsService);
+            var enemyStrategyFactory = new EnemyStrategyFactory(gameConfig);
+            ServiceLocator.Current.Register(enemyStrategyFactory);
         }
 
         public static void Unregister()
@@ -36,6 +38,7 @@ namespace DefaultNamespace.Gameplay
             ServiceLocator.Current.Unregister<PlayerStateService>();
             ServiceLocator.Current.Unregister<WindowManagerService>();
             ServiceLocator.Current.Unregister<AnalyticsService>();
+            ServiceLocator.Current.Unregister<PlayerStateService>();
         }
     }
 }
