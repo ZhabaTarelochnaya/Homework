@@ -38,7 +38,7 @@ namespace DefaultNamespace.Gameplay
             ServiceLocator.Current.Unregister<PlayerStateService>();
             ServiceLocator.Current.Unregister<WindowManagerService>();
             ServiceLocator.Current.Unregister<AnalyticsService>();
-            ServiceLocator.Current.Unregister<PlayerStateService>();
+            ServiceLocator.Current.Unregister<EnemyStrategyFactory>();
         }
     }
 }
