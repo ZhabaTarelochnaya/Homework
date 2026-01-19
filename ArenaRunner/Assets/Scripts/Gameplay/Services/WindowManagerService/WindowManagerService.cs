@@ -41,13 +41,9 @@ namespace Gameplay.Services
             var winPopUpView = instance.GetComponent<WinPopUpView>();
             var removePopUpCommand = new RemovePopUpCommand(_popUps);
             var winPopUpViewModel = new WinPopUpViewModel(removePopUpCommand);
+            Debug.Log(_popUpsContainer);
             winPopUpView.Bind(winPopUpViewModel);
             _popUps.Add(winPopUpViewModel);
-        }
-
-        public void ClosePopUp(WindowName name)
-        {
-            _popUps.FirstOrDefault(p => p.Name == name)?.Close();
         }
         public void OpenLosePopUp()
         {
@@ -57,6 +53,11 @@ namespace Gameplay.Services
             var losePopUpViewModel = new LosePopUpViewModel(removePopUpCommand);
             losePopUpView.Bind(losePopUpViewModel);
             _popUps.Add(losePopUpViewModel);
+        }
+
+        public void ClosePopUp(WindowName name)
+        {
+            _popUps.FirstOrDefault(p => p.Name == name)?.Close();
         }
 
         public void CloseAllPopUps()

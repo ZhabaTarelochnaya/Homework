@@ -13,7 +13,8 @@ namespace DefaultNamespace.Gameplay.View
         void LateUpdate()
         {
             _viewModel.LateUpdate();
-            var pos = Vector2.Lerp(transform.position, _viewModel.Position, 0.1f);
+            var velocity = Vector2.zero;
+            var pos = Vector2.SmoothDamp(transform.position, _viewModel.Position, ref velocity,0.02f);
             transform.position = new Vector3(pos.x, pos.y, transform.position.z);
         }
     }

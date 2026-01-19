@@ -6,13 +6,16 @@ namespace DefaultNamespace
 {
     public class GameplayUIView : MonoBehaviour
     {
+        GameplayUIViewModel _gameplayUIViewModel;
         [SerializeField] RectTransform _screens;
         [SerializeField] RectTransform _popUps;
 
         public void Bind(GameplayUIViewModel gameplayUIViewModel)
         {
-            gameplayUIViewModel.SetContainers(_screens, _popUps);
+            _gameplayUIViewModel = gameplayUIViewModel;
+            SetContainers();
             gameplayUIViewModel.OpenHUD();
         }
+        public void SetContainers() => _gameplayUIViewModel.SetContainers(_screens, _popUps);
     }
 }

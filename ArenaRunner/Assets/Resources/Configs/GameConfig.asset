@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: GameConfig
   m_EditorClassIdentifier: 
   <PlayerSpeed>k__BackingField: 15
+  <PlayerMaxHealth>k__BackingField: 100
+  <WinScore>k__BackingField: 100
   <PickUps>k__BackingField:
   - {fileID: 11400000, guid: c1a5c26a09adb504db88ef131e9cb362, type: 2}
   <EnemyConfigs>k__BackingField:

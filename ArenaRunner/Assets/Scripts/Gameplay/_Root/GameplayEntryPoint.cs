@@ -92,7 +92,13 @@ namespace DefaultNamespace.Gameplay
         }
         void BindUI(UIRoot uiRoot, GameConfig gameConfig)
         {
-            if (uiRoot.GetComponentInChildren<GameplayUIView>() != null) return;
+            _gameplayUIView = uiRoot.GetComponentInChildren<GameplayUIView>();
+            if (_gameplayUIView)
+            {
+                var viewModel = new GameplayUIViewModel();
+                _gameplayUIView.Bind(viewModel);
+                return;
+            }
             var instance = Instantiate(gameConfig.UIConfig.GameplayUI, uiRoot.transform);
             _gameplayUIView = instance.GetComponent<GameplayUIView>();
             var gameplayUIViewModel = new GameplayUIViewModel();
