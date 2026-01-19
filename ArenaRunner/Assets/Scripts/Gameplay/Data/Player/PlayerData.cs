@@ -8,7 +8,8 @@ namespace DefaultNamespace.Gameplay.Data
     public class PlayerData
     {
         public float Speed;
-        public bool IsDead;
         public SerializableVector2 Position;
+        public int CurrentHealth;
+        public int MaxHealth;
     }
 }

@@ -15,4 +15,5 @@ MonoBehaviour:
   <Type>k__BackingField: 2
   <StrategyConfig>k__BackingField: {fileID: 11400000, guid: 36c0fa7962f8fef4a955f438d93eb796, type: 2}
   <Speed>k__BackingField: 20
+  <Damage>k__BackingField: 20
   <Prefab>k__BackingField: {fileID: 8951047552630425085, guid: 0842dd5529554a7408bc2ed0359aade6, type: 3}

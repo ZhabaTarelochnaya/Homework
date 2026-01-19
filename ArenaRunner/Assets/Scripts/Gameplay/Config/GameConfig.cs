@@ -9,6 +9,7 @@ namespace DefaultNamespace.Gameplay.Data
     public class GameConfig : ScriptableObject
     {
         [field: SerializeField] public float PlayerSpeed { get; private set; } = 15f;
+        [field: SerializeField] public int PlayerMaxHealth { get; private set; } = 100;
         [field: SerializeField] public List<PickUpConfig> PickUps { get; private set; }
         [field: SerializeField] public List<EnemyConfig> EnemyConfigs { get; private set; }
         [field: SerializeField] public float EnemySpawnDelay { get; private set; }
@@ -19,6 +20,8 @@ namespace DefaultNamespace.Gameplay.Data
         {
             var playerData = new PlayerData();
             playerData.Speed = PlayerSpeed;
+            playerData.MaxHealth = PlayerMaxHealth;
+            playerData.CurrentHealth = PlayerMaxHealth;
             return playerData;
         }
 

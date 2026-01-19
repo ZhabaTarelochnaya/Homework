@@ -44,7 +44,6 @@ namespace DefaultNamespace.Gameplay.Controllers.Strategies
                 Mathf.Clamp(_target.x, boundsRect.xMin, boundsRect.xMax),
                 Mathf.Clamp(_target.y, boundsRect.yMin, boundsRect.yMax)
             );
-            Debug.Log(_target);
         }
     }
 }

@@ -12,6 +12,7 @@ namespace DefaultNamespace.Gameplay.Data
         [field: SerializeField] public EnemyType Type { get; private set; }
         [field: SerializeField] public EnemyStrategyConfig StrategyConfig { get; private set; }
         [field: SerializeField] public float Speed { get; private set; }
+        [field: SerializeField] public int Damage { get; private set; }
         [field: SerializeField] public GameObject Prefab { get; private set; }
 
         public EnemyState Create()
@@ -20,6 +21,7 @@ namespace DefaultNamespace.Gameplay.Data
             enemyData.Speed = Speed;
             enemyData.Type = Type;
             enemyData.StrategyName = StrategyConfig.StrategyName;
+            enemyData.Damage = Damage;
             var idService = ServiceLocator.Current.Get<IDService>();
             enemyData.ID = idService.CreateID();
             var enemyState = new EnemyState(enemyData);

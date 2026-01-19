@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace.AnalyticsTab;
 using DefaultNamespace.Gameplay.Data;
+using Gameplay.Services;
 using Utils.EventBus;
 using Utils.ServiceLocator;
 
@@ -9,8 +10,10 @@ namespace DefaultNamespace
 {
     public class HUDViewModel
     {
-        EventBus _eventBus;
+        readonly EventBus _eventBus;
+        readonly PlayerStateService _playerStateService;
         public IEnumerable<GameEvent> GameEvents => _eventBus.GameEvents;
+        public int CurrentHealth => _playerStateService.PlayerState.CurrentHealth;
 
         public event EventBus.GameEventHandler OnGameEvent
         {
@@ -22,6 +25,7 @@ namespace DefaultNamespace
         {
             AnalyticsTabViewModel = new AnalyticsTabViewModel();
             _eventBus = ServiceLocator.Current.Get<EventBus>();
+            _playerStateService = ServiceLocator.Current.Get<PlayerStateService>();
         }
 
         public void Restart()

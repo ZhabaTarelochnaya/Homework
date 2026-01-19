@@ -12,5 +12,6 @@ namespace DefaultNamespace.Gameplay.Data.Enemy
         public SerializableVector2 Position;
         public EnemyType Type;
         public EnemyStrategyName StrategyName;
+        public int Damage;
     }
 }

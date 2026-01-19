@@ -1,42 +1,51 @@
 using System;
 using DefaultNamespace.Gameplay.World;
+using Gameplay.View.World.Enemies.HitHurtBoxes;
 using UnityEngine;
 
 namespace DefaultNamespace.Gameplay.Data
 {
-    public class PlayerState : IMovable
+    public class PlayerState : IMovable, IHealthUser
     {
-        bool _isDead = false;
+        int _currentHealth;
         public float Speed { get; set; }
-
-        public bool IsDead
-        {
-            get => _isDead;
-            set
-            {
-                _isDead = value;
-                if (_isDead) Died?.Invoke();
-            }
-        }
         public Vector2 Position { get; set; }
         public Vector2 Velocity { get; set; }
         public Vector2 InputMoveDirection { get; set; }
-        
-        public event Action Died;
 
+        public int MaxHealth { get; set; }
+
+        public int CurrentHealth
+        {
+            get => _currentHealth;
+            set
+            {
+                _currentHealth = value;
+                PlayerDamaged?.Invoke(value);
+                if (_currentHealth <= 0)
+                {
+                    Died?.Invoke();
+                }
+            }
+        }
+
+        public event Action Died;
+        public event Action<int> PlayerDamaged; 
         public PlayerState(PlayerData playerData)
         {
             Speed = playerData.Speed;
-            IsDead = playerData.IsDead;
             Position = playerData.Position;
+            CurrentHealth = playerData.CurrentHealth;
+            MaxHealth = playerData.MaxHealth;
         }
 
         public PlayerData ToData()
         {
             var playerData = new PlayerData();
             playerData.Speed = Speed;
-            playerData.IsDead = IsDead;
             playerData.Position = Position;
+            CurrentHealth = playerData.CurrentHealth;
+            MaxHealth = playerData.MaxHealth;
             return playerData;
         }
     }

@@ -1,4 +1,5 @@
 using DefaultNamespace.Gameplay.View.PickUp;
+using Gameplay.View.World.Enemies.HitHurtBoxes;
 using UnityEngine;
 
 namespace DefaultNamespace.Gameplay.World.Player
@@ -7,6 +8,7 @@ namespace DefaultNamespace.Gameplay.World.Player
     public class PlayerView : MonoBehaviour
     {
         [SerializeField] PickUpCollectorView pickUpCollectorView;
+        [SerializeField] HurtBoxView hurtBoxView;
         PlayerViewModel _viewModel;
         Rigidbody2D _rigidbody;
         void Awake()
@@ -18,6 +20,7 @@ namespace DefaultNamespace.Gameplay.World.Player
         {
             _viewModel = viewModel;
             pickUpCollectorView.Bind(_viewModel.PickUpCollectorViewModel);
+            hurtBoxView.Bind(_viewModel.HurtBoxViewModel);
         }
         void FixedUpdate()
         {

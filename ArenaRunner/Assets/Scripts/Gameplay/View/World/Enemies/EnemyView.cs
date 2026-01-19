@@ -1,5 +1,6 @@
 using System;
 using DefaultNamespace.Gameplay.Data;
+using Gameplay.View.World.Enemies.HitHurtBoxes;
 using UnityEngine;
 
 namespace DefaultNamespace.Gameplay.View.Enemies.Types
@@ -9,6 +10,7 @@ namespace DefaultNamespace.Gameplay.View.Enemies.Types
     {
         Rigidbody2D _rb;
         EnemyViewModel _enemyViewModel;
+        [SerializeField] HitBoxView _hitBoxView;
         public int ID => _enemyViewModel.ID;
         public EnemyType Type => _enemyViewModel.Type;
 
@@ -19,6 +21,7 @@ namespace DefaultNamespace.Gameplay.View.Enemies.Types
         public void Bind(EnemyViewModel enemyViewModel)
         {
             _enemyViewModel = enemyViewModel;
+            _hitBoxView.Bind(enemyViewModel.HitBoxViewModel);
         }
         void FixedUpdate()
         {

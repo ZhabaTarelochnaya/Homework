@@ -10,10 +10,12 @@ namespace DefaultNamespace
         HUDViewModel _hudViewModel;
         [SerializeField] AnalyticsTabView _analyticsTab;
         [SerializeField] TMP_Text _score;
+        [SerializeField] TMP_Text _health;
         [SerializeField] TMP_Text _pauseButtonText;
         public void Bind(HUDViewModel hudViewModel)
         {
             _hudViewModel = hudViewModel;
+            _health.text = $"Health: {hudViewModel.CurrentHealth}";
             _analyticsTab.Bind(_hudViewModel.AnalyticsTabViewModel);
             _hudViewModel.OnGameEvent += HudViewModelOnGameEvent;
         }
@@ -24,6 +26,11 @@ namespace DefaultNamespace
             {
                 int score = (int)e.Args[0];
                 _score.text = $"Score: {score}";
+            }
+            else if (e.Name == EventName.PlayerDamaged)
+            {
+                int _currentHealth = (int)e.Args[0];
+                _health.text = $"Health: {_currentHealth}";
             }
         }
 

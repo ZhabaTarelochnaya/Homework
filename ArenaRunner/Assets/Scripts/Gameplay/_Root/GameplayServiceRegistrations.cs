@@ -27,6 +27,8 @@ namespace DefaultNamespace.Gameplay
             ServiceLocator.Current.Register(analyticsService);
             var enemyStrategyFactory = new EnemyStrategyFactory(gameConfig);
             ServiceLocator.Current.Register(enemyStrategyFactory);
+            var healthService = new HealthService();
+            ServiceLocator.Current.Register(healthService);
         }
 
         public static void Unregister()
@@ -39,6 +41,7 @@ namespace DefaultNamespace.Gameplay
             ServiceLocator.Current.Unregister<WindowManagerService>();
             ServiceLocator.Current.Unregister<AnalyticsService>();
             ServiceLocator.Current.Unregister<EnemyStrategyFactory>();
+            ServiceLocator.Current.Unregister<HealthService>();
         }
     }
 }
