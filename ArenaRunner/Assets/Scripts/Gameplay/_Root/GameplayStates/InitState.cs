@@ -7,12 +7,12 @@ namespace DefaultNamespace.Gameplay.GameplayStates
 {
     public class InitState : FSMState<GameStateName>
     {
-        readonly LoadGameplayCommand _loadGameplayCommand;
+        readonly ReloadGameplayCommand _reloadGameplayCommand;
         readonly EventBus _eventBus;
         GameStateName _nextState;
-        public InitState(LoadGameplayCommand loadGameplayCommand) : base(GameStateName.Init)
+        public InitState(ReloadGameplayCommand reloadGameplayCommand) : base(GameStateName.Init)
         {
-            _loadGameplayCommand = loadGameplayCommand;
+            _reloadGameplayCommand = reloadGameplayCommand;
             _eventBus = ServiceLocator.Current.Get<EventBus>();
             _eventBus.OnGameEvent += EventBusOnGameEvent;
             _nextState = StateName;
@@ -20,7 +20,7 @@ namespace DefaultNamespace.Gameplay.GameplayStates
 
         public override void OnEnter()
         {
-            _loadGameplayCommand.Execute();
+            _reloadGameplayCommand.Execute();
         }
 
         void EventBusOnGameEvent(GameEvent e)

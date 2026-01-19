@@ -10,6 +10,7 @@ namespace DefaultNamespace
         HUDViewModel _hudViewModel;
         [SerializeField] AnalyticsTabView _analyticsTab;
         [SerializeField] TMP_Text _score;
+        [SerializeField] TMP_Text _pauseButtonText;
         public void Bind(HUDViewModel hudViewModel)
         {
             _hudViewModel = hudViewModel;
@@ -32,6 +33,26 @@ namespace DefaultNamespace
             {
                 Debug.Log(gameEvent);
             }
+        }
+
+        public void OnRestartButtonPressed()
+        {
+            _hudViewModel.Restart();
+        }
+
+        public void OnPauseButtonPressed()
+        {
+            if (_pauseButtonText.text == "Пауза")
+            {
+                _pauseButtonText.text = "Продолжить";
+                _hudViewModel.Pause();
+            }
+            else
+            {
+                _pauseButtonText.text = "Пауза";
+                _hudViewModel.Resume();
+            }
+           
         }
     }
 }

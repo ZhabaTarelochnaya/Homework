@@ -1,3 +1,4 @@
+using System;
 using DefaultNamespace.Gameplay.Data;
 using DefaultNamespace.Gameplay.Data.Camera;
 using DefaultNamespace.Gameplay.GameplayStates;
@@ -7,7 +8,9 @@ using DefaultNamespace.Gameplay.View.PickUp;
 using DefaultNamespace.Gameplay.World;
 using DefaultNamespace.Gameplay.World.Player;
 using UnityEngine;
+using Utils.EventBus;
 using Utils.FiniteStateMachine;
+using Utils.ServiceLocator;
 
 namespace DefaultNamespace.Gameplay
 {
@@ -15,20 +18,23 @@ namespace DefaultNamespace.Gameplay
     {
         bool isBound;
         FSM<GameStateName> _gameStateFsm = new ();
+        EventBus _eventBus;
+        GameplayUIView _gameplayUIView;
         [SerializeField] PlayerView _playerView;
         [SerializeField] CameraView _cameraView;
         [SerializeField] Transform _pickUps;
         [SerializeField] EnemySpawnerView _enemySpawnerView;
         public void Bind(UIRoot uiRoot, GameConfig gameConfig, GameState gameState,
-            LoadGameplayCommand loadGameplayCommand)
+            ReloadGameplayCommand reloadGameplayCommand)
         {
             isBound = true;
+            _eventBus = ServiceLocator.Current.Get<EventBus>();
             
             var playerData = gameConfig.CreatePlayerData();
             var playerState = new PlayerState(playerData);
-
             var cameraData = new CameraData();
             var cameraState = new CameraState(cameraData);
+
             
             GameplayServiceRegistrations.Register(playerState, cameraState, gameConfig);
 
@@ -40,16 +46,30 @@ namespace DefaultNamespace.Gameplay
 
             gameState.GameStateName = GameStateName.Playing;
             _gameStateFsm.AddState(new PlayingState())
-                .AddState(new InitState(loadGameplayCommand))
+                .AddState(new InitState(reloadGameplayCommand))
                 .AddState(new LoseState())
                 .AddState(new WinState())
                 .AddState(new PausedState());
+            
+            _eventBus.OnGameEvent += EventBusOnGameEvent;
+        }
+
+        void EventBusOnGameEvent(GameEvent e)
+        {
+            _gameStateFsm.Tick(0f);
         }
 
         void OnDestroy()
         {
             if (!isBound) return;
+            if (_gameStateFsm.CurrentState.StateName != GameStateName.Init)
+            {
+                Destroy(_gameplayUIView.gameObject);
+            }
+            var gameStateService = ServiceLocator.Current.Get<GameStateService>();
+            gameStateService.ClearGameplayData();
             GameplayServiceRegistrations.Unregister();
+            _eventBus.OnGameEvent -= EventBusOnGameEvent;
         }
 
         void BindPlayer(PlayerState playerState)
@@ -71,10 +91,11 @@ namespace DefaultNamespace.Gameplay
         }
         void BindUI(UIRoot uiRoot, GameConfig gameConfig)
         {
+            if (uiRoot.GetComponentInChildren<GameplayUIView>() != null) return;
             var instance = Instantiate(gameConfig.UIConfig.GameplayUI, uiRoot.transform);
-            var gameplayUIView = instance.GetComponent<GameplayUIView>();
+            _gameplayUIView = instance.GetComponent<GameplayUIView>();
             var gameplayUIViewModel = new GameplayUIViewModel();
-            gameplayUIView.Bind(gameplayUIViewModel);
+            _gameplayUIView.Bind(gameplayUIViewModel);
         }
         void BindPickUps(GameConfig gameConfig, GameState gameState)
         {

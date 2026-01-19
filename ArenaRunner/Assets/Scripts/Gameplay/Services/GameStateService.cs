@@ -22,7 +22,17 @@ namespace DefaultNamespace.Gameplay.Data
                 GameState.GameStateName = (GameStateName)e.Args[0];
             }
         }
-
+        public void ClearGameplayData()
+        {
+            GameState.Score = 0;
+            GameState.Enemies.Clear();
+            GameState.PickUps.Clear();
+            GameState.PlayerState = null;
+            GameState.CameraData = null;
+            _eventBus.TriggerEvent(new GameEvent(EventName.ScoreChanged, 
+                $"Score changed to {GameState.Score}",
+                GameState.Score));
+        }
         public void AddScore(int score)
         {
             GameState.Score += score;

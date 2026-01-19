@@ -17,7 +17,7 @@ public class Bootstrapper
     readonly Coroutines _coroutines;
     readonly GameConfig _gameConfig;
     readonly GameState _gameState;
-    readonly LoadGameplayCommand _loadGameplayCommand;
+    readonly ReloadGameplayCommand _reloadGameplayCommand;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void AutostartGame()
@@ -39,7 +39,7 @@ public class Bootstrapper
 
         var gameData = new GameData();
         gameData.PlayerData = new PlayerData();
-        _gameState = new GameState(gameData, _gameConfig);
+        _gameState = new GameState(gameData);
         
         ServiceLocator.Initialize();
 
@@ -52,7 +52,7 @@ public class Bootstrapper
         var idService = new IDService(_gameState);
         ServiceLocator.Current.Register(idService);
 
-        _loadGameplayCommand = new LoadGameplayCommand(_coroutines, _uiRoot, _gameState, _gameConfig);
+        _reloadGameplayCommand = new ReloadGameplayCommand(_coroutines, _uiRoot, _gameState, _gameConfig);
     }
 
     void RunGame()
@@ -61,7 +61,7 @@ public class Bootstrapper
         var sceneName = SceneManager.GetActiveScene().name;
         if (sceneName == nameof(SceneNames.Gameplay))
         {
-            _loadGameplayCommand.Execute();
+            _coroutines.StartCoroutine(LoadAndStartGameplay());
             return;
         }
 
@@ -70,6 +70,21 @@ public class Bootstrapper
             return;
         }
 #endif
-        _loadGameplayCommand.Execute();
+        _coroutines.StartCoroutine(LoadAndStartGameplay());
+    }
+    IEnumerator LoadAndStartGameplay()
+    {
+        _uiRoot.ShowLoadingScreen();
+        _gameState.GameStateName = GameStateName.Init;
+        yield return LoadScene(SceneNames.Boot);
+        yield return LoadScene(SceneNames.Gameplay);
+
+        var sceneEntryPoint = Object.FindFirstObjectByType<GameplayEntryPoint>();
+        sceneEntryPoint.Bind(_uiRoot, _gameConfig, _gameState, _reloadGameplayCommand);
+        _uiRoot.HideLoadingScreen();
+    }
+    IEnumerator LoadScene(SceneNames sceneName)
+    {
+        yield return SceneManager.LoadSceneAsync(sceneName.ToString());
     }
 }

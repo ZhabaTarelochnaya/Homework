@@ -16,7 +16,7 @@ namespace DefaultNamespace.Gameplay.Data
         public CameraState CameraData {get; set;}
         public List<EnemyState> Enemies { get; } = new();
 
-        public GameState(GameData gameData, GameConfig gameConfig)
+        public GameState(GameData gameData)
         {
             ID = gameData.ID;
             Score = gameData.Score;
@@ -25,7 +25,6 @@ namespace DefaultNamespace.Gameplay.Data
         }
 
         public int CreateID() => ID++;
-
         public GameData ToData()
         {
             var gameData = new GameData();

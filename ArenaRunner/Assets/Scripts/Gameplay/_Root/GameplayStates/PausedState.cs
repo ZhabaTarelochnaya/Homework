@@ -20,6 +20,7 @@ namespace DefaultNamespace.Gameplay.GameplayStates
         public override void OnEnter()
         {
             Time.timeScale = 0;
+            Debug.Log("Entered PausedState");
         }
 
         public override void OnExit()

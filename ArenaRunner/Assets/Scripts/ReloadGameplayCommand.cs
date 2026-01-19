@@ -8,14 +8,14 @@ using Utils;
 
 namespace DefaultNamespace
 {
-    public class LoadGameplayCommand
+    public class ReloadGameplayCommand
     {
         readonly Coroutines _coroutines;
         readonly UIRoot _uiRoot;
         readonly GameState _gameState;
         readonly GameConfig _gameConfig;
 
-        public LoadGameplayCommand(Coroutines coroutines, UIRoot uiRoot, 
+        public ReloadGameplayCommand(Coroutines coroutines, UIRoot uiRoot, 
             GameState gameState, GameConfig gameConfig)
         {
             _coroutines = coroutines;
