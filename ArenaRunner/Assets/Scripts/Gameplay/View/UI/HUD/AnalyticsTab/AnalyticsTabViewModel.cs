@@ -20,5 +20,7 @@ namespace DefaultNamespace.AnalyticsTab
             _analyticsService = ServiceLocator.Current.Get<AnalyticsService>();
         }
         public string GetLastEvents(int number) => _analyticsService.GetLastEvents(number);
+        public string GetEnemySpawnedCount() => _analyticsService.GetEnemySpawnedCount();
+        public string GetPickedItemsCount() => _analyticsService.GetPickedItemsCount();
     }
 }

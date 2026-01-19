@@ -19,7 +19,9 @@ namespace DefaultNamespace.AnalyticsTab
         void EventManagerOnOnOnGameEvent(GameEvent e)
         {
             if (!_analyticsPanel.activeSelf) return;
-            _text.text = _viewModel.GetLastEvents(_lastEventsNumber);
+            _text.text = _viewModel.GetEnemySpawnedCount() + "\n";
+            _text.text += _viewModel.GetPickedItemsCount() + "\n";
+            _text.text += _viewModel.GetLastEvents(_lastEventsNumber);
         }
         public void OnShowAnalyticsButtonDown()
         {
