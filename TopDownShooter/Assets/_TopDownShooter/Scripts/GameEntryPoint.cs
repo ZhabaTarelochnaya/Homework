@@ -1,6 +1,7 @@
 using System.Collections;
 using _TopDownShooter.Scripts;
 using _TopDownShooter.Scripts.Utils;
+using _TopDownShooter.Scripts.Utils.ServiceLocator;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,7 +27,7 @@ public class GameEntryPoint
         _uiRoot = Object.Instantiate(prefabUIRoot);
         Object.DontDestroyOnLoad(_uiRoot.gameObject);
         
-        // _gameConfig = Resources.Load<GameConfig>("Configs/GameConfig");
+        ServiceLocator.Initialize();
         
     }
 
