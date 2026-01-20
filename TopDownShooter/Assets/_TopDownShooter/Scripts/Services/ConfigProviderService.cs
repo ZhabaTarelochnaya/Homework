@@ -16,5 +16,6 @@ namespace _TopDownShooter.Scripts.Gameplay.Services
         {
             return _gameConfig.GameplayConfig.PlayerConfig;
         }
+        public CameraConfig GetCameraConfig() => _gameConfig.GameplayConfig.CameraConfig;
     }
 }

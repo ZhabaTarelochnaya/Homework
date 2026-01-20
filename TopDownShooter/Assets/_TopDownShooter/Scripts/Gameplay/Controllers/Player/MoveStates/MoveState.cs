@@ -9,14 +9,15 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers.MoveStates
     public class MoveState : FSMState<PlayerMoveStateName>
     {
         readonly Rigidbody _rigidbody;
-        readonly PlayerConfig _config;
+        readonly PlayerConfig _playerConfig;
         readonly MoveService _moveService;
         readonly InputService _inputService;
 
-        public MoveState(Rigidbody rigidbody, PlayerConfig config) : base(PlayerMoveStateName.Move)
+        public MoveState(Rigidbody rigidbody, PlayerConfig playerConfig) 
+            : base(PlayerMoveStateName.Move)
         {
             _rigidbody = rigidbody;
-            _config = config;
+            _playerConfig = playerConfig;
             _moveService = ServiceLocator.Current.Get<MoveService>();
             _inputService = ServiceLocator.Current.Get<InputService>();
         }
@@ -24,7 +25,7 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers.MoveStates
         public override void Tick(float deltaTime)
         {
             var direction = _inputService.GetMoveDirection(); 
-            _moveService.MoveToDirection(_rigidbody, direction, _config.Speed);
+            _moveService.CameraRelativeMoveToDirection(_rigidbody, direction, _playerConfig.Speed);
            
         }
 
