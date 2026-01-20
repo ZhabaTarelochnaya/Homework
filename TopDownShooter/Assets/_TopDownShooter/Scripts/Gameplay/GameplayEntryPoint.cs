@@ -11,11 +11,10 @@ public class GameplayEntryPoint : MonoBehaviour
     bool _isBound;
     CameraManager _cameraManager;
     [SerializeField] PlayerView _playerView;
-    [SerializeField] Camera _camera;
 
     public void Bind(UIRoot uiRoot)
     {
-        GameplayServiceRegistrations.Register(_camera);
+        GameplayServiceRegistrations.Register();
         BindPlayer();
         _isBound = true;
         

@@ -5,17 +5,18 @@ namespace _TopDownShooter.Scripts.Gameplay.Services
 {
     public class ConfigProviderService : IService
     {
-        readonly GameConfig _gameConfig;
+        public GameConfig GameConfig { get; }
 
         public ConfigProviderService(GameConfig gameConfig)
         {
-            _gameConfig = gameConfig;
+            GameConfig = gameConfig;
         }
 
         public PlayerConfig GetPlayerConfig()
         {
-            return _gameConfig.GameplayConfig.PlayerConfig;
+            return GameConfig.GameplayConfig.PlayerConfig;
         }
-        public CameraConfig GetCameraConfig() => _gameConfig.GameplayConfig.CameraConfig;
+        public CameraConfig GetCameraConfig() => GameConfig.GameplayConfig.CameraConfig;
+        public GameplayConfig GetGameplayConfig() => GameConfig.GameplayConfig;
     }
 }

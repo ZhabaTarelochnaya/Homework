@@ -10,9 +10,9 @@ namespace _TopDownShooter.Scripts.Gameplay.Services
             return new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
         }
 
-        public Vector3 GetRotateDirection()
+        public Vector3 GetMousePosition()
         {
-            return new Vector3(Input.GetAxisRaw("Mouse X"), 0, Input.GetAxisRaw("Mouse Y")).normalized;
+            return Input.mousePosition;
         }
 
         public bool IsShooting()

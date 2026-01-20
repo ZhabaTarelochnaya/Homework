@@ -12,11 +12,11 @@ namespace _TopDownShooter.Scripts.Controllers
         Transform _target;
         Vector3 _velocity = Vector3.zero;
         public bool IsFollowingTarget { get; set; } = true;
-        public CameraManager(Transform camera)
+        public CameraManager()
         {
-            _camera = camera;
+            _camera = Camera.main.transform;
             _config = ServiceLocator.Current.Get<ConfigProviderService>().GetCameraConfig();
-            camera.rotation = Quaternion.Euler(_config.Rotation);
+            _camera.rotation = Quaternion.Euler(_config.Rotation);
         }
 
         public void SetTarget(Transform target) => _target = target;
