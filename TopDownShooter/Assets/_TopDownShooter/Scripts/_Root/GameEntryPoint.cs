@@ -1,5 +1,6 @@
 using System.Collections;
 using _TopDownShooter.Scripts;
+using _TopDownShooter.Scripts.Gameplay.Services;
 using _TopDownShooter.Scripts.Utils;
 using _TopDownShooter.Scripts.Utils.EventBus;
 using _TopDownShooter.Scripts.Utils.ServiceLocator;
@@ -33,6 +34,8 @@ public class GameEntryPoint
         var eventBus = new EventBus();
         ServiceLocator.Current.Register(eventBus);
         
+        var gameConfig = Resources.Load<GameConfig>("Configs/GameConfig");
+        var configProviderService = new ConfigProviderService(gameConfig);
 
     }
 
