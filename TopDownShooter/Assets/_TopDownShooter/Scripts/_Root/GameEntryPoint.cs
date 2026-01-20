@@ -36,6 +36,7 @@ public class GameEntryPoint
         
         var gameConfig = Resources.Load<GameConfig>("Configs/GameConfig");
         var configProviderService = new ConfigProviderService(gameConfig);
+        ServiceLocator.Current.Register(configProviderService);
 
     }
 
