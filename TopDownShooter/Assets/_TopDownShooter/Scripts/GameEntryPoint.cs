@@ -1,6 +1,7 @@
 using System.Collections;
 using _TopDownShooter.Scripts;
 using _TopDownShooter.Scripts.Utils;
+using _TopDownShooter.Scripts.Utils.EventBus;
 using _TopDownShooter.Scripts.Utils.ServiceLocator;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -29,6 +30,10 @@ public class GameEntryPoint
         
         ServiceLocator.Initialize();
         
+        var eventBus = new EventBus();
+        ServiceLocator.Current.Register(eventBus);
+        
+
     }
 
     void RunGame()
