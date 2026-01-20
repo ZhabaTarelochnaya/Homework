@@ -34,6 +34,11 @@ namespace _TopDownShooter.Scripts.Utils.StateMachine
             }
             
             CurrentState.Tick(deltaTime);
+            
+            CheckTransitions();
+        }
+        public void CheckTransitions()
+        {
             var nextStateKey = CurrentState.GetNextState();
             if (!nextStateKey.Equals(CurrentState.StateName))
             {

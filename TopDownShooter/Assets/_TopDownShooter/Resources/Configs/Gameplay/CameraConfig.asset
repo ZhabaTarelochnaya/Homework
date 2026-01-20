@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 592f05b4208f4ba8aae7fd9ded9ed2c2, type: 3}
   m_Name: CameraConfig
   m_EditorClassIdentifier: 
-  <Offset>k__BackingField: {x: 0, y: 0, z: 0}
-  <Rotation>k__BackingField: {x: 0, y: 0, z: 0}
+  <Offset>k__BackingField: {x: -7.76, y: 14.5, z: -9.7}
+  <Rotation>k__BackingField: {x: 51.2, y: 36.1, z: 0}

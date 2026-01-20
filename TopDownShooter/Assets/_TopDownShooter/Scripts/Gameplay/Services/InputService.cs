@@ -7,12 +7,12 @@ namespace _TopDownShooter.Scripts.Gameplay.Services
     {
         public Vector3 GetMoveDirection()
         {
-            return new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+            return new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
         }
 
         public Vector3 GetRotateDirection()
         {
-            return new Vector3(Input.GetAxis("Mouse X"), 0, Input.GetAxis("Mouse Y")).normalized;
+            return new Vector3(Input.GetAxisRaw("Mouse X"), 0, Input.GetAxisRaw("Mouse Y")).normalized;
         }
 
         public bool IsShooting()

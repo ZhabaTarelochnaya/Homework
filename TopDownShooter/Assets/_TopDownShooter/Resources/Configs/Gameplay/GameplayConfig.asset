@@ -12,3 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4def33b9f8ec8747b33bb0d59c78cf1, type: 3}
   m_Name: GameplayConfig
   m_EditorClassIdentifier: 
+  <PlayerConfig>k__BackingField: {fileID: 11400000, guid: 9484090eb2738ab4a889158b6589660c,
+    type: 2}
+  <CameraConfig>k__BackingField: {fileID: 11400000, guid: 7e7504ab87c1e604599b3c5b41ef06ee,
+    type: 2}
