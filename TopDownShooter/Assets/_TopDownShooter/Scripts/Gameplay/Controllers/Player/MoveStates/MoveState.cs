@@ -13,13 +13,13 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers.MoveStates
         readonly MoveService _moveService;
         readonly InputService _inputService;
 
-        public MoveState(Rigidbody rigidbody, PlayerConfig playerConfig) 
+        public MoveState(Rigidbody rigidbody, PlayerConfig playerConfig, InputService inputService) 
             : base(PlayerMoveStateName.Move)
         {
             _rigidbody = rigidbody;
             _playerConfig = playerConfig;
             _moveService = ServiceLocator.Current.Get<MoveService>();
-            _inputService = ServiceLocator.Current.Get<InputService>();
+            _inputService = inputService;
         }
 
         public override void Tick(float deltaTime)

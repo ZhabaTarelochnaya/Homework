@@ -1,3 +1,4 @@
+using System.Linq;
 using _TopDownShooter.Scripts.Gameplay.Configs;
 using _TopDownShooter.Scripts.Utils.ServiceLocator;
 
@@ -18,5 +19,11 @@ namespace _TopDownShooter.Scripts.Gameplay.Services
         }
         public CameraConfig GetCameraConfig() => GameConfig.GameplayConfig.CameraConfig;
         public GameplayConfig GetGameplayConfig() => GameConfig.GameplayConfig;
+
+        public WeaponConfig GetWeaponConfig(WeaponName name)
+        {
+            var config = GameConfig.GameplayConfig.WeaponConfigs.FirstOrDefault(c => c.Name == name);
+            return config;
+        }
     }
 }

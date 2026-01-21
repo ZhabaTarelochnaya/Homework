@@ -16,3 +16,11 @@ MonoBehaviour:
     type: 2}
   <CameraConfig>k__BackingField: {fileID: 11400000, guid: 7e7504ab87c1e604599b3c5b41ef06ee,
     type: 2}
+  <WeaponConfigs>k__BackingField:
+  - {fileID: 11400000, guid: 51588b2952b1ef7458b6b53fc44d8f76, type: 2}
+  <AimGroundMask>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 8
+  <BulletMask>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 1152

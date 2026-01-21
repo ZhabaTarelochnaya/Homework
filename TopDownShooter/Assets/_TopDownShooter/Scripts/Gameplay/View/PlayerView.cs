@@ -9,6 +9,7 @@ namespace _TopDownShooter.Scripts.View
     {
         PlayerController _controller;
         public Rigidbody Rigidbody { get; private set; }
+        [field: SerializeField] public HurtBox HurtBox { get; private set; }
 
         public void Bind(PlayerController playerController)
         {

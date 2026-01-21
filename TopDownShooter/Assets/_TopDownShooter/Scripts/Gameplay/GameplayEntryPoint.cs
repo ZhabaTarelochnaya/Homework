@@ -1,6 +1,7 @@
 using System;
 using _TopDownShooter.Scripts;
 using _TopDownShooter.Scripts.Controllers;
+using _TopDownShooter.Scripts.Gameplay.Configs;
 using _TopDownShooter.Scripts.Gameplay.Controllers;
 using _TopDownShooter.Scripts.Utils.ServiceLocator;
 using _TopDownShooter.Scripts.View;
@@ -14,17 +15,20 @@ public class GameplayEntryPoint : MonoBehaviour
 
     public void Bind(UIRoot uiRoot)
     {
-        GameplayServiceRegistrations.Register();
+        GameplayServiceRegistrations.Register(_playerView.transform);
         BindPlayer();
+        
         _isBound = true;
         
         _cameraManager = ServiceLocator.Current.Get<CameraManager>();
         _cameraManager.SetTarget(_playerView.transform);
+        var weaponManager = ServiceLocator.Current.Get<WeaponManager>();
+        weaponManager.Equip(WeaponName.Pistol);
     }
 
     void BindPlayer()
     {
-        var playerController = new PlayerController(_playerView.Rigidbody);
+        var playerController = new PlayerController(_playerView.Rigidbody, _playerView.HurtBox);
         _playerView.Bind(playerController);
     }
 

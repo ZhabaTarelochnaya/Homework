@@ -11,11 +11,11 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers.MoveStates
         readonly MoveService _moveService;
         readonly InputService _inputService;
 
-        public IdleState(Rigidbody rigidbody) : base(PlayerMoveStateName.Idle)
+        public IdleState(Rigidbody rigidbody, InputService inputService) : base(PlayerMoveStateName.Idle)
         {
             _rigidbody = rigidbody;
             _moveService = ServiceLocator.Current.Get<MoveService>();
-            _inputService = ServiceLocator.Current.Get<InputService>();
+            _inputService = inputService;
         }
 
         public override void OnEnter()

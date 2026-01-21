@@ -20,7 +20,6 @@ namespace _TopDownShooter.Scripts.View
             var hitBox = other.GetComponent<HitBox>();
             if (!hitBox) return;
             TakeDamage(hitBox.Damage);
-            Debug.Log(CurrentHealth);
         }
         public void HealFullHealth() => CurrentHealth = MaxHealth;
         public void TakeDamage(int damage)
