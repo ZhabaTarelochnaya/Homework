@@ -2,6 +2,7 @@ using _TopDownShooter.Scripts.Controllers;
 using _TopDownShooter.Scripts.Gameplay.Configs;
 using _TopDownShooter.Scripts.Utils.ServiceLocator;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace _TopDownShooter.Scripts.Gameplay.Services
 {
@@ -17,12 +18,12 @@ namespace _TopDownShooter.Scripts.Gameplay.Services
         {
             rigidbody.velocity = direction * moveSpeed;
         }
-
         public void CameraRelativeMoveToDirection(Rigidbody rigidbody, Vector3 direction, float moveSpeed)
         {
             var relativeDirection = Quaternion.AngleAxis(_cameraConfig.Rotation.y, Vector3.up) * direction;
             MoveToDirection(rigidbody, relativeDirection, moveSpeed);
         }
+        public void MoveToTarget(NavMeshAgent agent, Vector3 target) => agent.SetDestination(target);
         public void Stop(Rigidbody rigidbody) => rigidbody.velocity = Vector3.zero;
     }
 }

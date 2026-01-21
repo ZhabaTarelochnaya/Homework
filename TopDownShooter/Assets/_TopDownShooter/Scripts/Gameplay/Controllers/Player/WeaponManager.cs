@@ -42,8 +42,8 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
         }
         public void Shoot()
         {
-            if (Physics.Raycast(CurrentView.ShootPosition.position, 
-                    CurrentView.ShootPosition.forward, out RaycastHit hit, _gameplayConfig.BulletMask))
+            if (Physics.Raycast(CurrentView.ShootPosition.position,CurrentView.ShootPosition.forward, 
+                    out RaycastHit hit, 1000f,_gameplayConfig.BulletMask))
             {
                 var hurtBox = hit.collider.GetComponent<HurtBox>();
                 if (!hurtBox) return;

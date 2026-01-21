@@ -1,5 +1,6 @@
 using System.Linq;
 using _TopDownShooter.Scripts.Gameplay.Configs;
+using _TopDownShooter.Scripts.Gameplay.Configs.Enemies;
 using _TopDownShooter.Scripts.Utils.ServiceLocator;
 
 namespace _TopDownShooter.Scripts.Gameplay.Services
@@ -23,6 +24,12 @@ namespace _TopDownShooter.Scripts.Gameplay.Services
         public WeaponConfig GetWeaponConfig(WeaponName name)
         {
             var config = GameConfig.GameplayConfig.WeaponConfigs.FirstOrDefault(c => c.Name == name);
+            return config;
+        }
+
+        public EnemyConfig GetEnemyConfig(EnemyName name)
+        {
+            var config = GameConfig.GameplayConfig.EnemyConfigs.FirstOrDefault(c => c.Name == name);
             return config;
         }
     }
