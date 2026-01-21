@@ -20,6 +20,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 51588b2952b1ef7458b6b53fc44d8f76, type: 2}
   <EnemyConfigs>k__BackingField:
   - {fileID: 11400000, guid: 56fbebe10e0191e41bdc389854b900d5, type: 2}
+  <EnemySpawnerConfig>k__BackingField: {fileID: 11400000, guid: 88f8e8d52c1696d4cb08c19b3b22b88b,
+    type: 2}
   <AimGroundMask>k__BackingField:
     serializedVersion: 2
     m_Bits: 136

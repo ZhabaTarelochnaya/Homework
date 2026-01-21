@@ -14,15 +14,13 @@ public class GameplayEntryPoint : MonoBehaviour
     bool _isBound;
     CameraManager _cameraManager;
     [SerializeField] PlayerView _playerView;
-    [SerializeField] EnemyView _enemyView;
+    [SerializeField] EnemySpawnerView _enemySpawnerView;
 
     public void Bind(UIRoot uiRoot)
     {
         GameplayServiceRegistrations.Register(_playerView.transform);
         BindPlayer();
-        var configProvider = ServiceLocator.Current.Get<ConfigProviderService>();
-        var enemyController = new EnemyController(_enemyView.Agent, _enemyView.HurtBox, _enemyView.HitBox, _playerView.transform,configProvider.GetEnemyConfig(EnemyName.Enemy));
-        _enemyView.Bind(enemyController);
+        BindEnemySpawner();
         _isBound = true;
         
         _cameraManager = ServiceLocator.Current.Get<CameraManager>();
@@ -36,7 +34,12 @@ public class GameplayEntryPoint : MonoBehaviour
         var playerController = new PlayerController(_playerView.Rigidbody, _playerView.HurtBox);
         _playerView.Bind(playerController);
     }
-
+    void BindEnemySpawner()
+    {
+        var enemyController = new EnemySpawnerController(_enemySpawnerView.SpawnPoints, 
+            _enemySpawnerView.EnemiesParent, _playerView.transform);
+        _enemySpawnerView.Bind(enemyController);
+    }
     void LateUpdate()
     {
         _cameraManager.FollowTarget(_playerView.transform);

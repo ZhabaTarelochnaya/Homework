@@ -32,5 +32,7 @@ namespace _TopDownShooter.Scripts.Gameplay.Services
             var config = GameConfig.GameplayConfig.EnemyConfigs.FirstOrDefault(c => c.Name == name);
             return config;
         }
+
+        public EnemySpawnerConfig GetEnemySpawnerConfig() => GameConfig.GameplayConfig.EnemySpawnerConfig;
     }
 }

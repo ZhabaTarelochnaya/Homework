@@ -29,7 +29,6 @@ namespace _TopDownShooter.Scripts.View
             hitBox.Damage = _config.Damage;
             _hurtBox.MaxHealth = _config.MaxHealth;
             _hurtBox.HealFullHealth();
-            _hurtBox.Hit += (d, h) => Debug.Log(h);
             _hurtBox.Died += HurtBoxOnDied;
         }
 

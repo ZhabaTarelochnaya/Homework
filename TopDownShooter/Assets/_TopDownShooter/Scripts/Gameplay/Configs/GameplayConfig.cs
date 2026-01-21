@@ -11,6 +11,7 @@ namespace _TopDownShooter.Scripts.Gameplay.Configs
         [field: SerializeField] public CameraConfig CameraConfig { get; private set; }
         [field: SerializeField] public List<WeaponConfig> WeaponConfigs { get; private set; }
         [field: SerializeField] public List<EnemyConfig> EnemyConfigs { get; private set; }
+        [field: SerializeField] public EnemySpawnerConfig EnemySpawnerConfig { get; private set; }
         [field: SerializeField] public LayerMask AimGroundMask { get; private set; }
         [field: SerializeField] public LayerMask BulletMask { get; private set; }
     }
