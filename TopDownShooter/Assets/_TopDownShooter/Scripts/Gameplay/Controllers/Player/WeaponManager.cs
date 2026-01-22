@@ -12,7 +12,9 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
         readonly GameplayConfig _gameplayConfig;
         readonly ConfigProviderService _configProviderService;
         readonly InputService _inputService;
+        AudioSource _audioSource;
         float _timer = 0;
+        float _soundTimer = 0;
         public WeaponView CurrentView { get; private set; }
         public WeaponConfig CurrentConfig { get; private set; }
 
@@ -26,16 +28,24 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
 
         public void Equip(WeaponName name)
         {
-            CurrentConfig = _configProviderService.GetWeaponConfig(WeaponName.Pistol);
+            CurrentConfig = _configProviderService.GetWeaponConfig(name);
             var instance = Object.Instantiate(CurrentConfig.Prefab, _weaponPivot);
             CurrentView = instance.GetComponent<WeaponView>();
+            _audioSource = CurrentView.AudioSource;
+            _audioSource.clip = CurrentConfig.ShootSound;
             CurrentView.Bind(this);
         }
         public void Update()
         {
             _timer += Time.deltaTime;
+            _soundTimer += Time.deltaTime;
             if (_inputService.IsShooting() && _timer > 1 / CurrentConfig.FireRate)
             {
+                if (_soundTimer > CurrentConfig.FireSoundDelay)
+                {
+                    _audioSource.PlayOneShot(_audioSource.clip);
+                    _soundTimer = 0;
+                }
                 Shoot();
                 _timer = 0;
             }

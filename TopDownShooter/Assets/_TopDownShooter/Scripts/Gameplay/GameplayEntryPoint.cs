@@ -26,7 +26,7 @@ public class GameplayEntryPoint : MonoBehaviour
         _cameraManager = ServiceLocator.Current.Get<CameraManager>();
         _cameraManager.SetTarget(_playerView.transform);
         var weaponManager = ServiceLocator.Current.Get<WeaponManager>();
-        weaponManager.Equip(WeaponName.Pistol);
+        weaponManager.Equip(WeaponName.AssaultRifle);
     }
 
     void BindPlayer()

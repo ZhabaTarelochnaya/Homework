@@ -17,3 +17,6 @@ MonoBehaviour:
   <FireRate>k__BackingField: 20
   <Prefab>k__BackingField: {fileID: 6773184996775840341, guid: 10106200fe4317346a93d66e0f8d778a,
     type: 3}
+  <ShootSound>k__BackingField: {fileID: 8300000, guid: a39f9485ce9a5e343a6bbafc8d801127,
+    type: 3}
+  <FireSoundDelay>k__BackingField: 0
