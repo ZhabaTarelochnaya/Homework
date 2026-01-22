@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19774657abd401b9d53212e9de046ad, type: 3}
   m_Name: EnemyWaveConfig
   m_EditorClassIdentifier: 
-  <Duration>k__BackingField: 30
+  <Duration>k__BackingField: 10
   <Composition>k__BackingField:
   - {fileID: 11400000, guid: 6a85fa431dc1fdd4cb316215b0c17756, type: 2}

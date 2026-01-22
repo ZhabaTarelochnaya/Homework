@@ -24,5 +24,6 @@ namespace _TopDownShooter.Scripts.View
         {
             _enemyController.FixedUpdate();
         }
+        
     }
 }

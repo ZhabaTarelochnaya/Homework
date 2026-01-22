@@ -16,7 +16,8 @@ namespace _TopDownShooter.Scripts.Gameplay.Services
         }
         public void MoveToDirection(Rigidbody rigidbody, Vector3 direction, float moveSpeed)
         {
-            rigidbody.velocity = direction * moveSpeed;
+            var velocity = direction * moveSpeed;
+            rigidbody.velocity = new Vector3(velocity.x, rigidbody.velocity.y, velocity.z);
         }
         public void CameraRelativeMoveToDirection(Rigidbody rigidbody, Vector3 direction, float moveSpeed)
         {

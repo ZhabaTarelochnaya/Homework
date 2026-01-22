@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AssaultRifleConfig
   m_EditorClassIdentifier: 
   <Name>k__BackingField: 1
-  <Damage>k__BackingField: 10
-  <FireRate>k__BackingField: 8
+  <Damage>k__BackingField: 4
+  <FireRate>k__BackingField: 20
   <Prefab>k__BackingField: {fileID: 6773184996775840341, guid: 10106200fe4317346a93d66e0f8d778a,
     type: 3}
