@@ -34,5 +34,7 @@ namespace _TopDownShooter.Scripts.Gameplay.Services
         }
 
         public EnemySpawnerConfig GetEnemySpawnerConfig() => GameConfig.GameplayConfig.EnemySpawnerConfig;
+
+        public UIConfig GetUIConfig() => GameConfig.UIConfig;
     }
 }

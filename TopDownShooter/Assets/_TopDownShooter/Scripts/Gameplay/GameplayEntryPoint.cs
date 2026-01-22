@@ -5,6 +5,7 @@ using _TopDownShooter.Scripts.Gameplay.Configs;
 using _TopDownShooter.Scripts.Gameplay.Configs.Enemies;
 using _TopDownShooter.Scripts.Gameplay.Controllers;
 using _TopDownShooter.Scripts.Gameplay.Services;
+using _TopDownShooter.Scripts.Utils.EventBus;
 using _TopDownShooter.Scripts.Utils.ServiceLocator;
 using _TopDownShooter.Scripts.View;
 using UnityEngine;
@@ -13,10 +14,11 @@ public class GameplayEntryPoint : MonoBehaviour
 {
     bool _isBound;
     CameraManager _cameraManager;
+    PlayerController _playerController;
     [SerializeField] PlayerView _playerView;
     [SerializeField] EnemySpawnerView _enemySpawnerView;
 
-    public void Bind(UIRoot uiRoot)
+    public void Bind()
     {
         GameplayServiceRegistrations.Register(_playerView.transform);
         BindPlayer();
@@ -26,13 +28,22 @@ public class GameplayEntryPoint : MonoBehaviour
         _cameraManager = ServiceLocator.Current.Get<CameraManager>();
         _cameraManager.SetTarget(_playerView.transform);
         var weaponManager = ServiceLocator.Current.Get<WeaponManager>();
-        weaponManager.Equip(WeaponName.AssaultRifle);
+        var playerConfig = ServiceLocator.Current.Get<ConfigProviderService>().GetPlayerConfig();
+        weaponManager.Equip(playerConfig.StartingWeapon);
+        
+        var windowManager = ServiceLocator.Current.Get<WindowManagerService>();
+        windowManager.OpenGameplayUI();
+        
+        var eventBus = ServiceLocator.Current.Get<EventBus>();
+        eventBus.TriggerEvent(new GameEvent(EventName.PlayerHurt,
+            $"Player hp set",
+            _playerView.HurtBox.CurrentHealth));
     }
 
     void BindPlayer()
     {
-        var playerController = new PlayerController(_playerView.Rigidbody, _playerView.HurtBox);
-        _playerView.Bind(playerController);
+        _playerController = new PlayerController(_playerView.Rigidbody, _playerView.HurtBox);
+        _playerView.Bind(_playerController);
     }
     void BindEnemySpawner()
     {

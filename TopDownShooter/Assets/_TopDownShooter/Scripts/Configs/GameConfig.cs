@@ -7,5 +7,6 @@ namespace _TopDownShooter.Scripts
     public class GameConfig : ScriptableObject
     {
         [field: SerializeField] public GameplayConfig GameplayConfig { get; private set; }
+        [field: SerializeField] public UIConfig UIConfig { get; private set; }
     }
 }

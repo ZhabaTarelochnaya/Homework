@@ -9,12 +9,12 @@ namespace _TopDownShooter.Scripts.Utils.EventBus
         public IEnumerable<GameEvent> GameEvents => gameEvents;
         
         public delegate void GameEventHandler(GameEvent e);
-        public event GameEventHandler OnGameEvent;
+        public event GameEventHandler GameEventFired;
 
         public void TriggerEvent(GameEvent e)
         {
             gameEvents.Add(e);
-            OnGameEvent?.Invoke(e);
+            GameEventFired?.Invoke(e);
         }
     }
 }

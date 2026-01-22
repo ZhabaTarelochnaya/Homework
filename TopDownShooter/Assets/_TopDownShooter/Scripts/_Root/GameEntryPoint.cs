@@ -10,8 +10,7 @@ using UnityEngine.SceneManagement;
 public class GameEntryPoint
 {
     static GameEntryPoint _gameRoot;
-    readonly UIRoot _uiRoot;
-    readonly Coroutines _coroutines;
+    readonly SceneLoaderService _sceneLoaderService;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void AutostartGame()
@@ -22,12 +21,12 @@ public class GameEntryPoint
 
     GameEntryPoint()
     {
-        _coroutines = new GameObject("Coroutines").AddComponent<Coroutines>();
-        Object.DontDestroyOnLoad(_coroutines.gameObject);
+        var coroutines = new GameObject("Coroutines").AddComponent<Coroutines>();
+        Object.DontDestroyOnLoad(coroutines.gameObject);
 
         var prefabUIRoot = Resources.Load<UIRoot>("Prefabs/UIRoot");
-        _uiRoot = Object.Instantiate(prefabUIRoot);
-        Object.DontDestroyOnLoad(_uiRoot.gameObject);
+        var uiRoot = Object.Instantiate(prefabUIRoot);
+        Object.DontDestroyOnLoad(uiRoot.gameObject);
         
         ServiceLocator.Initialize();
         
@@ -37,7 +36,12 @@ public class GameEntryPoint
         var gameConfig = Resources.Load<GameConfig>("Configs/GameConfig");
         var configProviderService = new ConfigProviderService(gameConfig);
         ServiceLocator.Current.Register(configProviderService);
-
+        
+        var windowManagerService = new WindowManagerService(uiRoot);
+        ServiceLocator.Current.Register(windowManagerService);
+        
+        _sceneLoaderService = new SceneLoaderService(uiRoot, coroutines);
+        ServiceLocator.Current.Register(_sceneLoaderService);
     }
 
     void RunGame()
@@ -46,7 +50,7 @@ public class GameEntryPoint
         var sceneName = SceneManager.GetActiveScene().name;
         if (sceneName == nameof(SceneNames.Gameplay))
         {
-            _coroutines.StartCoroutine(LoadAndStartGameplay());
+            _sceneLoaderService.LoadGameplay();
             return;
         }
 
@@ -55,20 +59,6 @@ public class GameEntryPoint
             return;
         }
 #endif
-        _coroutines.StartCoroutine(LoadAndStartGameplay());
-    }
-    IEnumerator LoadAndStartGameplay()
-    {
-        _uiRoot.ShowLoadingScreen();
-        yield return LoadScene(SceneNames.Boot);
-        yield return LoadScene(SceneNames.Gameplay);
-
-        var sceneEntryPoint = Object.FindFirstObjectByType<GameplayEntryPoint>();
-        sceneEntryPoint.Bind(_uiRoot);
-        _uiRoot.HideLoadingScreen();
-    }
-    IEnumerator LoadScene(SceneNames sceneName)
-    {
-        yield return SceneManager.LoadSceneAsync(sceneName.ToString());
+        _sceneLoaderService.LoadGameplay();
     }
 }
