@@ -34,5 +34,11 @@ namespace _TopDownShooter.Scripts.View
             }
         }
         public void OnRestartButtonPressed() => _sceneLoaderService.LoadGameplay();
+
+        public void Reset()
+        {
+            killCount = 0;
+            _killsText.text = $"Kills: 0";
+        }
     }
 }

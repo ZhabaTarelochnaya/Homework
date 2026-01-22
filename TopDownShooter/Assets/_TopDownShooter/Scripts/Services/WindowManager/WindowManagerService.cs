@@ -28,18 +28,24 @@ namespace _TopDownShooter.Scripts.Gameplay.Services
 
         public void OpenGameplayUI()
         {
-            if (_uiRoot.GetComponentInChildren<GameplayUI>() != null) return;
+            var gameplayUI = _uiRoot.GetComponentInChildren<GameplayUI>();
+            if (gameplayUI)
+            {
+                gameplayUI.Reset();
+                return;
+            }
             var instance = Object.Instantiate(_config.GameplayUI, _uiRoot.transform);
-            var gameplayUI = instance.GetComponent<GameplayUI>();
+            gameplayUI = instance.GetComponent<GameplayUI>();
             SetContainers(gameplayUI.Screens, gameplayUI.Popups);
             gameplayUI.Bind(this);
         }
-        public void OpenHUD()
+        public HUD OpenHUD()
         {
             var instance = Object.Instantiate(_config.HUD, _screens);
             var hud = instance.GetComponent<HUD>();
             SetScreen(hud);
             hud.Bind();
+            return hud;
         }
 
         void SetScreen(IScreen screen)
