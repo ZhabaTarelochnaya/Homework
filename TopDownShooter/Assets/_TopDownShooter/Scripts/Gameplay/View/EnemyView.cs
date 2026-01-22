@@ -11,8 +11,8 @@ namespace _TopDownShooter.Scripts.View
         EnemyController _enemyController;
         Renderer _renderer;
         Color _originalColor;
-        float _flashDuration = 0.1f;
         Coroutine _hurtCoroutine;
+        [SerializeField] float _flashDuration = 0.5f;
         [field: SerializeField] public HurtBox HurtBox { get; private set; }
         [field: SerializeField] public HitBox HitBox { get; private set; }
         public NavMeshAgent Agent { get; private set; }
@@ -52,10 +52,6 @@ namespace _TopDownShooter.Scripts.View
         IEnumerator HurtColorChange()
         {
             float elapsedTime = 0f;
-            Debug.Log("Hit");
-            
-            _renderer.material.color = Color.white;
-            yield return new WaitForSeconds(0.05f);
             
             while (elapsedTime < _flashDuration)
             {
