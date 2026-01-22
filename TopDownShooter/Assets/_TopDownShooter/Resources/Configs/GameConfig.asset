@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <GameplayConfig>k__BackingField: {fileID: 11400000, guid: 800a49526372c9647b59cc8faa662969,
     type: 2}
+  <UIConfig>k__BackingField: {fileID: 11400000, guid: 500c73ccf1de57f4e984fa3ca27603de,
+    type: 2}

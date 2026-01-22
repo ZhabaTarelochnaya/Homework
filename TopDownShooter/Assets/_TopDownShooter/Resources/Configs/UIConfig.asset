@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98842d6b96ae4ce1a8f00612efae46d9, type: 3}
   m_Name: UIConfig
   m_EditorClassIdentifier: 
-  <GameplayUI>k__BackingField: {fileID: 0}
-  <HUD>k__BackingField: {fileID: 0}
+  <GameplayUI>k__BackingField: {fileID: 3683852387127171628, guid: a9cf56b248520c94cb747748102350ee,
+    type: 3}
+  <HUD>k__BackingField: {fileID: 2210073353845629956, guid: dc006aafbe187684ba6324e0ff1e62e0,
+    type: 3}

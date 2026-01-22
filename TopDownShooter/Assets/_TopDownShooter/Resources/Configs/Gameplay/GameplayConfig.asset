@@ -25,7 +25,7 @@ MonoBehaviour:
     type: 2}
   <AimGroundMask>k__BackingField:
     serializedVersion: 2
-    m_Bits: 136
+    m_Bits: 8
   <BulletMask>k__BackingField:
     serializedVersion: 2
     m_Bits: 1152
