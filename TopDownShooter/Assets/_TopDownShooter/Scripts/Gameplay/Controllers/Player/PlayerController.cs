@@ -33,7 +33,7 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
         public void FixedUpdate()
         {
             _moveFSM.Tick(Time.fixedDeltaTime);
-            _aimService.CameraRelativeAim(_rigidbody.transform, _inputService.GetMousePosition());
+            _aimService.CameraRelativeAim(_rigidbody, _inputService.GetMousePosition());
         }
     }
 }

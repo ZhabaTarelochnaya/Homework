@@ -12,14 +12,15 @@ namespace _TopDownShooter.Scripts.Gameplay.Services
         {
             _config = ServiceLocator.Current.Get<ConfigProviderService>().GetGameplayConfig();
         }
-        public void CameraRelativeAim(Transform transform, Vector3 aimPosition)
+        public void CameraRelativeAim(Rigidbody rigidbody, Vector3 aimPosition)
         {
             if (TryGetMousePosition(out var position, aimPosition))
             {
-                var direction = position - transform.position;
+                var direction = position - rigidbody.position;
                 direction.y = 0;
-                transform.forward = direction;
+                rigidbody.transform.forward = direction;
             }
+            rigidbody.angularVelocity = Vector3.zero;
         }
         bool TryGetMousePosition(out Vector3 position, Vector3 aimPosition)
         {
