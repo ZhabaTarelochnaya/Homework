@@ -1,3 +1,5 @@
+using System;
+using _TopDownShooter.Scripts.Gameplay.Configs;
 using _TopDownShooter.Scripts.Gameplay.Controllers;
 using UnityEngine;
 
@@ -7,19 +9,41 @@ namespace _TopDownShooter.Scripts.View
     public class WeaponView : MonoBehaviour
     {
         WeaponManager _weaponManager;
-        public AudioSource AudioSource { get; private set; }
+        AudioSource _audioSource;
+        WeaponConfig _config;
+        float _soundTimer;
         [field: SerializeField] public Transform ShootPosition { get; private set; }
-        public void Bind(WeaponManager weaponManager)
+        [field: SerializeField] public ParticleSystem Shot { get; private set; }
+        public void Bind(WeaponManager weaponManager, WeaponConfig config)
         {
+            _config = config;
             _weaponManager = weaponManager;
+            _weaponManager.Shot += WeaponManagerOnShot;
         }
+
+        void WeaponManagerOnShot()
+        {
+            if (_soundTimer > _config.FireSoundDelay)
+            {
+                _audioSource.PlayOneShot(_audioSource.clip);
+                Shot.Play();
+                _soundTimer = 0;
+            }
+        }
+
         void Awake()
         {
-            AudioSource = GetComponent<AudioSource>();
+            _audioSource = GetComponent<AudioSource>();
         }
         void Update()
         {
+            _soundTimer += Time.deltaTime;
             _weaponManager.Update();
+        }
+
+        void OnDestroy()
+        {
+            _weaponManager.Shot -= WeaponManagerOnShot;
         }
     }
 }

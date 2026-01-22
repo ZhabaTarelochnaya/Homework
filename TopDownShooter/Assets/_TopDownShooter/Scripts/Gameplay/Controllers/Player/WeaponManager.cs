@@ -1,8 +1,10 @@
+using System;
 using _TopDownShooter.Scripts.Gameplay.Configs;
 using _TopDownShooter.Scripts.Gameplay.Services;
 using _TopDownShooter.Scripts.Utils.ServiceLocator;
 using _TopDownShooter.Scripts.View;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace _TopDownShooter.Scripts.Gameplay.Controllers
 {
@@ -12,12 +14,10 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
         readonly GameplayConfig _gameplayConfig;
         readonly ConfigProviderService _configProviderService;
         readonly InputService _inputService;
-        AudioSource _audioSource;
         float _timer = 0;
-        float _soundTimer = 0;
         public WeaponView CurrentView { get; private set; }
         public WeaponConfig CurrentConfig { get; private set; }
-
+        public event Action Shot;
         public WeaponManager(Transform weaponPivot)
         {
             _weaponPivot = weaponPivot;
@@ -31,27 +31,20 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
             CurrentConfig = _configProviderService.GetWeaponConfig(name);
             var instance = Object.Instantiate(CurrentConfig.Prefab, _weaponPivot);
             CurrentView = instance.GetComponent<WeaponView>();
-            _audioSource = CurrentView.AudioSource;
-            _audioSource.clip = CurrentConfig.ShootSound;
-            CurrentView.Bind(this);
+            CurrentView.Bind(this, CurrentConfig);
         }
         public void Update()
         {
             _timer += Time.deltaTime;
-            _soundTimer += Time.deltaTime;
             if (_inputService.IsShooting() && _timer > 1 / CurrentConfig.FireRate)
             {
-                if (_soundTimer > CurrentConfig.FireSoundDelay)
-                {
-                    _audioSource.PlayOneShot(_audioSource.clip);
-                    _soundTimer = 0;
-                }
                 Shoot();
                 _timer = 0;
             }
         }
         public void Shoot()
         {
+            Shot?.Invoke();
             if (Physics.Raycast(CurrentView.ShootPosition.position,CurrentView.ShootPosition.forward, 
                     out RaycastHit hit, 1000f,_gameplayConfig.BulletMask))
             {
