@@ -25,7 +25,6 @@ namespace _TopDownShooter.Scripts.View
         public void TakeDamage(int damage)
         {
             CurrentHealth -= damage;
-            Hit?.Invoke(damage, CurrentHealth);
             if (CurrentHealth <= 0)
             {
                 CurrentHealth = 0;
@@ -35,6 +34,7 @@ namespace _TopDownShooter.Scripts.View
             {
                 CurrentHealth = MaxHealth;
             }
+            Hit?.Invoke(damage, CurrentHealth);
         }
     }
 }
