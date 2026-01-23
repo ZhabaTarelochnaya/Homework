@@ -29,6 +29,7 @@ namespace _TopDownShooter.Scripts.View
             {
                 CurrentHealth = 0;
                 Died?.Invoke();
+                gameObject.SetActive(false);
             }
             else if (CurrentHealth > MaxHealth)
             {

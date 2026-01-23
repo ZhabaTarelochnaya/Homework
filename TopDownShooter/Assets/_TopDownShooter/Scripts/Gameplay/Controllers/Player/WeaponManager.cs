@@ -49,8 +49,13 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
                     out RaycastHit hit, 1000f,_gameplayConfig.BulletMask))
             {
                 var hurtBox = hit.collider.GetComponent<HurtBox>();
-                if (!hurtBox) return;
-                hurtBox.TakeDamage(CurrentConfig.Damage);
+                if (hurtBox)
+                {
+                    hurtBox.TakeDamage(CurrentConfig.Damage);
+                }
+                var rigidbody = hit.collider.GetComponent<Rigidbody>();
+                if (!rigidbody) return;
+                rigidbody.AddForceAtPosition(-hit.normal * CurrentConfig.Damage, hit.point);
             }
         }
     }
