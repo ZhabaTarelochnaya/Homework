@@ -16,3 +16,7 @@ MonoBehaviour:
     type: 3}
   <HUD>k__BackingField: {fileID: 2210073353845629956, guid: dc006aafbe187684ba6324e0ff1e62e0,
     type: 3}
+  <LosePopup>k__BackingField: {fileID: 3279970325016677886, guid: 224bfc9f85bed124aa574f8a2cc32d36,
+    type: 3}
+  <WinPopup>k__BackingField: {fileID: 1024781318262215288, guid: 6e472b89f7df89142aee7ccffd4b27ff,
+    type: 3}

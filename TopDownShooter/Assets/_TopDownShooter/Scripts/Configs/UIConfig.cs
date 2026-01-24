@@ -8,5 +8,7 @@ namespace _TopDownShooter.Scripts.Gameplay.Configs
     {
         [field: SerializeField] public GameObject GameplayUI { get; private set; }
         [field: SerializeField] public GameObject HUD { get; private set; }
+        [field: SerializeField] public GameObject LosePopup { get; private set; }
+        [field: SerializeField] public GameObject WinPopup { get; private set; }
     }
 }

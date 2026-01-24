@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using _TopDownShooter.Scripts.Gameplay.Configs;
 using _TopDownShooter.Scripts.Utils.ServiceLocator;
 using _TopDownShooter.Scripts.View;
@@ -10,9 +11,9 @@ namespace _TopDownShooter.Scripts.Gameplay.Services
         readonly UIRoot _uiRoot;
         readonly UIConfig _config;
         RectTransform _screens;
-        RectTransform _popUps;
+        RectTransform _popups;
         IScreen _currentScreen;
-        IPopup _popups;
+        List<IPopup> _currentPopups = new();
 
         public WindowManagerService(UIRoot uiRoot)
         {
@@ -23,7 +24,7 @@ namespace _TopDownShooter.Scripts.Gameplay.Services
         public void SetContainers(RectTransform screens, RectTransform popUps)
         {
             _screens = screens;
-            _popUps = popUps;
+            _popups = popUps;
         }
 
         public void OpenGameplayUI()
@@ -32,10 +33,12 @@ namespace _TopDownShooter.Scripts.Gameplay.Services
             if (gameplayUI)
             {
                 gameplayUI.Reset();
-                return;
             }
-            var instance = Object.Instantiate(_config.GameplayUI, _uiRoot.transform);
-            gameplayUI = instance.GetComponent<GameplayUI>();
+            else
+            {
+                var instance = Object.Instantiate(_config.GameplayUI, _uiRoot.transform);
+                gameplayUI = instance.GetComponent<GameplayUI>();
+            }
             SetContainers(gameplayUI.Screens, gameplayUI.Popups);
             gameplayUI.Bind(this);
         }
@@ -47,7 +50,29 @@ namespace _TopDownShooter.Scripts.Gameplay.Services
             hud.Bind();
             return hud;
         }
+        public void OpenLosePopup()
+        {
+            var instance = Object.Instantiate(_config.LosePopup, _popups);
+            var gameEndPopup = instance.GetComponent<GameEndPopup>();
+            gameEndPopup.Bind();
+            _currentPopups.Add(gameEndPopup);
+        }
+        public void OpenWinPopup()
+        {
+            var instance = Object.Instantiate(_config.WinPopup, _popups);
+            var gameEndPopup = instance.GetComponent<GameEndPopup>();
+            gameEndPopup.Bind();
+            _currentPopups.Add(gameEndPopup);
+        }
 
+        public void ClearPopups()
+        {
+            foreach (var popup in _currentPopups)
+            {
+                Object.Destroy(popup.gameObject);
+            }
+            _currentPopups.Clear();
+        }
         void SetScreen(IScreen screen)
         {
             if (_currentScreen != null)

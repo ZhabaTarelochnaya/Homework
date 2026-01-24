@@ -10,7 +10,7 @@ namespace _TopDownShooter.Scripts.View
     public class HUD : MonoBehaviour, IScreen
     {
         EventBus _eventBus;
-        SceneLoaderService _sceneLoaderService;
+        GameplayStateManager _gameplayStateManager;
         int killCount = 0;
         [SerializeField] FillableBar _healthBar;
         [SerializeField] ChosenWeaponUI _chosenWeaponUI;
@@ -19,7 +19,7 @@ namespace _TopDownShooter.Scripts.View
         public void Bind()
         {
             _eventBus = ServiceLocator.Current.Get<EventBus>();
-            _sceneLoaderService = ServiceLocator.Current.Get<SceneLoaderService>();
+            _gameplayStateManager = ServiceLocator.Current.Get<GameplayStateManager>();
             _chosenWeaponUI.Bind();
             _eventBus.GameEventFired += EventBusOnGameEventFired;
         }
@@ -36,11 +36,12 @@ namespace _TopDownShooter.Scripts.View
                     break;
             }
         }
-        public void OnRestartButtonPressed() => _sceneLoaderService.LoadGameplay();
+        public void OnRestartButtonPressed() => _gameplayStateManager.Reload();
         public void Reset()
         {
             killCount = 0;
             _killsText.text = $"Kills: 0";
+            _eventBus.GameEventFired -= EventBusOnGameEventFired;
             _chosenWeaponUI.Reset();
         }
     }

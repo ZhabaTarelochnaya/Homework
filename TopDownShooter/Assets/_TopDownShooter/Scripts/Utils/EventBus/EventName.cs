@@ -13,6 +13,12 @@ namespace _TopDownShooter.Scripts.Utils.EventBus
         ReloadStarted,
         ReloadStopped,
         EnemyKilled,
-        WeaponSwitched
+        WeaponSwitched,
+        /// <summary>
+        /// args: GameStateName newState
+        /// </summary>
+        GameStateChanged,
+        Won,
+        Lost
     }
 }

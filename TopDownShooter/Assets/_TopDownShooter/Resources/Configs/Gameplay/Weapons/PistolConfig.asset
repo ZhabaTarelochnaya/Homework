@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: 2
   <Damage>k__BackingField: 40
-  <FireRate>k__BackingField: 3
+  <FireRate>k__BackingField: 3.5
   <SpreadAngle>k__BackingField: 2
-  <AmmunitionCapacity>k__BackingField: 10
+  <AmmunitionCapacity>k__BackingField: 12
   <ReloadTime>k__BackingField: 1
   <Prefab>k__BackingField: {fileID: 6773184996775840341, guid: e826cc949d6a63a49b3282ae912091fc,
     type: 3}

@@ -66,7 +66,10 @@ namespace _TopDownShooter.Scripts.Utils.ServiceLocator
                     $"Attempted to unregister service of type {key} which is not registered with the {GetType().Name}.");
                 return;
             }
-
+            if (_services[key] is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
             _services.Remove(key);
         }
     }

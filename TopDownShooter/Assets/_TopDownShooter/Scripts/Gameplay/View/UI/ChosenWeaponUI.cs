@@ -34,7 +34,7 @@ namespace _TopDownShooter.Scripts.View
         void OnDestroy()
         {
             if (_eventBus == null) return;
-            _eventBus.GameEventFired -= EventBusOnGameEventFired;
+            UnsubscribeFromEvents();
         }
 
         void EventBusOnGameEventFired(GameEvent e)
@@ -75,7 +75,17 @@ namespace _TopDownShooter.Scripts.View
             {
                 StopCoroutine(_reloadCoroutine);
             }
+            UnsubscribeFromEvents();
             _fillBar.FillPercent = 0;
+        }
+
+        void UnsubscribeFromEvents()
+        {
+            _eventBus.GameEventFired -= EventBusOnGameEventFired;
+            _eventBus.GameEventFired -= EventBusOnGameEventFired;
+            _weaponManager.Shot -= WeaponManagerOnUpdateAmmo;
+            _weaponManager.Reloaded -= WeaponManagerOnUpdateAmmo;
+            _weaponManager.WeaponSwitched -= WeaponManagerOnUpdateAmmo;
         }
     }
 }
