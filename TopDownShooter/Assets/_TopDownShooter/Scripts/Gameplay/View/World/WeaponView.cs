@@ -23,7 +23,7 @@ namespace _TopDownShooter.Scripts.View
 
         void WeaponManagerOnShot()
         {
-            if (_soundTimer > _config.FireSoundDelay)
+            if (gameObject.activeSelf && _soundTimer > _config.FireSoundDelay)
             {
                 _audioSource.PlayOneShot(_audioSource.clip);
                 Shot.Play();

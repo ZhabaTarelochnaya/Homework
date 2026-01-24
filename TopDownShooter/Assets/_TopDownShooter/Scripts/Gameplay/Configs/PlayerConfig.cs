@@ -6,6 +6,6 @@ namespace _TopDownShooter.Scripts.Gameplay.Configs
     public class PlayerConfig : ScriptableObject
     {
         [field: SerializeField] public float Speed { get; private set; }
-        [field: SerializeField] public WeaponName StartingWeapon { get; private set; }
+        [field: SerializeField] public WeaponName[] StartingWeapons { get; private set; }
     }
 }

@@ -12,6 +12,7 @@ namespace _TopDownShooter.Scripts.Utils.EventBus
         /// </summary>
         ReloadStarted,
         ReloadStopped,
-        EnemyKilled
+        EnemyKilled,
+        WeaponSwitched
     }
 }

@@ -7,6 +7,7 @@ using _TopDownShooter.Scripts.Utils.ServiceLocator;
 using _TopDownShooter.Scripts.Utils.StateMachine;
 using _TopDownShooter.Scripts.View;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using IdleState = _TopDownShooter.Scripts.Gameplay.Controllers.MoveStates.IdleState;
 
 namespace _TopDownShooter.Scripts.Gameplay.Controllers
@@ -17,6 +18,7 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
         readonly Rigidbody _rigidbody;
         readonly AimService _aimService;
         readonly InputService _inputService;
+        readonly WeaponManager _weaponManager;
         readonly PlayerConfig _config;
         FSM<PlayerMoveStateName> _moveFSM = new ();
 
@@ -26,6 +28,7 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
             _config = ServiceLocator.Current.Get<ConfigProviderService>().GetPlayerConfig();
             _aimService = ServiceLocator.Current.Get<AimService>();
             _inputService = ServiceLocator.Current.Get<InputService>();
+            _weaponManager = ServiceLocator.Current.Get<WeaponManager>();
             
             _moveFSM.AddState(new IdleState(_rigidbody, _inputService))
                 .AddState(new MoveState(_rigidbody,  _config, _inputService));
@@ -42,6 +45,16 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
         {
             _moveFSM.Tick(Time.fixedDeltaTime);
             _aimService.CameraRelativeAim(_rigidbody, _inputService.GetMousePosition());
+            
+        }
+
+        public void Update()
+        {
+            var scroll = _inputService.SwitchWeapon();
+            if (scroll != 0)
+            {
+                _weaponManager.SwitchWeapon(scroll);
+            }
         }
     }
 }

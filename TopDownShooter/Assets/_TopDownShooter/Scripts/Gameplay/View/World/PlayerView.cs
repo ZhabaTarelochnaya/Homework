@@ -20,5 +20,6 @@ namespace _TopDownShooter.Scripts.View
             Rigidbody = GetComponent<Rigidbody>();
         }
         void FixedUpdate() => _controller.FixedUpdate();
+        void Update() => _controller.Update();
     }
 }

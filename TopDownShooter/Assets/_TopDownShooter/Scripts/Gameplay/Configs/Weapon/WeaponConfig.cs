@@ -14,5 +14,6 @@ namespace _TopDownShooter.Scripts.Gameplay.Configs
         [field: SerializeField] public GameObject Prefab { get; private set; }
         [field: SerializeField] public AudioClip ShootSound { get; private set; }
         [field: SerializeField] public float FireSoundDelay { get; private set; }
+        [field: SerializeField] public Sprite Sprite { get; private set; }
     }
 }

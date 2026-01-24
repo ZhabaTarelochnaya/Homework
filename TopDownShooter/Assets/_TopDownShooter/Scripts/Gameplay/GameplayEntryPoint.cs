@@ -25,15 +25,17 @@ public class GameplayEntryPoint : MonoBehaviour
         BindEnemySpawner();
         _isBound = true;
         
+        var windowManager = ServiceLocator.Current.Get<WindowManagerService>();
+        windowManager.OpenGameplayUI();
+        
         _cameraManager = ServiceLocator.Current.Get<CameraManager>();
         _cameraManager.SetTarget(_playerView.transform);
         var weaponManager = ServiceLocator.Current.Get<WeaponManager>();
         var playerConfig = ServiceLocator.Current.Get<ConfigProviderService>().GetPlayerConfig();
-        weaponManager.Equip(playerConfig.StartingWeapon);
-        
-        var windowManager = ServiceLocator.Current.Get<WindowManagerService>();
-        windowManager.OpenGameplayUI();
-        
+        foreach (var weaponName in playerConfig.StartingWeapons)
+        {
+            weaponManager.Equip(weaponName);
+        }
         var eventBus = ServiceLocator.Current.Get<EventBus>();
         eventBus.TriggerEvent(new GameEvent(EventName.PlayerHurt,
             $"Player hp set",
