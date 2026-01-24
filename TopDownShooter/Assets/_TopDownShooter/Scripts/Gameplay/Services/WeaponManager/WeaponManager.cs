@@ -30,6 +30,8 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
         public WeaponView CurrentView { get; private set; }
         public WeaponConfig CurrentConfig { get; private set; }
         public event Action Shot;
+        public event Action Reloaded;
+        public event Action WeaponSwitched;
         public WeaponManager(Transform weaponPivot)
         {
             _weaponPivot = weaponPivot;
@@ -74,6 +76,7 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
             CurrentView = _weaponViews[_currentWeaponIndex];
             CurrentView.gameObject.SetActive(true);
             CurrentAmmo = 0;
+            WeaponSwitched?.Invoke();
             _fsm.Transition(WeaponStateName.Reload);
             _eventBus.TriggerEvent(new GameEvent(EventName.WeaponSwitched, 
                 $"Switched to {CurrentConfig.Name}"));
@@ -83,11 +86,14 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
             ShootTimer += Time.deltaTime;
             _fsm.Tick(Time.deltaTime);
         }
-        public void Reload() => CurrentAmmo = MaxAmmo;
-        
+        public void Reload()
+        {
+            CurrentAmmo = MaxAmmo;
+            Reloaded?.Invoke();
+        }
+
         public void Shoot()
         {
-            Shot?.Invoke();
             CurrentAmmo--;
             ShootTimer = 0;
             var spread = UnityEngine.Random.Range(-CurrentConfig.SpreadAngle, CurrentConfig.SpreadAngle);
@@ -101,9 +107,12 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
                     hurtBox.TakeDamage(CurrentConfig.Damage);
                 }
                 var rigidbody = hit.collider.GetComponent<Rigidbody>();
-                if (!rigidbody) return;
-                rigidbody.AddForceAtPosition(-hit.normal * CurrentConfig.Damage, hit.point);
+                if (rigidbody)
+                {
+                    rigidbody.AddForceAtPosition(-hit.normal * CurrentConfig.Damage * 10, hit.point);
+                }
             }
+            Shot?.Invoke();
         }
     }
 }

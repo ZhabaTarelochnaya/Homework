@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: PlayerConfig
   m_EditorClassIdentifier: 
   <Speed>k__BackingField: 12
-  <StartingWeapon>k__BackingField: 2
+  <StartingWeapons>k__BackingField: 0200000001000000

@@ -3,6 +3,7 @@ using System.Collections;
 using _TopDownShooter.Scripts.Gameplay.Controllers;
 using _TopDownShooter.Scripts.Utils.EventBus;
 using _TopDownShooter.Scripts.Utils.ServiceLocator;
+using TMPro;
 using UnityEngine;
 
 namespace _TopDownShooter.Scripts.View
@@ -13,12 +14,21 @@ namespace _TopDownShooter.Scripts.View
         WeaponManager _weaponManager;
         Coroutine _reloadCoroutine;
         [SerializeField] FillableBar _fillBar;
+        [SerializeField] TMP_Text _ammoText;
 
         public void Bind()
         {
             _eventBus = ServiceLocator.Current.Get<EventBus>();
             _weaponManager = ServiceLocator.Current.Get<WeaponManager>();
             _eventBus.GameEventFired += EventBusOnGameEventFired;
+            _weaponManager.Shot += WeaponManagerOnUpdateAmmo;
+            _weaponManager.Reloaded += WeaponManagerOnUpdateAmmo;
+            _weaponManager.WeaponSwitched += WeaponManagerOnUpdateAmmo;
+        }
+
+        void WeaponManagerOnUpdateAmmo()
+        {
+            _ammoText.text = $"Ammo: {_weaponManager.CurrentAmmo} / {_weaponManager.MaxAmmo}";
         }
 
         void OnDestroy()
