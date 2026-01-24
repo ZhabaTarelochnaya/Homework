@@ -37,7 +37,7 @@ public class GameplayEntryPoint : MonoBehaviour
         var eventBus = ServiceLocator.Current.Get<EventBus>();
         eventBus.TriggerEvent(new GameEvent(EventName.PlayerHurt,
             $"Player hp set",
-            _playerView.HurtBox.CurrentHealth));
+            0, _playerView.HurtBox));
     }
 
     void BindPlayer()

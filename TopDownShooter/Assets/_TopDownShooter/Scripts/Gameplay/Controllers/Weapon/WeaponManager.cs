@@ -1,10 +1,13 @@
 using System;
 using _TopDownShooter.Scripts.Gameplay.Configs;
+using _TopDownShooter.Scripts.Gameplay.Controllers.ShootStates;
 using _TopDownShooter.Scripts.Gameplay.Services;
 using _TopDownShooter.Scripts.Utils.ServiceLocator;
+using _TopDownShooter.Scripts.Utils.StateMachine;
 using _TopDownShooter.Scripts.View;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using Random = System.Random;
 
 namespace _TopDownShooter.Scripts.Gameplay.Controllers
 {
@@ -14,7 +17,10 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
         readonly GameplayConfig _gameplayConfig;
         readonly ConfigProviderService _configProviderService;
         readonly InputService _inputService;
-        float _timer = 0;
+        FSM<WeaponStateName> _fsm = new ();
+        public int CurrentAmmo { get; private set; } = 0;
+        public int MaxAmmo => CurrentConfig.AmmunitionCapacity;
+        public float ShootTimer { get; private set; } = 0;
         public WeaponView CurrentView { get; private set; }
         public WeaponConfig CurrentConfig { get; private set; }
         public event Action Shot;
@@ -24,6 +30,9 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
             _configProviderService = ServiceLocator.Current.Get<ConfigProviderService>();
             _gameplayConfig = _configProviderService.GetGameplayConfig();
             _inputService = ServiceLocator.Current.Get<InputService>();
+            _fsm.AddState(new IdleState(_inputService, this))
+                .AddState(new ReloadState(_inputService, this))
+                .AddState(new ShootState(_inputService, this));
         }
 
         public void Equip(WeaponName name)
@@ -32,20 +41,23 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
             var instance = Object.Instantiate(CurrentConfig.Prefab, _weaponPivot);
             CurrentView = instance.GetComponent<WeaponView>();
             CurrentView.Bind(this, CurrentConfig);
+            Reload();
         }
         public void Update()
         {
-            _timer += Time.deltaTime;
-            if (_inputService.IsShooting() && _timer > 1 / CurrentConfig.FireRate)
-            {
-                Shoot();
-                _timer = 0;
-            }
+            ShootTimer += Time.deltaTime;
+            _fsm.Tick(Time.deltaTime);
         }
+        public void Reload() => CurrentAmmo = MaxAmmo;
+        
         public void Shoot()
         {
             Shot?.Invoke();
-            if (Physics.Raycast(CurrentView.ShootPosition.position,CurrentView.ShootPosition.forward, 
+            CurrentAmmo--;
+            ShootTimer = 0;
+            var spread = UnityEngine.Random.Range(-CurrentConfig.SpreadAngle, CurrentConfig.SpreadAngle);
+            var direction = Quaternion.Euler(0, spread, 0) * CurrentView.ShootPosition.forward;
+            if (Physics.Raycast(CurrentView.ShootPosition.position, direction, 
                     out RaycastHit hit, 1000f,_gameplayConfig.BulletMask))
             {
                 var hurtBox = hit.collider.GetComponent<HurtBox>();

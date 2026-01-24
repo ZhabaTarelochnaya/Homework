@@ -1,9 +1,10 @@
 namespace _TopDownShooter.Scripts.Gameplay.Controllers
 {
-    public enum PlayerShootStateName
+    public enum WeaponStateName
     {
         Default,
         Idle,
-        Shoot
+        Shoot,
+        Reload
     }
 }

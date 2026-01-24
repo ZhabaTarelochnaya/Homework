@@ -4,9 +4,14 @@ namespace _TopDownShooter.Scripts.Utils.EventBus
     {
         Default,
         /// <summary>
-        /// args: int currentHP
+        /// args: int damage, HurtBox hurtBox.
         /// </summary>
         PlayerHurt,
+        /// <summary>
+        /// args: float reloadTime.
+        /// </summary>
+        ReloadStarted,
+        ReloadStopped,
         EnemyKilled
     }
 }

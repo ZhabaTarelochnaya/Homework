@@ -1,11 +1,13 @@
 using _TopDownShooter.Scripts.Gameplay.Configs;
 using _TopDownShooter.Scripts.Gameplay.Controllers.MoveStates;
+using _TopDownShooter.Scripts.Gameplay.Controllers.ShootStates;
 using _TopDownShooter.Scripts.Gameplay.Services;
 using _TopDownShooter.Scripts.Utils.EventBus;
 using _TopDownShooter.Scripts.Utils.ServiceLocator;
 using _TopDownShooter.Scripts.Utils.StateMachine;
 using _TopDownShooter.Scripts.View;
 using UnityEngine;
+using IdleState = _TopDownShooter.Scripts.Gameplay.Controllers.MoveStates.IdleState;
 
 namespace _TopDownShooter.Scripts.Gameplay.Controllers
 {
@@ -13,12 +15,10 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
     {
         readonly EventBus _eventBus;
         readonly Rigidbody _rigidbody;
-        readonly HurtBox _hurtBox;
         readonly AimService _aimService;
         readonly InputService _inputService;
         readonly PlayerConfig _config;
         FSM<PlayerMoveStateName> _moveFSM = new ();
-        FSM<PlayerShootStateName> _shoottFSM = new ();
 
         public PlayerController(Rigidbody rigidbody, HurtBox hurtBox)
         {
@@ -29,14 +29,12 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
             
             _moveFSM.AddState(new IdleState(_rigidbody, _inputService))
                 .AddState(new MoveState(_rigidbody,  _config, _inputService));
-            _shoottFSM.AddState(new ShootStates.IdleState(_inputService))
-                .AddState(new ShootStates.ShootState(_inputService));
 
             _eventBus = ServiceLocator.Current.Get<EventBus>();
             hurtBox.Hit += (damage, health) => _eventBus.TriggerEvent(
                 new GameEvent(EventName.PlayerHurt,
                     $"Player hurt. Current health: {health}",
-                    health));
+                    damage, hurtBox));
         }
 
 
