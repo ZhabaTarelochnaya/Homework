@@ -7,14 +7,6 @@ namespace _TopDownShooter.Scripts.View
     {
         [SerializeField] ParticleSystem[] _particleSystems;
 
-        void Update()
-        {
-            if (Input.GetButtonDown("Jump"))
-            {
-                Explode();
-            }
-        }
-
         public void Explode()
         {
             foreach (var particleSystem in _particleSystems)
