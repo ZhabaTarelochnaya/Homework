@@ -18,6 +18,8 @@ namespace _TopDownShooter.Scripts.View
         readonly MoveService _moveService;
         readonly EventBus _eventBus;
 
+        public float AIPathfindingFrequency { get; private set; }
+
         public EnemyController(NavMeshAgent agent, HurtBox hurtBox, HitBox hitBox,
             Transform target, EnemyConfig config)
         {
@@ -27,6 +29,8 @@ namespace _TopDownShooter.Scripts.View
             _config = config;
             _moveService = ServiceLocator.Current.Get<MoveService>();
             _eventBus = ServiceLocator.Current.Get<EventBus>();
+            AIPathfindingFrequency = ServiceLocator.Current.Get<ConfigProviderService>()
+                .GetGameplayConfig().AIPathFindingFrequency;
 
             _agent.speed = _config.Speed;
             hitBox.Damage = _config.Damage;
@@ -42,7 +46,7 @@ namespace _TopDownShooter.Scripts.View
             Object.Destroy(_agent.gameObject);
         }
         
-        public void FixedUpdate()
+        public void UpdatePath()
         {
             _moveService.MoveToTarget(_agent, _target.position);
         }

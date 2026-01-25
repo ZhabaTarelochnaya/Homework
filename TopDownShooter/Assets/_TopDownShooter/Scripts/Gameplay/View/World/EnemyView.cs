@@ -20,6 +20,7 @@ namespace _TopDownShooter.Scripts.View
         public void Bind(EnemyController enemyController)
         {
             _enemyController = enemyController;
+            StartCoroutine(UpdatePath());
         }
 
         void HurtBoxOnHit(int damage, int currentHealth)
@@ -39,9 +40,13 @@ namespace _TopDownShooter.Scripts.View
             HurtBox.Hit += HurtBoxOnHit;
         }
 
-        void FixedUpdate()
+        IEnumerator UpdatePath()
         {
-            _enemyController.FixedUpdate();
+            while (true)
+            {
+                _enemyController.UpdatePath();
+                yield return new WaitForSeconds(1 / _enemyController.AIPathfindingFrequency);
+            }
         }
 
         void OnDestroy()

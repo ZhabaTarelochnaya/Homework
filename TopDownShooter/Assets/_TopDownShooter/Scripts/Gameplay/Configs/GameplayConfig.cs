@@ -14,5 +14,6 @@ namespace _TopDownShooter.Scripts.Gameplay.Configs
         [field: SerializeField] public EnemySpawnerConfig EnemySpawnerConfig { get; private set; }
         [field: SerializeField] public LayerMask AimGroundMask { get; private set; }
         [field: SerializeField] public LayerMask BulletMask { get; private set; }
+        [field: SerializeField] public float AIPathFindingFrequency { get; private set; }
     }
 }
