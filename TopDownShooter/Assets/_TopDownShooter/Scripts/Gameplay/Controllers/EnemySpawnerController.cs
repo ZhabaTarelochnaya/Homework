@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using _TopDownShooter.Scripts.Gameplay.Configs;
 using _TopDownShooter.Scripts.Gameplay.Configs.Enemies;
 using _TopDownShooter.Scripts.Gameplay.Services;
+using _TopDownShooter.Scripts.Utils;
 using _TopDownShooter.Scripts.Utils.Extensions;
 using _TopDownShooter.Scripts.Utils.ServiceLocator;
 using UnityEngine;
@@ -19,6 +20,7 @@ namespace _TopDownShooter.Scripts.View
         readonly ConfigProviderService _configProvider;
         readonly EnemySpawnerConfig _spawnerConfig;
         readonly List<EnemyName> _enemiesToSpawn = new ();
+        ObjectPool<EnemyView> _enemyPool;
 
         public EnemySpawnerController(Transform spawnPoints, Transform enemiesParent, Transform player)
         {
@@ -31,6 +33,7 @@ namespace _TopDownShooter.Scripts.View
             }
             _configProvider = ServiceLocator.Current.Get<ConfigProviderService>();
             _spawnerConfig = _configProvider.GetEnemySpawnerConfig();
+            _enemyPool = new (InstantiateEnemy);
         }
         public IEnumerator Spawn()
         {
@@ -62,20 +65,22 @@ namespace _TopDownShooter.Scripts.View
                 foreach (var spawnPoint in _spawnPoints)
                 {
                     if (_enemiesToSpawn.Count == 0) break;
-                    InstantiateEnemy(_enemiesToSpawn.TakeRandom(), spawnPoint);
+                    var enemy = _enemyPool.Get();
+                    enemy.transform.position = spawnPoint.position;
                 }
                 yield return new WaitForSeconds(_spawnerConfig.SpawnDelay);
             }
         }
-        void InstantiateEnemy(EnemyName name, Transform spawnPoint)
+        EnemyView InstantiateEnemy()
         {
+            var name = _enemiesToSpawn.TakeRandom();
             var config = _configProvider.GetEnemyConfig(name);
-            var instance = Object.Instantiate(config.Prefab, 
-                spawnPoint.position, Quaternion.identity, _enemiesParent);
+            var instance = Object.Instantiate(config.Prefab, _enemiesParent);
             var view = instance.GetComponent<EnemyView>();
-            var controller = new EnemyController(view.Agent, view.HurtBox, view.HitBox, _player, config);
+            var controller = new EnemyController(view, config, _player, _enemyPool.Push);
             view.Bind(controller);
             PlaceOnMesh(view.Agent);
+            return view;
         }
 
         void PlaceOnMesh(NavMeshAgent agent)

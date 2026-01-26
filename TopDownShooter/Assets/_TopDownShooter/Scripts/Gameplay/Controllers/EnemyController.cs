@@ -13,19 +13,23 @@ namespace _TopDownShooter.Scripts.View
     {
         readonly NavMeshAgent _agent;
         readonly HurtBox _hurtBox;
+        readonly EnemyView _enemyView;
         readonly Transform _target;
+        readonly Action<EnemyView> _destroy;
         readonly EnemyConfig _config;
         readonly MoveService _moveService;
         readonly EventBus _eventBus;
 
         public float AIPathfindingFrequency { get; private set; }
 
-        public EnemyController(NavMeshAgent agent, HurtBox hurtBox, HitBox hitBox,
-            Transform target, EnemyConfig config)
+        public EnemyController(EnemyView enemyView, EnemyConfig config, 
+            Transform target, Action<EnemyView> destroy)
         {
-            _agent = agent;
-            _hurtBox = hurtBox;
+            _agent = enemyView.Agent;
+            _hurtBox = enemyView.HurtBox;
+            _enemyView = enemyView;
             _target = target;
+            _destroy = destroy;
             _config = config;
             _moveService = ServiceLocator.Current.Get<MoveService>();
             _eventBus = ServiceLocator.Current.Get<EventBus>();
@@ -33,7 +37,7 @@ namespace _TopDownShooter.Scripts.View
                 .GetGameplayConfig().AIPathFindingFrequency;
 
             _agent.speed = _config.Speed;
-            hitBox.Damage = _config.Damage;
+            enemyView.HitBox.Damage = _config.Damage;
             _hurtBox.MaxHealth = _config.MaxHealth;
             _hurtBox.HealFullHealth();
             _hurtBox.Died += HurtBoxOnDied;
@@ -43,7 +47,7 @@ namespace _TopDownShooter.Scripts.View
         {
             _eventBus.TriggerEvent(new GameEvent(EventName.EnemyKilled,
                 $"Enemy {_agent.gameObject.name} killed"));
-            Object.Destroy(_agent.gameObject);
+            _destroy?.Invoke(_enemyView);
         }
         
         public void UpdatePath()

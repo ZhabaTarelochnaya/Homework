@@ -30,3 +30,4 @@ MonoBehaviour:
   <BulletMask>k__BackingField:
     serializedVersion: 2
     m_Bits: 1152
+  <AIPathFindingFrequency>k__BackingField: 10

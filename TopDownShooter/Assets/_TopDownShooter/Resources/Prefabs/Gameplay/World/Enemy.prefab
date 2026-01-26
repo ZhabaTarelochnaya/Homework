@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2608a1d6b2fd42fea53222fb80d24e68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _flashDuration: 0.5
   <HurtBox>k__BackingField: {fileID: 2809626330263662255}
   <HitBox>k__BackingField: {fileID: 4249206137971900051}
 --- !u!33 &2036639312335250279
@@ -135,19 +136,19 @@ NavMeshAgent:
   m_GameObject: {fileID: 3127900588393512009}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.3
   m_Speed: 3.5
   m_Acceleration: 50
   avoidancePriority: 50
-  m_AngularSpeed: 360
-  m_StoppingDistance: 0
+  m_AngularSpeed: 0
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 0
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 1
 --- !u!114 &1076626061244979573
 MonoBehaviour:
   m_ObjectHideFlags: 0

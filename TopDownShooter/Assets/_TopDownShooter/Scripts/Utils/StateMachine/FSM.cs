@@ -6,6 +6,7 @@ namespace _TopDownShooter.Scripts.Utils.StateMachine
 {
     public class FSM<T> where T : Enum 
     {
+        static readonly EqualityComparer<T> Comparer = EqualityComparer<T>.Default;
         Dictionary<T, FSMState<T>> _states = new();
         bool _isInitialized;
         bool _isActive = true;
@@ -40,7 +41,7 @@ namespace _TopDownShooter.Scripts.Utils.StateMachine
         public void CheckTransitions()
         {
             var nextStateKey = CurrentState.GetNextState();
-            if (!nextStateKey.Equals(CurrentState.StateName))
+            if (!Comparer.Equals(nextStateKey, CurrentState.StateName))
             {
                 Transition(nextStateKey);
             }

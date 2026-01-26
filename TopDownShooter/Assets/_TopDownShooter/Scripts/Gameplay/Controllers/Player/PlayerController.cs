@@ -45,7 +45,6 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
         {
             _moveFSM.Tick(Time.fixedDeltaTime);
             _aimService.CameraRelativeAim(_rigidbody, _inputService.GetMousePosition());
-            
         }
 
         public void Update()

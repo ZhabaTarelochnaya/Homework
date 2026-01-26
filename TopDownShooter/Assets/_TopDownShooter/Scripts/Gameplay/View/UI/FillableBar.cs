@@ -98,6 +98,7 @@ namespace _TopDownShooter.Scripts.View
         void Awake()
         {
             _rectTransform = GetComponent<RectTransform>();
+            enabled = false;
         }
         void Update()
         {

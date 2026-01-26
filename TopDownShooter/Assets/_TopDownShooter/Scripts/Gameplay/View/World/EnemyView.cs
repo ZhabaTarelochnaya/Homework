@@ -12,6 +12,7 @@ namespace _TopDownShooter.Scripts.View
         Renderer _renderer;
         Color _originalColor;
         Coroutine _hurtCoroutine;
+        WaitForSeconds _waitForSeconds;
         [SerializeField] float _flashDuration = 0.5f;
         [field: SerializeField] public HurtBox HurtBox { get; private set; }
         [field: SerializeField] public HitBox HitBox { get; private set; }
@@ -20,6 +21,7 @@ namespace _TopDownShooter.Scripts.View
         public void Bind(EnemyController enemyController)
         {
             _enemyController = enemyController;
+            _waitForSeconds = new WaitForSeconds(1 / _enemyController.AIPathfindingFrequency);
             StartCoroutine(UpdatePath());
         }
 
@@ -29,6 +31,7 @@ namespace _TopDownShooter.Scripts.View
             {
                 StopCoroutine(_hurtCoroutine);
             }
+            if (!gameObject.activeInHierarchy) return;
             _hurtCoroutine = StartCoroutine(HurtColorChange());
         }
 
@@ -45,7 +48,7 @@ namespace _TopDownShooter.Scripts.View
             while (true)
             {
                 _enemyController.UpdatePath();
-                yield return new WaitForSeconds(1 / _enemyController.AIPathfindingFrequency);
+                yield return _waitForSeconds;
             }
         }
 
@@ -54,6 +57,10 @@ namespace _TopDownShooter.Scripts.View
             HurtBox.Hit -= HurtBoxOnHit;
         }
 
+        void OnDisable()
+        {
+            StopAllCoroutines();
+        }
         IEnumerator HurtColorChange()
         {
             float elapsedTime = 0f;

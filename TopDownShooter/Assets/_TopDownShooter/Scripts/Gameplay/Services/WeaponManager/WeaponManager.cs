@@ -84,13 +84,7 @@ namespace _TopDownShooter.Scripts.Gameplay.Controllers
         public void Update()
         {
             ShootTimer += Time.deltaTime;
-            int gcBefore = GC.CollectionCount(0);
             _fsm.Tick(Time.deltaTime);
-            if (GC.CollectionCount(0) > gcBefore)
-            {
-                Debug.LogWarning($"FSM GC Allocation at frame {Time.frameCount}");
-                UnityEngine.Debug.Break(); // Pause in editor
-            }
         }
         public void Reload()
         {
