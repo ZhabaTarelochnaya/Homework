@@ -24,8 +24,6 @@ namespace _Prototype.Scripts.Services
             _loadingScreen.Show();
             yield return LoadScene("Load");
             yield return LoadScene("Gameplay");
-
-            var sceneEntryPoint = Object.FindAnyObjectByType<GameplayCompositionRoot>();
             _loadingScreen.Hide();
         }
         IEnumerator LoadScene(string sceneName)
