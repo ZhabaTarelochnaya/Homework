@@ -6,7 +6,7 @@ namespace _Prototype.Scripts.Gameplay.Services.InputService
     {
         public Vector2 GetMovementInput()
         {
-            return new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            return new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
         }
     }
 }
