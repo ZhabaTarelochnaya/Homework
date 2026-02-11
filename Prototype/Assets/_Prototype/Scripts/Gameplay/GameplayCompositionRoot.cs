@@ -6,6 +6,7 @@ using _Prototype.Scripts.Gameplay.Services.InputService;
 using _Prototype.Scripts.Gameplay.Services.MoveService;
 using _Prototype.Scripts.Gameplay.Services.PickUpService;
 using _Prototype.Scripts.Gameplay.View;
+using _Prototype.Scripts.Utils.EventBus;
 using _Prototype.Scripts.Utils.ServiceLocator;
 using UnityEngine;
 
@@ -34,7 +35,11 @@ public class GameplayCompositionRoot : MonoBehaviour
         }
 
         _cameraService.CurrentTarget = _playerView;
+
+        var eventBus = ServiceLocator.Current.Get<EventBus>();
+        eventBus.TriggerEvent(new GameEvent(EventName.GameStarted, "Game started"));
     }
+
     void RegisterServices()
     {
         var inputService = new KeyboardInputService();

@@ -6,6 +6,9 @@ namespace _Prototype.Scripts.Utils.EventBus
         /// <summary>
         /// args: int id
         /// </summary>
-        PickUpCollected
+        PickUpCollected,
+        GameStarted,
+        PlayerDied,
+        GameRestarted,
     }
 }
