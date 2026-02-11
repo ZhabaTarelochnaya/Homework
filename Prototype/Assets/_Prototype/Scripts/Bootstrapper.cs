@@ -2,6 +2,7 @@ using _Prototype.Scripts.Gameplay.Services.GameDataService;
 using _Prototype.Scripts.Gameplay.State;
 using _Prototype.Scripts.Services;
 using _Prototype.Scripts.Utils;
+using _Prototype.Scripts.Utils.EventBus;
 using _Prototype.Scripts.Utils.ServiceLocator;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -24,6 +25,8 @@ public class Bootstrapper : MonoBehaviour
         var gameState = new GameState();
         var gameStateService = new GameStateService(gameState);
         ServiceLocator.Current.Register<IGameStateService>(gameStateService);
+        var eventBus = new EventBus();
+        ServiceLocator.Current.Register(eventBus);
         
         sceneLoader.LoadGameplay();
     }
