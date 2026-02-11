@@ -1,3 +1,5 @@
+using _Prototype.Scripts.Gameplay.Services.GameDataService;
+using _Prototype.Scripts.Gameplay.State;
 using _Prototype.Scripts.Services;
 using _Prototype.Scripts.Utils;
 using _Prototype.Scripts.Utils.ServiceLocator;
@@ -19,6 +21,9 @@ public class Bootstrapper : MonoBehaviour
         ServiceLocator.Initialize();
         var sceneLoader = new SceneLoaderService(_loadingScreen, coroutines);
         ServiceLocator.Current.Register(sceneLoader);
+        var gameState = new GameState();
+        var gameStateService = new GameStateService(gameState);
+        ServiceLocator.Current.Register<IGameStateService>(gameStateService);
         
         sceneLoader.LoadGameplay();
     }
