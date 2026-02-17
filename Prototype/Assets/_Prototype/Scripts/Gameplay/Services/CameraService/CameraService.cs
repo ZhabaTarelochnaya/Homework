@@ -24,7 +24,7 @@ namespace _Prototype.Scripts.Gameplay.Services
             var y = CurrentTarget.Position.y;
             var z = CurrentCamera.transform.position.z;
             CurrentCamera.transform.position = Vector3.SmoothDamp(CurrentCamera.transform.position, 
-                new Vector3(x, y, z), ref velocity, 0.1f); ;
+                new Vector3(x, y, z), ref velocity, 0.1f); 
         }
     }
 }

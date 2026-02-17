@@ -1,3 +1,4 @@
+using _Prototype.Scripts.Gameplay.Controllers;
 using _Prototype.Scripts.Gameplay.Services.PickUpService;
 using _Prototype.Scripts.Gameplay.State;
 using _Prototype.Scripts.Utils.ServiceLocator;
@@ -9,5 +10,6 @@ namespace _Prototype.Scripts.Gameplay.Services.GameDataService
         public GameState GameState { get; }
         public void AddPickUp(PickUp pickUp);
         public int CreateID();
+        void AddDamageArea(DamageAreaController damageArea);
     }
 }

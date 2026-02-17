@@ -1,3 +1,4 @@
+using System;
 using _Prototype.Scripts.Gameplay.Controllers;
 using _Prototype.Scripts.Gameplay.Controllers.CollectorController;
 using _Prototype.Scripts.Gameplay.Services;
@@ -6,6 +7,7 @@ using _Prototype.Scripts.Gameplay.Services.InputService;
 using _Prototype.Scripts.Gameplay.Services.MoveService;
 using _Prototype.Scripts.Gameplay.Services.PickUpService;
 using _Prototype.Scripts.Gameplay.View;
+using _Prototype.Scripts.Gameplay.View.HurtBox;
 using _Prototype.Scripts.Utils.EventBus;
 using _Prototype.Scripts.Utils.ServiceLocator;
 using UnityEngine;
@@ -18,20 +20,28 @@ public class GameplayCompositionRoot : MonoBehaviour
     [SerializeField] PlayerView _playerView;
     [SerializeField] Transform _pickUps;
     [SerializeField] CollectorView _collectorView;
+    [SerializeField] Transform _damageAreas;
     public void Awake()
     {
         RegisterServices();
         
-        IPlayerController playerController = new PlayerController();
+        IPlayerController playerController = new PlayerController(_playerView.HurtBoxView);
         _playerView.Init(playerController);
 
         _collectorController = new CollectorController(_collectorView);
         
         var gameStateService = ServiceLocator.Current.Get<IGameStateService>();
+        
         foreach (IPickUpView child in _pickUps.GetComponentsInChildren<IPickUpView>())
         {
             var pickUp = new EmptyPickUpController(child);
             gameStateService.AddPickUp(pickUp);
+        }
+
+        foreach (var damageAreaView in _damageAreas.GetComponentsInChildren<DamageAreaView>())
+        {
+            var damageArea = new DamageAreaController(damageAreaView);
+            gameStateService.AddDamageArea(damageArea);
         }
 
         _cameraService.CurrentTarget = _playerView;

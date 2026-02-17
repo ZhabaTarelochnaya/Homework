@@ -1,6 +1,7 @@
 using System;
 using _Prototype.Scripts.Gameplay.Controllers;
 using _Prototype.Scripts.Gameplay.Services;
+using _Prototype.Scripts.Gameplay.View.HurtBox;
 using UnityEngine;
 
 namespace _Prototype.Scripts.Gameplay.View
@@ -10,6 +11,7 @@ namespace _Prototype.Scripts.Gameplay.View
     {
         IPlayerController _playerController;
         Rigidbody2D _rigidbody;
+        [field: SerializeField] public HurtBoxView HurtBoxView { get; private set; }
         public Vector2 Position 
         { 
             get => _rigidbody.position;
