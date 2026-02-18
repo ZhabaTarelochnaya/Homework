@@ -1,6 +1,6 @@
 namespace _MultiplayerFPS.Scripts.Utils.ServiceLocator
 {
-    public class IService
+    public interface IService
     {
         
     }

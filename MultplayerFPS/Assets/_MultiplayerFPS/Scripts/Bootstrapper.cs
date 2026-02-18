@@ -1,5 +1,7 @@
 using System.Collections;
+using _MultiplayerFPS.Scripts.Services;
 using _MultiplayerFPS.Scripts.Utils;
+using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -23,12 +25,16 @@ public class Bootstrapper
         _coroutines = new GameObject("Coroutines").AddComponent<Coroutines>();
         Object.DontDestroyOnLoad(_coroutines.gameObject);
         
-        var prefabUIRoot = Resources.Load<LoadingScreen>("Prefabs/LoadingScreen");
-        _loadingScreen = Object.Instantiate(prefabUIRoot);
+        var loadingScreenPrefab = Resources.Load<LoadingScreen>("Prefabs/LoadingScreen");
+        _loadingScreen = Object.Instantiate(loadingScreenPrefab);
         Object.DontDestroyOnLoad(_loadingScreen.gameObject);
         
         var networkManagerPrefab = Resources.Load<NetworkManager>("Prefabs/NetworkManager");
         _networkManager = Object.Instantiate(networkManagerPrefab);
+        
+        ServiceLocator.Initialize();
+        var networkManagerService = new NetworkManagerService();
+        ServiceLocator.Current.Register<INetworkManagerService>(networkManagerService);
     }
 
     void RunGame()
