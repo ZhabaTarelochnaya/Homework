@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace _MultiplayerFPS.Scripts
 {
-    public class Player : NetworkBehaviour
+    public class GameNetworkPlayer : NetworkBehaviour
     {
         
     }

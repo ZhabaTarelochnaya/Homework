@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 439827280155656651}
-  - component: {fileID: 2990430175421343057}
-  - component: {fileID: 6482296705429640814}
+  - component: {fileID: -5154626046811676270}
   - component: {fileID: 5344403293827970653}
   - component: {fileID: 2870233280187960694}
+  - component: {fileID: 5796201321066963502}
   m_Layer: 0
-  m_Name: NetworkManager
+  m_Name: NetManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,7 +35,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2990430175421343057
+--- !u!114 &-5154626046811676270
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,7 +44,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7295290403086036776}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8aab4c8111b7c411b9b92cf3dbc5bd4e, type: 3}
+  m_Script: {fileID: 11500000, guid: 8ecb987b3cb4677459e0479e0657c9f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
@@ -52,8 +52,8 @@ MonoBehaviour:
   headlessStartMode: 0
   editorAutoStart: 0
   sendRate: 60
-  offlineScene: 
-  onlineScene: 
+  offlineScene: Assets/_MultiplayerFPS/Scenes/Offline.unity
+  onlineScene: Assets/_MultiplayerFPS/Scenes/Lobby.unity
   offlineSceneLoadDelay: 0
   transport: {fileID: 2870233280187960694}
   networkAddress: localhost
@@ -80,20 +80,13 @@ MonoBehaviour:
   evaluationMethod: 0
   evaluationInterval: 3
   timeInterpolationGui: 0
---- !u!114 &6482296705429640814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7295290403086036776}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  offsetX: 0
-  offsetY: 0
+  showRoomGUI: 1
+  minPlayers: 1
+  roomPlayerPrefab: {fileID: 1511994223778787702, guid: b909ccd3fc26b3c4b896f97b3afa048a, type: 3}
+  RoomScene: Assets/_MultiplayerFPS/Scenes/Lobby.unity
+  GameplayScene: Assets/_MultiplayerFPS/Scenes/Game.unity
+  _allPlayersReady: 0
+  clientIndex: 0
 --- !u!114 &5344403293827970653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,3 +134,24 @@ MonoBehaviour:
   jitterSpeed: 1
   unreliableLoss: 2
   unreliableScramble: 2
+--- !u!114 &5796201321066963502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7295290403086036776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f51d0a20f2cae74e9a9310152f35d15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableActiveDiscovery: 1
+  BroadcastAddress: 
+  serverBroadcastListenPort: 47777
+  ActiveDiscoveryInterval: 3
+  transport: {fileID: 5344403293827970653}
+  OnServerFound:
+    m_PersistentCalls:
+      m_Calls: []
+  secretHandshake: 3102876309888202081
