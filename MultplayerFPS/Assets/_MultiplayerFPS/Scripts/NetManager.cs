@@ -1,3 +1,4 @@
+using System;
 using _MultiplayerFPS.Scripts.Utils;
 using UnityEngine;
 using Mirror;
@@ -64,13 +65,19 @@ public class NetManager : NetworkRoomManager
     /// This is called on the server when a new client connects to the server.
     /// </summary>
     /// <param name="conn">The new connection.</param>
-    public override void OnRoomServerConnect(NetworkConnectionToClient conn) { }
+    public override void OnRoomServerConnect(NetworkConnectionToClient conn)
+    {
+        
+    }
 
     /// <summary>
     /// This is called on the server when a client disconnects.
     /// </summary>
     /// <param name="conn">The connection that disconnected.</param>
-    public override void OnRoomServerDisconnect(NetworkConnectionToClient conn) { }
+    public override void OnRoomServerDisconnect(NetworkConnectionToClient conn)
+    {
+        
+    }
 
     /// <summary>
     /// This is called on the server when a networked scene finishes loading.
@@ -190,13 +197,13 @@ public class NetManager : NetworkRoomManager
     /// </summary>
     public override void OnRoomClientSceneChanged()
     {
+        
     }
     
     public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling)
     {
         base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
         if (NetworkClient.activeHost) return;
-        Debug.Log("OnClientChangeScene");
         _loadingScreen.Show();
     }
 
@@ -205,7 +212,6 @@ public class NetManager : NetworkRoomManager
     public override void OnClientSceneChanged()
     {
         base.OnClientSceneChanged();
-        Debug.Log("OnClientSceneChanged");
         _loadingScreen.Hide();
     }
 

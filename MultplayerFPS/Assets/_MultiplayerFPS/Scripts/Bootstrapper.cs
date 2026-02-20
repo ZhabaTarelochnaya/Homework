@@ -3,6 +3,7 @@ using _MultiplayerFPS.Scripts;
 using _MultiplayerFPS.Scripts.Services;
 using _MultiplayerFPS.Scripts.Services.SceneManager;
 using _MultiplayerFPS.Scripts.Utils;
+using _MultiplayerFPS.Scripts.Utils.EventBus;
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 using kcp2k;
 using Mirror;
@@ -42,6 +43,8 @@ public class Bootstrapper
         ServiceLocator.Current.Register<INetworkService>(networkManagerService);
         _sceneManagerService = new SceneManagerService(networkManagerService, _loadingScreen, _coroutines);
         ServiceLocator.Current.Register(_sceneManagerService);
+        var eventBus = new EventBus();
+        ServiceLocator.Current.Register(eventBus);
     }
 
     void RunGame()

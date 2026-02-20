@@ -1,3 +1,7 @@
+using System;
+using _MultiplayerFPS.Scripts.Online.Lobby;
+using _MultiplayerFPS.Scripts.Utils.EventBus;
+using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 using UnityEngine;
 using Mirror;
 
@@ -14,6 +18,24 @@ using Mirror;
 /// </summary>
 public class NetworkPlayer : NetworkRoomPlayer
 {
+    const string StartNickname = "Player";
+    static readonly Color StartColor = Color.white;
+
+    [SyncVar(hook = nameof(OnNicknameChanged))] public string Nickname;
+    [SyncVar(hook = nameof(OnColorChanged))]  public Color Color;
+    
+    EventBus _eventBus;
+    public event Action<string> NicknameChanged;
+    public event Action<Color> ColorChanged;
+    public event Action<NetworkPlayer, bool> ReadyChanged;
+    void OnNicknameChanged(string oldNickname, string newNickname) => NicknameChanged?.Invoke(newNickname);
+    void OnColorChanged(Color oldColor, Color newColor) => ColorChanged?.Invoke(newColor);
+
+    void Awake()
+    {
+        _eventBus = ServiceLocator.Current.Get<EventBus>();
+    }
+
     #region Start & Stop Callbacks
 
     /// <summary>
@@ -21,7 +43,12 @@ public class NetworkPlayer : NetworkRoomPlayer
     /// <para>This could be triggered by NetworkServer.Listen() for objects in the scene, or by NetworkServer.Spawn() for objects that are dynamically created.</para>
     /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
     /// </summary>
-    public override void OnStartServer() { }
+    public override void OnStartServer()
+    {
+        Nickname = StartNickname;
+        Color = StartColor;
+        
+    }
 
     /// <summary>
     /// Invoked on the server when the object is unspawned
@@ -33,7 +60,14 @@ public class NetworkPlayer : NetworkRoomPlayer
     /// Called on every NetworkBehaviour when it is activated on a client.
     /// <para>Objects on the host have this function called, as there is a local client on the host. The values of SyncVars on object are guaranteed to be initialized correctly with the latest state from the server when this function is called on the client.</para>
     /// </summary>
-    public override void OnStartClient() { }
+    public override void OnStartClient()
+    {
+        Nickname = StartNickname;
+        Color = StartColor;
+        _eventBus.TriggerEvent(new GameEvent(EventName.OnPlayerStartClient,
+            $"Client {netIdentity.netId} started.",
+            this));
+    }
 
     /// <summary>
     /// This is invoked on clients when the server has caused this object to be destroyed.
@@ -73,7 +107,12 @@ public class NetworkPlayer : NetworkRoomPlayer
     /// <summary>
     /// This is a hook that is invoked on all player objects when exiting the room.
     /// </summary>
-    public override void OnClientExitRoom() { }
+    public override void OnClientExitRoom()
+    {
+        _eventBus.TriggerEvent(new GameEvent(EventName.OnClientExitRoom,
+            $"Client {netIdentity.netId} exit room.",
+            this));
+    }
 
     #endregion
 
@@ -92,8 +131,12 @@ public class NetworkPlayer : NetworkRoomPlayer
     /// </summary>
     /// <param name="oldReadyState">The old readyState value</param>
     /// <param name="newReadyState">The new readyState value</param>
-    public override void ReadyStateChanged(bool oldReadyState, bool newReadyState) { }
-
+    public override void ReadyStateChanged(bool oldReadyState, bool newReadyState)
+    {
+        _eventBus.TriggerEvent(new GameEvent(EventName.ReadyStateChanged,
+            $"Player {netIdentity.netId} ready state {newReadyState}.",
+            this, newReadyState));
+    }
     #endregion
 
     #region Optional UI
