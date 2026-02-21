@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace _MultiplayerFPS.Scripts.Online.Lobby
 {
-    public class PlayerCard : MonoBehaviour
+    public class PlayerCardView : MonoBehaviour
     {
         [SerializeField] TMP_Text _nickname;
         [SerializeField] TMP_Text _playerStatus;

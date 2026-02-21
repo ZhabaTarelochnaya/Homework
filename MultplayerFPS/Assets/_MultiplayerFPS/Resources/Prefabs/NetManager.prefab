@@ -55,16 +55,17 @@ MonoBehaviour:
   offlineScene: Assets/_MultiplayerFPS/Scenes/Offline.unity
   onlineScene: Assets/_MultiplayerFPS/Scenes/Lobby.unity
   offlineSceneLoadDelay: 0
-  transport: {fileID: 2870233280187960694}
+  transport: {fileID: 5344403293827970653}
   networkAddress: localhost
-  maxConnections: 100
+  maxConnections: 8
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 6475772093013630939, guid: 5ca84adc99da47046b84d2bd639764cc, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 8414447224811415141, guid: fff4da1556f968e47a040544dc1c70e7, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -80,13 +81,14 @@ MonoBehaviour:
   evaluationMethod: 0
   evaluationInterval: 3
   timeInterpolationGui: 0
-  showRoomGUI: 1
-  minPlayers: 1
+  showRoomGUI: 0
+  minPlayers: 0
   roomPlayerPrefab: {fileID: 1511994223778787702, guid: b909ccd3fc26b3c4b896f97b3afa048a, type: 3}
   RoomScene: Assets/_MultiplayerFPS/Scenes/Lobby.unity
   GameplayScene: Assets/_MultiplayerFPS/Scenes/Game.unity
   _allPlayersReady: 0
   clientIndex: 0
+  _lobbyStatePrefab: {fileID: 3554966425792629410, guid: fff4da1556f968e47a040544dc1c70e7, type: 3}
 --- !u!114 &5344403293827970653
 MonoBehaviour:
   m_ObjectHideFlags: 0

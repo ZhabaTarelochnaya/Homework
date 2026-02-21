@@ -1,7 +1,6 @@
 using System;
 using _MultiplayerFPS.Scripts.Online.Lobby;
-using _MultiplayerFPS.Scripts.Utils.EventBus;
-using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
+using _MultiplayerFPS.Scripts.Online.Lobby.View;
 using UnityEngine;
 using Mirror;
 
@@ -21,20 +20,27 @@ public class NetworkPlayer : NetworkRoomPlayer
     const string StartNickname = "Player";
     static readonly Color StartColor = Color.white;
 
-    [SyncVar(hook = nameof(OnNicknameChanged))] public string Nickname;
-    [SyncVar(hook = nameof(OnColorChanged))]  public Color Color;
+    [SyncVar(hook = nameof(OnNicknameChanged)), HideInInspector] 
+    public string Nickname;
+    [SyncVar(hook = nameof(OnColorChanged)), HideInInspector]  
+    public Color Color;
     
-    EventBus _eventBus;
-    public event Action<string> NicknameChanged;
-    public event Action<Color> ColorChanged;
-    public event Action<NetworkPlayer, bool> ReadyChanged;
-    void OnNicknameChanged(string oldNickname, string newNickname) => NicknameChanged?.Invoke(newNickname);
-    void OnColorChanged(Color oldColor, Color newColor) => ColorChanged?.Invoke(newColor);
+    [SerializeField] LobbyUIRootView _lobbyUIRootViewPrefab;
+    
+    public event Action<NetworkPlayer, string> ClientNicknameChanged;
+    public event Action<NetworkPlayer, Color> ClientColorChanged;
+    public event Action<NetworkPlayer, bool> ClientReadyChanged;
+    public event Action<NetworkPlayer> ClientStarted;
+    public event Action<NetworkPlayer> ClientStopped;
 
-    void Awake()
-    {
-        _eventBus = ServiceLocator.Current.Get<EventBus>();
-    }
+    void OnNicknameChanged(string oldNickname, string newNickname) => ClientNicknameChanged?.Invoke(this, newNickname);
+    void OnColorChanged(Color oldColor, Color newColor) => ClientColorChanged?.Invoke(this, newColor);
+    
+    [Command]
+    public void CmdSetColor(Color newColor) => Color = newColor;
+
+    [Command]
+    public void CmdSetNickname(string newNickname) => Nickname = newNickname;
 
     #region Start & Stop Callbacks
 
@@ -47,7 +53,6 @@ public class NetworkPlayer : NetworkRoomPlayer
     {
         Nickname = StartNickname;
         Color = StartColor;
-        
     }
 
     /// <summary>
@@ -62,24 +67,27 @@ public class NetworkPlayer : NetworkRoomPlayer
     /// </summary>
     public override void OnStartClient()
     {
-        Nickname = StartNickname;
-        Color = StartColor;
-        _eventBus.TriggerEvent(new GameEvent(EventName.OnPlayerStartClient,
-            $"Client {netIdentity.netId} started.",
-            this));
+        
     }
-
     /// <summary>
     /// This is invoked on clients when the server has caused this object to be destroyed.
     /// <para>This can be used as a hook to invoke effects or do client specific cleanup.</para>
     /// </summary>
-    public override void OnStopClient() { }
+    public override void OnStopClient() => ClientStopped?.Invoke(this);
 
     /// <summary>
     /// Called when the local player object has been set up.
     /// <para>This happens after OnStartClient(), as it is triggered by an ownership message from the server. This is an appropriate place to activate components or functionality that should only be active for the local player, such as cameras and input.</para>
     /// </summary>
-    public override void OnStartLocalPlayer() { }
+    public override void OnStartLocalPlayer()
+    {
+        ClientStarted?.Invoke(this);
+        if (isLocalPlayer)
+        {
+            var _lobbyUIView = Instantiate(_lobbyUIRootViewPrefab);
+            _lobbyUIView.Init(this);
+        }
+    }
 
     /// <summary>
     /// This is invoked on behaviours that have authority, based on context and <see cref="NetworkIdentity.hasAuthority">NetworkIdentity.hasAuthority</see>.
@@ -102,16 +110,17 @@ public class NetworkPlayer : NetworkRoomPlayer
     /// This is a hook that is invoked on all player objects when entering the room.
     /// <para>Note: isLocalPlayer is not guaranteed to be set until OnStartLocalPlayer is called.</para>
     /// </summary>
-    public override void OnClientEnterRoom() { }
+    public override void OnClientEnterRoom()
+    {
+        
+    }
 
     /// <summary>
     /// This is a hook that is invoked on all player objects when exiting the room.
     /// </summary>
     public override void OnClientExitRoom()
     {
-        _eventBus.TriggerEvent(new GameEvent(EventName.OnClientExitRoom,
-            $"Client {netIdentity.netId} exit room.",
-            this));
+        
     }
 
     #endregion
@@ -133,18 +142,15 @@ public class NetworkPlayer : NetworkRoomPlayer
     /// <param name="newReadyState">The new readyState value</param>
     public override void ReadyStateChanged(bool oldReadyState, bool newReadyState)
     {
-        _eventBus.TriggerEvent(new GameEvent(EventName.ReadyStateChanged,
-            $"Player {netIdentity.netId} ready state {newReadyState}.",
-            this, newReadyState));
+        ClientReadyChanged?.Invoke(this, newReadyState);
     }
+
     #endregion
 
     #region Optional UI
 
-    public override void OnGUI()
-    {
-        base.OnGUI();
-    }
+    public override void OnGUI() { }
 
     #endregion
+    
 }

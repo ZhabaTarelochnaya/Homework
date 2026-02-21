@@ -1,8 +1,11 @@
 using System;
+using _MultiplayerFPS.Scripts.Online.Lobby;
 using _MultiplayerFPS.Scripts.Utils;
+using _MultiplayerFPS.Scripts.Utils.LoadingScreenService;
+using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
+using kcp2k;
 using UnityEngine;
 using Mirror;
-
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/components/network-room-manager
 	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkRoomManager.html
@@ -20,36 +23,43 @@ using Mirror;
 /// </summary>
 public class NetManager : NetworkRoomManager
 {
-    // Overrides the base singleton so we don't
-    // have to cast to this type everywhere.
     public static new NetManager singleton => (NetManager)NetworkRoomManager.singleton;
-    LoadingScreen _loadingScreen;
+    
+    
+    ILoadingScreenService _loadingScreen;
+    LobbyState _lobbyState;
+    [SerializeField] LobbyState _lobbyStatePrefab;
 
-    public void Init(LoadingScreen loadingScreen)
+    public override void Awake()
     {
-        _loadingScreen = loadingScreen;
+        base.Awake();
+        _loadingScreen = ServiceLocator.Current.Get<ILoadingScreenService>();
     }
+
+    public void CmdStartGame()
+    {
+        ServerChangeScene(GameplayScene);
+    }
+    
     #region Server Callbacks
 
-    public override void OnServerChangeScene(string newSceneName)
-    {
-        _loadingScreen.Show();
-    }
-
-    public override void OnServerSceneChanged(string sceneName)
-    {
-        _loadingScreen.Hide();
-    }
 
     /// <summary>
     /// This is called on the server when the server is started - including when a host is started.
     /// </summary>
-    public override void OnRoomStartServer() { }
+    public override void OnRoomStartServer()
+    {
+        _lobbyState = Instantiate(_lobbyStatePrefab);
+        NetworkServer.Spawn(_lobbyState.gameObject);
+    }
 
     /// <summary>
     /// This is called on the server when the server is stopped - including when a host is stopped.
     /// </summary>
-    public override void OnRoomStopServer() { }
+    public override void OnRoomStopServer()
+    {
+        Destroy(_lobbyState);
+    }
 
     /// <summary>
     /// This is called on the host when a host is started.
@@ -59,7 +69,9 @@ public class NetManager : NetworkRoomManager
     /// <summary>
     /// This is called on the host when the host is stopped.
     /// </summary>
-    public override void OnRoomStopHost() { }
+    public override void OnRoomStopHost()
+    {
+    }
 
     /// <summary>
     /// This is called on the server when a new client connects to the server.
@@ -67,7 +79,6 @@ public class NetManager : NetworkRoomManager
     /// <param name="conn">The new connection.</param>
     public override void OnRoomServerConnect(NetworkConnectionToClient conn)
     {
-        
     }
 
     /// <summary>
@@ -76,7 +87,7 @@ public class NetManager : NetworkRoomManager
     /// <param name="conn">The connection that disconnected.</param>
     public override void OnRoomServerDisconnect(NetworkConnectionToClient conn)
     {
-        
+        _lobbyState.Players.Remove(conn.identity.GetComponent<NetworkPlayer>());
     }
 
     /// <summary>
@@ -93,7 +104,11 @@ public class NetManager : NetworkRoomManager
     /// <returns>The new room-player object.</returns>
     public override GameObject OnRoomServerCreateRoomPlayer(NetworkConnectionToClient conn)
     {
-        return base.OnRoomServerCreateRoomPlayer(conn);
+        GameObject playerObject = Instantiate(roomPlayerPrefab.gameObject);
+        var player = playerObject.GetComponent<NetworkPlayer>();
+        _lobbyState.Players.Add(player);
+        NetworkServer.Spawn(playerObject, conn);
+        return playerObject;
     }
 
     /// <summary>
@@ -139,21 +154,17 @@ public class NetManager : NetworkRoomManager
     {
         base.ReadyStatusChanged();
     }
-
     /// <summary>
     /// This is called on the server when all the players in the room are ready.
     /// <para>The default implementation of this function uses ServerChangeScene() to switch to the game player scene. By implementing this callback you can customize what happens when all the players in the room are ready, such as adding a countdown or a confirmation for a group leader.</para>
     /// </summary>
-    public override void OnRoomServerPlayersReady()
-    {
-        base.OnRoomServerPlayersReady();
-    }
+    public override void OnRoomServerPlayersReady() => _lobbyState.AllPlayersReady = allPlayersReady;
 
     /// <summary>
     /// This is called on the server when CheckReadyToBegin finds that players are not ready
     /// <para>May be called multiple times while not ready players are joining</para>
     /// </summary>
-    public override void OnRoomServerPlayersNotReady() { }
+    public override void OnRoomServerPlayersNotReady() => _lobbyState.AllPlayersReady = allPlayersReady;
 
     #endregion
 
@@ -172,7 +183,9 @@ public class NetManager : NetworkRoomManager
     /// <summary>
     /// This is called on the client when it connects to server.
     /// </summary>
-    public override void OnRoomClientConnect() { }
+    public override void OnRoomClientConnect()
+    {
+    }
 
     /// <summary>
     /// This is called on the client when disconnected from a server.
@@ -197,31 +210,25 @@ public class NetManager : NetworkRoomManager
     /// </summary>
     public override void OnRoomClientSceneChanged()
     {
-        
+        _loadingScreen.Hide();
     }
-    
     public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling)
     {
         base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
         if (NetworkClient.activeHost) return;
         _loadingScreen.Show();
     }
-
-    
-
     public override void OnClientSceneChanged()
     {
         base.OnClientSceneChanged();
         _loadingScreen.Hide();
+        
     }
 
     #endregion
     #region Optional UI
 
-    public override void OnGUI()
-    {
-        base.OnGUI();
-    }
+    public override void OnGUI() { }
 
     #endregion
 }
