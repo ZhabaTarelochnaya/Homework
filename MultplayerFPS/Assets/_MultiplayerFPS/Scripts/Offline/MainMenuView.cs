@@ -1,20 +1,16 @@
-using _MultiplayerFPS.Scripts.Services;
-using _MultiplayerFPS.Scripts.Services.SceneManager;
+using System;
+using _MultiplayerFPS.Scripts.Utils.LoadingScreenService;
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 using UnityEditor;
 using UnityEngine;
 
 public class MainMenuView : MonoBehaviour
 {
-    INetworkService _networkService;
-    ISceneManagerService _sceneManagerService;
     [SerializeField] GameObject _selectLobbyPanel;
 
     void Awake()
     {
-        _networkService = ServiceLocator.Current.Get<INetworkService>();
-        _sceneManagerService = ServiceLocator.Current.Get<ISceneManagerService>();
-        
+        ServiceLocator.Current.Get<ILoadingScreenService>().Hide();
     }
 
     public void OnExitButtonClicked()
@@ -24,15 +20,26 @@ public class MainMenuView : MonoBehaviour
         #endif
         Application.Quit();
     }
-    public void OnConnectButtonClicked()
+    public void OnDiscoverButtonClicked()
     {
         _selectLobbyPanel.SetActive(true);
         gameObject.SetActive(false);
-        _networkService.NetDiscovery.StartDiscovery();
+        NetManager.singleton.GetComponent<NetDiscovery>().StartDiscovery(); 
     }
 
-    public void OnCreateLobbyButtonClicked()
+    public void OnHostButtonClicked()
     {
-        _sceneManagerService.LoadLobbyAndHost();
+        NetManager.singleton.StartHost();
+        NetManager.singleton.GetComponent<NetDiscovery>().AdvertiseServer();  
+    }
+
+    public void OnClientButtonClicked()
+    {
+        NetManager.singleton.StartClient();
+    }
+
+    public void OnIPInputFieldEndEdit(string newIP)
+    {
+        NetManager.singleton.networkAddress = newIP;
     }
 }

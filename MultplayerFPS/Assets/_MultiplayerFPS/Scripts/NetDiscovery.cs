@@ -107,7 +107,6 @@ public class NetDiscovery : NetworkDiscoveryBase<DiscoveryRequest, DiscoveryResp
             Host = response.EndPoint.Address.ToString()
         };
         response.Uri = realUri.Uri;
-        Debug.Log("Got response");
         OnServerFound.Invoke(response);
     }
 
