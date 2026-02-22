@@ -4,60 +4,33 @@ using _MultiplayerFPS.Scripts.Utils.ExceptionPopUp;
 using _MultiplayerFPS.Scripts.Utils.LoadingScreenService;
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 using UnityEngine;
-
-public class Bootstrapper
-{
-    static Bootstrapper _gameRoot;
-    readonly Coroutines _coroutines;
+using UnityEngine.SceneManagement;
     
-
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    public static void AutostartGame()
+[DefaultExecutionOrder(-1000)]
+public class Bootstrapper : MonoBehaviour
+{
+    readonly Coroutines _coroutines;
+    [SerializeField] NetManager _netManager;
+    [SerializeField] DontDestroyOnLoadUIView _dontDestroyOnLoadUIView;
+    public void Awake()
     {
-        _gameRoot = new Bootstrapper(); 
-        _gameRoot.RunGame();
-    }
-
-    Bootstrapper()
-    {
-        _coroutines = new GameObject("Coroutines").AddComponent<Coroutines>();
-        Object.DontDestroyOnLoad(_coroutines.gameObject);
-        
-        var loadingScreenPrefab = Resources.Load<LoadingScreen>("Prefabs/LoadingScreen");
-        var loadingScreen = Object.Instantiate(loadingScreenPrefab);
-        Object.DontDestroyOnLoad(loadingScreen.gameObject);
-        
-        var exceptionPopupViewPrefab = Resources.Load<ExceptionPopupView>("Prefabs/ExceptionPopupView");
-        var exceptionPopupView = Object.Instantiate(exceptionPopupViewPrefab);
-        Object.DontDestroyOnLoad(exceptionPopupView.gameObject);
+        DontDestroyOnLoad(_dontDestroyOnLoadUIView.gameObject);
         
         ServiceLocator.Initialize();
-        var loadingScreenService = new LoadingScreenService(loadingScreen);
+        var loadingScreenService = new LoadingScreenService(_dontDestroyOnLoadUIView.LoadingScreen);
         ServiceLocator.Current.Register<ILoadingScreenService>(loadingScreenService);
-        var exceptionUIService = new ExceptionUIService(exceptionPopupView);
+        var exceptionUIService = new ExceptionUIService(_dontDestroyOnLoadUIView.ExceptionPopupView);
         ServiceLocator.Current.Register<IExceptionUIService>(exceptionUIService);
-    }
 
-    void RunGame()
-    {
-// #if UNITY_EDITOR
-//         var sceneName = SceneManager.GetActiveScene().name;
-//         if (sceneName != "Offline")
-//         {
-//             return;
-//         }
-// #endif
-        //LoadScene("Offline");
-        // }
-        // public void LoadScene(string sceneName)
-        // {
-        //     _coroutines.StartCoroutine(LoadSceneRoutine(sceneName));
-        // }
-        // IEnumerator LoadSceneRoutine(string sceneName)
-        // {
-        //     _loadingScreen.Show();
-        //     yield return UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
-        //     _loadingScreen.Hide();
-        // }
+        _dontDestroyOnLoadUIView.Init(_netManager);
+
+        StartCoroutine(LoadMainMenu());
     }
+    IEnumerator LoadMainMenu()
+    {
+        ServiceLocator.Current.Get<ILoadingScreenService>().Show();
+        yield return SceneManager.LoadSceneAsync("MainMenu");
+        ServiceLocator.Current.Get<ILoadingScreenService>().Hide();
+    }
+    
 }

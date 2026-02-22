@@ -39,7 +39,7 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
         public void OnStartGameButtonPressed()
         {
             _lobbyState.AllPlayersReadyChanged -= OnAllPlayersReadyChanged;
-            NetManager.singleton.CmdStartGame();
+            NetManager.singleton.StartGame();
         }
 
         public void OnStopButtonPressed()

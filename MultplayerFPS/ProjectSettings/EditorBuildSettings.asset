@@ -6,12 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_MultiplayerFPS/Scenes/Boot.unity
+    guid: 5c94413038584c14187d2ad8bceac7a5
+  - enabled: 1
+    path: Assets/_MultiplayerFPS/Scenes/MainMenu.unity
+    guid: e282e74edb3dbe047999699c44617cd5
+  - enabled: 1
     path: Assets/_MultiplayerFPS/Scenes/Lobby.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
     path: Assets/_MultiplayerFPS/Scenes/Game.unity
     guid: 9cd585d3b1148e84a906ff6078585f03
-  - enabled: 1
-    path: Assets/_MultiplayerFPS/Scenes/Offline.unity
-    guid: e282e74edb3dbe047999699c44617cd5
   m_configObjects: {}

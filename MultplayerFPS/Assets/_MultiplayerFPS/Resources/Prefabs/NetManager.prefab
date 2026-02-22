@@ -52,7 +52,7 @@ MonoBehaviour:
   headlessStartMode: 0
   editorAutoStart: 0
   sendRate: 60
-  offlineScene: Assets/_MultiplayerFPS/Scenes/Offline.unity
+  offlineScene: Assets/_MultiplayerFPS/Scenes/MainMenu.unity
   onlineScene: Assets/_MultiplayerFPS/Scenes/Lobby.unity
   offlineSceneLoadDelay: 0
   transport: {fileID: 5344403293827970653}

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using _MultiplayerFPS.Scripts.Online.Lobby;
 using _MultiplayerFPS.Scripts.Utils;
 using _MultiplayerFPS.Scripts.Utils.LoadingScreenService;
@@ -25,22 +27,21 @@ public class NetManager : NetworkRoomManager
 {
     public static new NetManager singleton => (NetManager)NetworkRoomManager.singleton;
     
-    
     ILoadingScreenService _loadingScreen;
     LobbyState _lobbyState;
     [SerializeField] LobbyState _lobbyStatePrefab;
-
+    public event Action LocalClientConnected;
+    public event Action LocalClientConnecting;
+    public event Action LocalClientDisconnected;
+    
     public override void Awake()
     {
         base.Awake();
         _loadingScreen = ServiceLocator.Current.Get<ILoadingScreenService>();
     }
 
-    public void CmdStartGame()
-    {
-        ServerChangeScene(GameplayScene);
-    }
-    
+    public void StartGame() => ServerChangeScene(GameplayScene);
+
     #region Server Callbacks
 
 
@@ -212,6 +213,25 @@ public class NetManager : NetworkRoomManager
     {
         _loadingScreen.Hide();
     }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        LocalClientConnecting?.Invoke();
+    }
+
+    public override void OnClientConnect()
+    {
+        base.OnClientConnect();
+        LocalClientConnected?.Invoke();
+    }
+
+    public override void OnClientDisconnect()
+    {
+        base.OnClientDisconnect();
+        LocalClientDisconnected?.Invoke();
+    }
+
     public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling)
     {
         base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
