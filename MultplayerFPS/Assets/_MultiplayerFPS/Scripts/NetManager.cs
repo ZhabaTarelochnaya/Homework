@@ -41,6 +41,7 @@ public class NetManager : NetworkRoomManager
     }
 
     public void StartGame() => ServerChangeScene(GameplayScene);
+    public string GetHostName() => _lobbyState.Players[0].Nickname; 
 
     #region Server Callbacks
 

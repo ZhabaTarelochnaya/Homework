@@ -61,7 +61,7 @@ public class NetDiscovery : NetworkDiscoveryBase<DiscoveryRequest, DiscoveryResp
                 ServerId = ServerId,
                 Uri = transport.ServerUri(),
                 PlayerCount = NetworkServer.connections.Count,
-                HostPlayerName = "Bobr"
+                HostPlayerName = NetManager.singleton.GetHostName()
             };
         }
         catch (NotImplementedException)
