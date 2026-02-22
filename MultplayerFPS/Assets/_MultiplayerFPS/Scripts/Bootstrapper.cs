@@ -1,5 +1,6 @@
 using System.Collections;
 using _MultiplayerFPS.Scripts.Utils;
+using _MultiplayerFPS.Scripts.Utils.ExceptionPopUp;
 using _MultiplayerFPS.Scripts.Utils.LoadingScreenService;
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 using UnityEngine;
@@ -7,7 +8,6 @@ using UnityEngine;
 public class Bootstrapper
 {
     static Bootstrapper _gameRoot;
-    readonly LoadingScreen _loadingScreen;
     readonly Coroutines _coroutines;
     
 
@@ -24,11 +24,18 @@ public class Bootstrapper
         Object.DontDestroyOnLoad(_coroutines.gameObject);
         
         var loadingScreenPrefab = Resources.Load<LoadingScreen>("Prefabs/LoadingScreen");
-        _loadingScreen = Object.Instantiate(loadingScreenPrefab);
-        Object.DontDestroyOnLoad(_loadingScreen.gameObject);
+        var loadingScreen = Object.Instantiate(loadingScreenPrefab);
+        Object.DontDestroyOnLoad(loadingScreen.gameObject);
+        
+        var exceptionPopupViewPrefab = Resources.Load<ExceptionPopupView>("Prefabs/ExceptionPopupView");
+        var exceptionPopupView = Object.Instantiate(exceptionPopupViewPrefab);
+        Object.DontDestroyOnLoad(exceptionPopupView.gameObject);
         
         ServiceLocator.Initialize();
-        ServiceLocator.Current.Register<ILoadingScreenService>(_loadingScreen);
+        var loadingScreenService = new LoadingScreenService(loadingScreen);
+        ServiceLocator.Current.Register<ILoadingScreenService>(loadingScreenService);
+        var exceptionUIService = new ExceptionUIService(exceptionPopupView);
+        ServiceLocator.Current.Register<IExceptionUIService>(exceptionUIService);
     }
 
     void RunGame()
@@ -41,15 +48,16 @@ public class Bootstrapper
 //         }
 // #endif
         //LoadScene("Offline");
-    }
-    public void LoadScene(string sceneName)
-    {
-        _coroutines.StartCoroutine(LoadSceneRoutine(sceneName));
-    }
-    IEnumerator LoadSceneRoutine(string sceneName)
-    {
-        _loadingScreen.Show();
-        yield return UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
-        _loadingScreen.Hide();
+        // }
+        // public void LoadScene(string sceneName)
+        // {
+        //     _coroutines.StartCoroutine(LoadSceneRoutine(sceneName));
+        // }
+        // IEnumerator LoadSceneRoutine(string sceneName)
+        // {
+        //     _loadingScreen.Show();
+        //     yield return UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName);
+        //     _loadingScreen.Hide();
+        // }
     }
 }

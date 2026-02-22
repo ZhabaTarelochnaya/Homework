@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace _MultiplayerFPS.Scripts.Utils
 {
-    public class LoadingScreen : MonoBehaviour, ILoadingScreenService
+    public class LoadingScreen : MonoBehaviour
     {
         public void Show() => gameObject.SetActive(true);
 

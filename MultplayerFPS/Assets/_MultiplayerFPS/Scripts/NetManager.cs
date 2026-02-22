@@ -222,9 +222,8 @@ public class NetManager : NetworkRoomManager
     {
         base.OnClientSceneChanged();
         _loadingScreen.Hide();
-        
     }
-
+    
     #endregion
     #region Optional UI
 
