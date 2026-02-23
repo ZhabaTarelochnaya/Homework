@@ -8,10 +8,10 @@ namespace _MultiplayerFPS.Scripts.Utils.ExceptionPopUp
         {
             this.exceptionPopupView = exceptionPopupView;
         }
-        public void ShowError(string message)
+        public void ShowError(string errorType, string error)
         {
             exceptionPopupView.gameObject.SetActive(true);
-            exceptionPopupView.ShowError(message);
+            exceptionPopupView.ShowError(errorType, error);
         }
     }
 }

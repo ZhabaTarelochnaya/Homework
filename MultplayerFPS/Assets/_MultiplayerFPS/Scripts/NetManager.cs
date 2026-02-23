@@ -4,6 +4,7 @@ using System.Linq;
 using _MultiplayerFPS.Scripts;
 using _MultiplayerFPS.Scripts.Online.Lobby;
 using _MultiplayerFPS.Scripts.Utils;
+using _MultiplayerFPS.Scripts.Utils.ExceptionPopUp;
 using _MultiplayerFPS.Scripts.Utils.LoadingScreenService;
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 using kcp2k;
@@ -152,6 +153,12 @@ public class NetManager : NetworkRoomManager
         gameNetworkPlayer.Nickname =  networkPlayer.Nickname;
         gameNetworkPlayer.Color = networkPlayer.Color;
         return true;
+    }
+
+    public override void OnClientError(TransportError error, string reason)
+    {
+        ServiceLocator.Current.Get<IExceptionUIService>().ShowError(error.ToString(), reason);
+        base.OnClientError(error, reason);
     }
 
     /// <summary>

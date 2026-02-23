@@ -34,8 +34,15 @@ public class MainMenuView : MonoBehaviour
 
     public void OnHostButtonClicked()
     {
-        NetManager.singleton.StartHost();
-        NetManager.singleton.GetComponent<NetDiscovery>().AdvertiseServer();  
+        try
+        {
+            NetManager.singleton.StartHost();
+            NetManager.singleton.GetComponent<NetDiscovery>().AdvertiseServer();
+        }
+        catch (Exception e)
+        {
+            ServiceLocator.Current.Get<IExceptionUIService>().ShowError(e.GetType().Name, e.Message);
+        }
     }
 
     public void OnClientButtonClicked()

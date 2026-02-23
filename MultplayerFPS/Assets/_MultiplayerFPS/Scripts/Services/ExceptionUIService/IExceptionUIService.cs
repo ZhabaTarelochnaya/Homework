@@ -4,6 +4,6 @@ namespace _MultiplayerFPS.Scripts.Utils.ExceptionPopUp
 {
     public interface IExceptionUIService : IService
     {
-        public void ShowError(string message);
+        public void ShowError(string errorType, string error);
     }
 }
