@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 439827280155656651}
   - component: {fileID: -5154626046811676270}
   - component: {fileID: 5344403293827970653}
-  - component: {fileID: 2870233280187960694}
   - component: {fileID: 5796201321066963502}
   m_Layer: 0
   m_Name: NetManager
@@ -63,7 +62,7 @@ MonoBehaviour:
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 6475772093013630939, guid: 5ca84adc99da47046b84d2bd639764cc, type: 3}
   autoCreatePlayer: 1
-  playerSpawnMethod: 0
+  playerSpawnMethod: 1
   spawnPrefabs:
   - {fileID: 8414447224811415141, guid: fff4da1556f968e47a040544dc1c70e7, type: 3}
   exceptionsDisconnect: 1
@@ -118,24 +117,6 @@ MonoBehaviour:
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0
---- !u!114 &2870233280187960694
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7295290403086036776}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96b149f511061407fb54895c057b7736, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wrap: {fileID: 5344403293827970653}
-  latency: 100
-  jitter: 0.48
-  jitterSpeed: 1
-  unreliableLoss: 2
-  unreliableScramble: 2
 --- !u!114 &5796201321066963502
 MonoBehaviour:
   m_ObjectHideFlags: 0

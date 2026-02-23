@@ -52,6 +52,9 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  Nickname: 
+  Color: {r: 0, g: 0, b: 0, a: 0}
+  _nicknameTagViewPrefab: {fileID: 25727620182926670, guid: cd41c94543e12a0478f9c9e23926016b, type: 3}
 --- !u!33 &8476984514999426088
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -80,7 +83,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 49e51b43955a22b4489ec647d3ef69a6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

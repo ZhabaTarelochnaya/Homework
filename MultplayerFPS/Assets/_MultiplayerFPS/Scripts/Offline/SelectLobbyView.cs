@@ -10,12 +10,10 @@ namespace _MultiplayerFPS.Scripts.Offline
         [SerializeField] GameObject _mainMenu;
         [SerializeField] RectTransform _content;
         [SerializeField] DiscoveredLobbyView _discoveredLobbyViewPrefab;
-
-        void Awake()
+        void OnEnable()
         {
             NetManager.singleton.GetComponent<NetDiscovery>().OnServerFound.AddListener(OnDiscoveredServer);
         }
-
         void OnDiscoveredServer(DiscoveryResponse response)
         {
             if (discoveredServers.ContainsKey(response.ServerId)) return;
@@ -39,6 +37,11 @@ namespace _MultiplayerFPS.Scripts.Offline
                 Destroy(child);
             }
             NetManager.singleton.GetComponent<NetDiscovery>().StartDiscovery();
+        }
+
+        void OnDisable()
+        {
+            NetManager.singleton.GetComponent<NetDiscovery>().OnServerFound.RemoveListener(OnDiscoveredServer);
         }
     }
 }

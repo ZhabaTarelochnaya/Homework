@@ -14,6 +14,10 @@ public class MainMenuView : MonoBehaviour
         ServiceLocator.Current.Get<ILoadingScreenService>().Hide();
     }
 
+    void OnEnable()
+    {
+        NetManager.singleton.GetComponent<NetDiscovery>().StopDiscovery(); 
+    }
     public void OnExitButtonClicked()
     {
         #if UNITY_EDITOR
