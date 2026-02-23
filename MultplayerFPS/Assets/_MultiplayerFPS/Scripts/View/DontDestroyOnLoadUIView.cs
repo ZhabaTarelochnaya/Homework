@@ -13,11 +13,11 @@ public class DontDestroyOnLoadUIView : MonoBehaviour
     public void Init(NetManager netManager)
     {
         _netManager = netManager;
-        netManager.LocalClientConnected += NetManagerOnLocalClientConnected;
-        netManager.LocalClientConnecting += NetManagerOnLocalClientConnecting;
-        netManager.LocalClientDisconnected += NetManagerOnLocalClientDisconnected;
+        _netManager.LocalClientConnected += NetManagerOnLocalClientConnected;
+        _netManager.LocalClientConnecting += NetManagerOnLocalClientConnecting;
+        _netManager.LocalClientDisconnected += NetManagerOnLocalClientDisconnected;
     }
-    void NetManagerOnLocalClientConnecting() => _statusText.text = "Connecting...";
-    void NetManagerOnLocalClientConnected() => _statusText.text = "Connected";
-    void NetManagerOnLocalClientDisconnected() => _statusText.text = "Disconnected";
+    void NetManagerOnLocalClientConnecting() => _statusText.text = "Status: Connecting...";
+    void NetManagerOnLocalClientConnected() => _statusText.text = "Status: Connected";
+    void NetManagerOnLocalClientDisconnected() => _statusText.text = "Status: Disconnected";
 }
