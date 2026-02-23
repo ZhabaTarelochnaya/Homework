@@ -7,6 +7,7 @@ public class PlayerListView : MonoBehaviour, IPlayerListView
     Dictionary<uint, PlayerCardView> _playerCards = new ();
     [SerializeField] PlayerCardView playerCardViewPrefab;
     [SerializeField] RectTransform _viewport;
+    [SerializeField] FixedSizeVerticalLayoutGroup _verticalLayoutGroup;
     
     public void CreatePlayerCard(uint netId, string nickName, Color color, bool ready)
     {
@@ -15,6 +16,7 @@ public class PlayerListView : MonoBehaviour, IPlayerListView
         playerCard.SetColor(color);
         playerCard.SetReady(ready);
         _playerCards[netId] = playerCard;
+        _verticalLayoutGroup.UpdateChildHeights();
     }
     public void RemovePlayerCard(uint netId)
     {

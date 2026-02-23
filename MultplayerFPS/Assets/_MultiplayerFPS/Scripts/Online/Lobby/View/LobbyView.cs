@@ -23,6 +23,7 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
         public event Action StopPressed;
         public event Action StartGamePressed;
         
+
         public void Enable()
         {
             gameObject.SetActive(true);
