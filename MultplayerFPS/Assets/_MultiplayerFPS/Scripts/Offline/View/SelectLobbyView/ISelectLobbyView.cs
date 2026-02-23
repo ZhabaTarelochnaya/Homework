@@ -3,7 +3,7 @@ using _MultiplayerFPS.Scripts.Utils;
 
 namespace _MultiplayerFPS.Scripts.Offline
 {
-    public interface ISelectLobbyView : IEnableView
+    public interface ISelectLobbyView : IView
     {
         public event Action<Uri> ServerChosen;
         public event Action ExitButtonClicked;

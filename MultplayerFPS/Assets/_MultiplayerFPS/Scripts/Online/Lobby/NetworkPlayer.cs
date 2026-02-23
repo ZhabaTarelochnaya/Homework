@@ -25,13 +25,12 @@ public class NetworkPlayer : NetworkRoomPlayer
     [SyncVar(hook = nameof(OnColorChanged)), HideInInspector]  
     public Color Color;
     
-    [SerializeField] LobbyUIRootView _lobbyUIRootViewPrefab;
+    LobbyPresenter _lobbyPresenter;
+    [SerializeField] LobbyView _lobbyViewPrefab;
     
     public event Action<NetworkPlayer, string> ClientNicknameChanged;
     public event Action<NetworkPlayer, Color> ClientColorChanged;
     public event Action<NetworkPlayer, bool> ClientReadyChanged;
-    public event Action<NetworkPlayer> ClientStarted;
-    public event Action<NetworkPlayer> ClientStopped;
 
     void OnNicknameChanged(string oldNickname, string newNickname) => ClientNicknameChanged?.Invoke(this, newNickname);
     void OnColorChanged(Color oldColor, Color newColor) => ClientColorChanged?.Invoke(this, newColor);
@@ -73,7 +72,7 @@ public class NetworkPlayer : NetworkRoomPlayer
     /// This is invoked on clients when the server has caused this object to be destroyed.
     /// <para>This can be used as a hook to invoke effects or do client specific cleanup.</para>
     /// </summary>
-    public override void OnStopClient() => ClientStopped?.Invoke(this);
+    public override void OnStopClient() { }
 
     /// <summary>
     /// Called when the local player object has been set up.
@@ -81,12 +80,9 @@ public class NetworkPlayer : NetworkRoomPlayer
     /// </summary>
     public override void OnStartLocalPlayer()
     {
-        ClientStarted?.Invoke(this);
-        if (isLocalPlayer)
-        {
-            var _lobbyUIView = Instantiate(_lobbyUIRootViewPrefab);
-            _lobbyUIView.Init(this);
-        }
+        var _lobbyView = Instantiate(_lobbyViewPrefab);
+        var lobbyState = FindAnyObjectByType<LobbyState>();
+        _lobbyPresenter = new LobbyPresenter(lobbyState, this, _lobbyView);
     }
 
     /// <summary>

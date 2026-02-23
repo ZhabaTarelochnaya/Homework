@@ -1,6 +1,4 @@
-using System;
 using Mirror;
-using TMPro;
 using UnityEngine;
 
 namespace _MultiplayerFPS.Scripts
@@ -27,13 +25,13 @@ namespace _MultiplayerFPS.Scripts
 
         void OnNicknameChanged(string oldNickname, string newNickname)
         {
-            if (!isClient) return;
+            if (_nicknameTagView == null) return;
             _nicknameTagView?.SetNickname(newNickname);
         }
 
         void OnColorChanged(Color oldColor, Color newColor)
         {
-            if (!isClient) return;
+            if (_nicknameTagView == null) return;
             _nicknameTagView.SetColor(newColor);
             _renderer.material.color = newColor;
         }

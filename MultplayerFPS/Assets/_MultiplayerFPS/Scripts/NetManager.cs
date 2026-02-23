@@ -111,8 +111,8 @@ public class NetManager : NetworkRoomManager
     {
         GameObject playerObject = Instantiate(roomPlayerPrefab.gameObject);
         var player = playerObject.GetComponent<NetworkPlayer>();
-        _lobbyState.Players.Add(player);
         NetworkServer.Spawn(playerObject, conn);
+        _lobbyState.Players.Add(player);
         return playerObject;
     }
 
@@ -147,7 +147,8 @@ public class NetManager : NetworkRoomManager
     /// <param name="roomPlayer">The room player object.</param>
     /// <param name="gamePlayer">The game player object.</param>
     /// <returns>False to not allow this player to replace the room player.</returns>
-    public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
+    public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, 
+        GameObject roomPlayer, GameObject gamePlayer)
     {
         var networkPlayer =  roomPlayer.GetComponent<NetworkPlayer>();
         var gameNetworkPlayer = gamePlayer.GetComponent<GameNetworkPlayer>();

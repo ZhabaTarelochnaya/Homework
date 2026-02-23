@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1511994223778787702}
   - component: {fileID: 7544781623369752247}
   m_Layer: 0
-  m_Name: RoomPlayer
+  m_Name: NetworkPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,7 +53,7 @@ MonoBehaviour:
   index: 0
   Nickname: 
   Color: {r: 0, g: 0, b: 0, a: 0}
-  _lobbyUIRootViewPrefab: {fileID: 1125939598102718239, guid: 0955e0f1c3301d348bb8c66c4aaa4705, type: 3}
+  _lobbyViewPrefab: {fileID: 7984778628705106749, guid: 0955e0f1c3301d348bb8c66c4aaa4705, type: 3}
 --- !u!114 &7544781623369752247
 MonoBehaviour:
   m_ObjectHideFlags: 0

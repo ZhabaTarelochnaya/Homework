@@ -1,6 +1,6 @@
 namespace _MultiplayerFPS.Scripts.Utils
 {
-    public interface IEnableView
+    public interface IView
     {
         public void Enable();
 

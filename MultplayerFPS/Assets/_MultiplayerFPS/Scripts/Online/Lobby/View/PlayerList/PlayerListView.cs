@@ -1,60 +1,29 @@
-using System;
 using System.Collections.Generic;
 using _MultiplayerFPS.Scripts.Online.Lobby;
-using Mirror;
 using UnityEngine;
 
-public class PlayerListView : MonoBehaviour
+public class PlayerListView : MonoBehaviour, IPlayerListView
 {
-    Dictionary<NetworkPlayer, PlayerCardView> _playerCards = new ();
-    LobbyState _lobbyState;
+    Dictionary<uint, PlayerCardView> _playerCards = new ();
     [SerializeField] PlayerCardView playerCardViewPrefab;
     [SerializeField] RectTransform _viewport;
-
-    public void Init(LobbyState lobbyState)
-    {
-        _lobbyState = lobbyState;
-        foreach (var player in _lobbyState.Players)
-        {
-            CreatePlayerCard(player);
-        }
-        _lobbyState.Players.OnAdd += OnAdd;
-        _lobbyState.Players.OnRemove += OnRemove;
-    }
-
-    void CreatePlayerCard(NetworkPlayer player)
+    
+    public void CreatePlayerCard(uint netId, string nickName, Color color, bool ready)
     {
         var playerCard = Instantiate(playerCardViewPrefab, _viewport);
-        _playerCards[player] = playerCard;
-        _playerCards[player].SetNickname($"{ player.Nickname}");
-        _playerCards[player].SetColor(player.Color);
-        _playerCards[player].SetReady(player.readyToBegin);
-        player.ClientNicknameChanged += OnPlayerNicknameChanged;
-        player.ClientReadyChanged += OnPlayerReadyChanged;
-        player.ClientColorChanged += OnPlayerNicknameColorChanged;
+        playerCard.SetNickname(nickName);
+        playerCard.SetColor(color);
+        playerCard.SetReady(ready);
+        _playerCards[netId] = playerCard;
     }
-    void OnAdd(int index) => CreatePlayerCard(_lobbyState.Players[index]);
-    void OnRemove(int index, NetworkPlayer player)
+    public void RemovePlayerCard(uint netId)
     {
-        Destroy(_playerCards[player].gameObject);
-        _playerCards.Remove(player);
-        player.ClientNicknameChanged -= OnPlayerNicknameChanged;
-        player.ClientReadyChanged -= OnPlayerReadyChanged;
-        player.ClientColorChanged -= OnPlayerNicknameColorChanged;
+        Destroy(_playerCards[netId].gameObject);
+        _playerCards.Remove(netId);
     }
-    void OnPlayerNicknameChanged(NetworkPlayer player, string newNickname)
-    {
-        if (!_playerCards.ContainsKey(player)) return;
-        _playerCards[player].SetNickname(newNickname);
-    }
-
-    void OnPlayerReadyChanged(NetworkPlayer player, bool readyState)
-    {
-        _playerCards[player].SetReady(readyState);
-    }
-    void OnPlayerNicknameColorChanged(NetworkPlayer player, Color color)
-    {
-        if (!_playerCards.ContainsKey(player)) return;
-        _playerCards[player].SetColor(color);
-    }
+    public void SetPlayerNickname(uint netId, string nickName) => _playerCards[netId].SetNickname(nickName);
+    public void SetPlayerColor(uint netId, Color color) => _playerCards[netId].SetColor(color);
+    public void SetPlayerReady(uint netId, bool ready) => _playerCards[netId].SetReady(ready);
+    public void Enable() => gameObject.SetActive(true);
+    public void Disable() => gameObject.SetActive(false);
 }

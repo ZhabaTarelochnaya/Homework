@@ -3,7 +3,7 @@ using _MultiplayerFPS.Scripts.Utils;
 
 namespace _MultiplayerFPS.Scripts.Offline.View.MainMenuView
 {
-    public interface IMainMenuView : IEnableView
+    public interface IMainMenuView : IView
     {
         public event Action ExitButtonClicked;
         public event Action HostButtonClicked;
