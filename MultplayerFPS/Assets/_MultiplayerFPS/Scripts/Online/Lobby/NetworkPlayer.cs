@@ -3,6 +3,7 @@ using _MultiplayerFPS.Scripts.Online.Lobby;
 using _MultiplayerFPS.Scripts.Online.Lobby.View;
 using UnityEngine;
 using Mirror;
+using Telepathy;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/components/network-room-player
@@ -24,6 +25,8 @@ public class NetworkPlayer : NetworkRoomPlayer
     public string Nickname;
     [SyncVar(hook = nameof(OnColorChanged)), HideInInspector]  
     public Color Color;
+    [SyncVar] 
+    public bool IsHost;
     
     LobbyPresenter _lobbyPresenter;
     [SerializeField] LobbyView _lobbyViewPrefab;
@@ -52,6 +55,7 @@ public class NetworkPlayer : NetworkRoomPlayer
     {
         Nickname = StartNickname;
         Color = StartColor;
+        IsHost = connectionToClient.connectionId == 0;
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
 using _MultiplayerFPS.Scripts.Utils;
+using Mirror;
 using UnityEngine;
 
 namespace _MultiplayerFPS.Scripts.Online.Lobby
@@ -19,7 +20,9 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
             _playerListView.Enable();
             foreach (var player in _lobbyState.Players)
             {
-                _playerListView.CreatePlayerCard(player.netId, player.Nickname, 
+                var nickname = player.Nickname;
+                nickname = player.IsHost ? nickname + " (Host)" : nickname;
+                _playerListView.CreatePlayerCard(player.netId, nickname, 
                     player.Color, player.readyToBegin);
                 player.ClientNicknameChanged += OnPlayerNicknameChanged;
                 player.ClientReadyChanged += OnPlayerReadyChanged;
@@ -44,7 +47,9 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
         void OnAdd(int index)
         {
             var player = _lobbyState.Players[index];
-            _playerListView.CreatePlayerCard(player.netId, player.Nickname, 
+            var nickname = player.Nickname;
+            nickname = player.IsHost ? nickname + " (Host)" : nickname;
+            _playerListView.CreatePlayerCard(player.netId, nickname, 
                 player.Color, player.readyToBegin);
             player.ClientNicknameChanged += OnPlayerNicknameChanged;
             player.ClientReadyChanged += OnPlayerReadyChanged;
@@ -59,6 +64,7 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
         }
         void OnPlayerNicknameChanged(NetworkPlayer player, string newNickname)
         {
+            newNickname = player.IsHost ? newNickname + " (Host)" : newNickname;
             _playerListView.SetPlayerNickname(player.netId, newNickname);
         }
         void OnPlayerReadyChanged(NetworkPlayer player, bool readyState)
