@@ -25,6 +25,7 @@ using Mirror;
 /// It requires that the NetworkRoomPlayer component be on the room player objects.
 /// NetworkRoomManager is derived from NetworkManager, and so it implements many of the virtual functions provided by the NetworkManager class.
 /// </summary>
+[DefaultExecutionOrder(-500)]
 public class NetManager : NetworkRoomManager
 {
     public static new NetManager singleton => (NetManager)NetworkRoomManager.singleton;
