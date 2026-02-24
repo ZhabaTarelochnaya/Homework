@@ -10,6 +10,7 @@ namespace _MultiplayerFPS.Scripts.Services.InputService
             var y = Sign(Input.GetAxisRaw("Vertical"));
             return new Vector2(x, y);
         }
+        public bool JumpButtonDown() => Input.GetButtonDown("Jump");
 
         float Sign(float value)
         {

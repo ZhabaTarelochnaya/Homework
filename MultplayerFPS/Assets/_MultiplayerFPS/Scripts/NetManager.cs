@@ -152,13 +152,12 @@ public class NetManager : NetworkRoomManager
         gameNetworkPlayer.Color = networkPlayer.Color;
         return true;
     }
-
     public override void OnClientError(TransportError error, string reason)
     {
         ServiceLocator.Current.Get<IExceptionUIService>().ShowError(error.ToString(), reason);
         base.OnClientError(error, reason);
     }
-
+    
     /// <summary>
     /// This is called on server from NetworkRoomPlayer.CmdChangeReadyState when client indicates change in Ready status.
     /// </summary>
@@ -235,6 +234,12 @@ public class NetManager : NetworkRoomManager
     {
         base.OnClientConnect();
         LocalClientConnected?.Invoke();
+    }
+
+    public override void OnClientTransportException(Exception exception)
+    {
+        ServiceLocator.Current.Get<IExceptionUIService>().ShowError(exception.GetType().Name, exception.Message);
+        base.OnClientTransportException(exception);
     }
 
     public override void OnClientDisconnect()

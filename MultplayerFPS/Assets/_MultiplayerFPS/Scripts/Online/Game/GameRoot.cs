@@ -1,5 +1,7 @@
 using System;
+using _MultiplayerFPS.Scripts.Controllers;
 using _MultiplayerFPS.Scripts.Services.InputService;
+using _MultiplayerFPS.Scripts.Services.Move;
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 using Mirror;
 using UnityEngine;
@@ -9,40 +11,31 @@ namespace _MultiplayerFPS.Scripts
     [DefaultExecutionOrder(-1000)]
     public class GameRoot : NetworkBehaviour
     {
-        public override void OnStartClient()
-        {
-            RegisterLocalServices();
-        }
+        
         public override void OnStartServer()
         {
-            RegisterServerServices();
-        }
-        public override void OnStopClient()
-        {
-            UnregisterLocalServices();
         }
         public override void OnStopServer()
         {
-            UnregisterServerServices();
-        }
-        void RegisterLocalServices()
-        {
-            var inputService = new MouseKeyboardInputService();
-            ServiceLocator.Current.Register<IInputService>(inputService);
-        }
-        void UnregisterLocalServices()
-        {
-            ServiceLocator.Current.Unregister<IInputService>();
+            
         }
 
-        void RegisterServerServices()
+        public override void OnStartLocalPlayer()
+        {
+            base.OnStartLocalPlayer();
+            var player = NetworkClient.localPlayer.GetComponent<GameNetworkPlayer>();
+            Debug.Log(player);
+        }
+
+        public override void OnStartClient()
         {
             
         }
-        void UnregisterServerServices()
+
+        public override void OnStopClient()
         {
-            
+            ServiceLocator.Current.Unregister<IInputService>();
+            ServiceLocator.Current.Unregister<IMovementService>();
         }
-        
     }
 }

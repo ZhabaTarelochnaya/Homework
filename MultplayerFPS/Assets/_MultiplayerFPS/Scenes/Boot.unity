@@ -368,6 +368,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _netManager: {fileID: 175010240}
   _dontDestroyOnLoadUIView: {fileID: 118944493}
+  _configs: {fileID: 11400000, guid: 0ac5c1940bac2394b853b710d0a3286f, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
