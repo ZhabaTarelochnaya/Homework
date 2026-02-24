@@ -1,6 +1,6 @@
 using System;
 using _MultiplayerFPS.Scripts.Offline.View.MainMenuView;
-using _MultiplayerFPS.Scripts.Utils.LoadingScreenService;
+using _MultiplayerFPS.Scripts.Utils.LoadingScreen;
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 using UnityEngine;
 

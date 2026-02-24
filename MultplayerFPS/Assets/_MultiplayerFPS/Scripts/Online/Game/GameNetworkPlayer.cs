@@ -1,3 +1,6 @@
+using System;
+using _MultiplayerFPS.Scripts.Services.InputService;
+using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 using Mirror;
 using UnityEngine;
 
@@ -5,29 +8,48 @@ namespace _MultiplayerFPS.Scripts
 {
     public class GameNetworkPlayer : NetworkBehaviour
     {
+        static readonly int MoveHorizontal = Animator.StringToHash("MoveHorizontal");
+        static readonly int MoveVertical = Animator.StringToHash("MoveVertical");
+
         [SyncVar(hook = nameof(OnNicknameChanged)), HideInInspector] 
         public string Nickname;
         [SyncVar(hook = nameof(OnColorChanged)), HideInInspector]  
         public Color Color;
    
         NicknameTagView _nicknameTagView;
+        IInputService _inputService;
         [SerializeField] NicknameTagView _nicknameTagViewPrefab;
         [SerializeField] Renderer _renderer;
+        [SerializeField] CharacterController _characterController;
+        [SerializeField] Animator _animator;
 
         public override void OnStartClient()
         {
             _nicknameTagView = Instantiate(_nicknameTagViewPrefab, transform);
-            _renderer = GetComponent<Renderer>();
             OnNicknameChanged("", Nickname);
             OnColorChanged(Color.black, Color);
+            _inputService = ServiceLocator.Current.Get<IInputService>();
+        }
+        void Update()
+        {
+            if (isLocalPlayer)
+            {
+                var move = _inputService.GetMove();
+                CmdPlayMoveAnimation(move);
+            }
         }
 
+        [Command]
+        void CmdPlayMoveAnimation(Vector2 move)
+        {
+            _animator.SetInteger(MoveVertical, (int)move.y);
+            _animator.SetInteger(MoveHorizontal, (int)move.x);
+        }
         void OnNicknameChanged(string oldNickname, string newNickname)
         {
             if (_nicknameTagView == null) return;
             _nicknameTagView?.SetNickname(newNickname);
         }
-
         void OnColorChanged(Color oldColor, Color newColor)
         {
             if (_nicknameTagView == null) return;

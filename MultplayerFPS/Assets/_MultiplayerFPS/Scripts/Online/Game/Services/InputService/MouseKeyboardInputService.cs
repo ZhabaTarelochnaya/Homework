@@ -6,9 +6,17 @@ namespace _MultiplayerFPS.Scripts.Services.InputService
     {
         public Vector2 GetMove()
         {
-            var x = Mathf.Sign(Input.GetAxisRaw("Horizontal"));
-            var y = Mathf.Sign(Input.GetAxisRaw("Vertical"));
+            var x = Sign(Input.GetAxisRaw("Horizontal"));
+            var y = Sign(Input.GetAxisRaw("Vertical"));
             return new Vector2(x, y);
         }
+
+        float Sign(float value)
+        {
+            if (value < 0) return -1;
+            if (value > 0) return 1;
+            return 0;
+        }
+        
     }
 }

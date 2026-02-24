@@ -1,10 +1,10 @@
-namespace _MultiplayerFPS.Scripts.Utils.LoadingScreenService
+namespace _MultiplayerFPS.Scripts.Utils.LoadingScreen
 {
     public class LoadingScreenService : ILoadingScreenService
     {
-        readonly LoadingScreen loadingScreen;
+        readonly LoadingScreenView loadingScreen;
 
-        public LoadingScreenService(LoadingScreen loadingScreen)
+        public LoadingScreenService(LoadingScreenView loadingScreen)
         {
             this.loadingScreen = loadingScreen;
         }

@@ -786,7 +786,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _statusText: {fileID: 8250356074289781946}
-  <LoadingScreen>k__BackingField: {fileID: 4044741066233474795}
+  <LoadingScreenView>k__BackingField: {fileID: 4044741066233474795}
   <ExceptionPopupView>k__BackingField: {fileID: 3842707352668343669}
 --- !u!1 &6904291078781003952
 GameObject:

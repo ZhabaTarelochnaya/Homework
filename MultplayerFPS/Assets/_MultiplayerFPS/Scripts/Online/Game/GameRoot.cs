@@ -1,32 +1,48 @@
 using System;
 using _MultiplayerFPS.Scripts.Services.InputService;
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
+using Mirror;
 using UnityEngine;
 
 namespace _MultiplayerFPS.Scripts
 {
-    [DefaultExecutionOrder(-100)]
-    public class GameRoot : MonoBehaviour
+    [DefaultExecutionOrder(-1000)]
+    public class GameRoot : NetworkBehaviour
     {
-        void Awake()
+        public override void OnStartClient()
         {
-            Register();
+            RegisterLocalServices();
         }
-
-        void Register()
+        public override void OnStartServer()
+        {
+            RegisterServerServices();
+        }
+        public override void OnStopClient()
+        {
+            UnregisterLocalServices();
+        }
+        public override void OnStopServer()
+        {
+            UnregisterServerServices();
+        }
+        void RegisterLocalServices()
         {
             var inputService = new MouseKeyboardInputService();
             ServiceLocator.Current.Register<IInputService>(inputService);
         }
-
-        void Unregister()
+        void UnregisterLocalServices()
         {
             ServiceLocator.Current.Unregister<IInputService>();
         }
 
-        void OnDestroy()
+        void RegisterServerServices()
         {
-            Unregister();
+            
         }
+        void UnregisterServerServices()
+        {
+            
+        }
+        
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections;
 using _MultiplayerFPS.Scripts.Utils;
 using _MultiplayerFPS.Scripts.Utils.ExceptionPopUp;
-using _MultiplayerFPS.Scripts.Utils.LoadingScreenService;
+using _MultiplayerFPS.Scripts.Utils.LoadingScreen;
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,7 +17,7 @@ public class Bootstrapper : MonoBehaviour
         DontDestroyOnLoad(_dontDestroyOnLoadUIView.gameObject);
         
         ServiceLocator.Initialize();
-        var loadingScreenService = new LoadingScreenService(_dontDestroyOnLoadUIView.LoadingScreen);
+        var loadingScreenService = new LoadingScreenService(_dontDestroyOnLoadUIView.LoadingScreenView);
         ServiceLocator.Current.Register<ILoadingScreenService>(loadingScreenService);
         var exceptionUIService = new ExceptionUIService(_dontDestroyOnLoadUIView.ExceptionPopupView);
         ServiceLocator.Current.Register<IExceptionUIService>(exceptionUIService);

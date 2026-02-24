@@ -8,7 +8,7 @@ public class DontDestroyOnLoadUIView : MonoBehaviour
     NetManager _netManager;
     [SerializeField] TMP_Text _statusText;
     
-    [field: SerializeField] public LoadingScreen LoadingScreen { get; private set; }
+    [field: SerializeField] public LoadingScreenView LoadingScreenView { get; private set; }
     [field: SerializeField] public ExceptionPopupView ExceptionPopupView { get; private set; }
     public void Init(NetManager netManager)
     {

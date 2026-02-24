@@ -1,6 +1,6 @@
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 
-namespace _MultiplayerFPS.Scripts.Utils.LoadingScreenService
+namespace _MultiplayerFPS.Scripts.Utils.LoadingScreen
 {
     public interface ILoadingScreenService : IService
     {

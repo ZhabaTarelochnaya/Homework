@@ -1,9 +1,5 @@
 using System;
 using _MultiplayerFPS.Scripts.Offline.View.MainMenuView;
-using _MultiplayerFPS.Scripts.Utils.ExceptionPopUp;
-using _MultiplayerFPS.Scripts.Utils.LoadingScreenService;
-using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
-using UnityEditor;
 using UnityEngine;
 
 public class MainMenuView : MonoBehaviour, IMainMenuView
