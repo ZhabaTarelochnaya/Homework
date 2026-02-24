@@ -3,17 +3,16 @@ using UnityEngine;
 
 namespace _MultiplayerFPS.Scripts
 {
-    [RequireComponent(typeof(Renderer))]
     public class GameNetworkPlayer : NetworkBehaviour
     {
         [SyncVar(hook = nameof(OnNicknameChanged)), HideInInspector] 
         public string Nickname;
         [SyncVar(hook = nameof(OnColorChanged)), HideInInspector]  
         public Color Color;
-        
-        Renderer _renderer;
+   
         NicknameTagView _nicknameTagView;
         [SerializeField] NicknameTagView _nicknameTagViewPrefab;
+        [SerializeField] Renderer _renderer;
 
         public override void OnStartClient()
         {
