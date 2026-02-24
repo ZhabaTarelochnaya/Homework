@@ -35,7 +35,12 @@ namespace _MultiplayerFPS.Scripts
             if (isLocalPlayer)
             {
                 var move = _inputService.GetMove();
+                Vector3 move3 = new Vector3(move.x, 0, move.y) * Time.deltaTime * 10f;
+                _characterController.Move(move3);
+                _animator.SetInteger(MoveVertical, (int)move.y);
+                _animator.SetInteger(MoveHorizontal, (int)move.x);
                 CmdPlayMoveAnimation(move);
+                CmdMovePLayer(move * Time.deltaTime * 10f);
             }
         }
 
@@ -44,6 +49,13 @@ namespace _MultiplayerFPS.Scripts
         {
             _animator.SetInteger(MoveVertical, (int)move.y);
             _animator.SetInteger(MoveHorizontal, (int)move.x);
+        }
+
+        [Command]
+        void CmdMovePLayer(Vector2 move)
+        {
+            var move3 = new Vector3(move.x, 0, move.y);
+            _characterController.Move(move3);
         }
         void OnNicknameChanged(string oldNickname, string newNickname)
         {

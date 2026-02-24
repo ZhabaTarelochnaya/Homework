@@ -1,4 +1,5 @@
 using System.Collections;
+using _MultiplayerFPS.Scripts.Services.Config;
 using _MultiplayerFPS.Scripts.Utils;
 using _MultiplayerFPS.Scripts.Utils.ExceptionPopUp;
 using _MultiplayerFPS.Scripts.Utils.LoadingScreen;
@@ -12,6 +13,7 @@ public class Bootstrapper : MonoBehaviour
     readonly Coroutines _coroutines;
     [SerializeField] NetManager _netManager;
     [SerializeField] DontDestroyOnLoadUIView _dontDestroyOnLoadUIView;
+    [SerializeField] ConfigsSO _configs;
     public void Awake()
     {
         DontDestroyOnLoad(_dontDestroyOnLoadUIView.gameObject);
@@ -21,6 +23,8 @@ public class Bootstrapper : MonoBehaviour
         ServiceLocator.Current.Register<ILoadingScreenService>(loadingScreenService);
         var exceptionUIService = new ExceptionUIService(_dontDestroyOnLoadUIView.ExceptionPopupView);
         ServiceLocator.Current.Register<IExceptionUIService>(exceptionUIService);
+        var configsService = new ConfigService(_configs);
+        ServiceLocator.Current.Register<IConfigService>(configsService);
 
         _dontDestroyOnLoadUIView.Init(_netManager);
 
