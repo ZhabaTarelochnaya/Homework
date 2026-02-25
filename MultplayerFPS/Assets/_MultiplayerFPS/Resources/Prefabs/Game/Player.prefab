@@ -100,7 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncDirection: 0
   syncMode: 0
-  syncInterval: 0
+  syncInterval: 0.05
   Nickname: 
   Color: {r: 0, g: 0, b: 0, a: 0}
   _nicknameTagViewPrefab: {fileID: 25727620182926670, guid: cd41c94543e12a0478f9c9e23926016b, type: 3}
@@ -187,7 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncDirection: 1
   syncMode: 0
-  syncInterval: 0
+  syncInterval: 0.05
   target: {fileID: 3232600926293641778}
   syncPosition: 1
   syncRotation: 1
