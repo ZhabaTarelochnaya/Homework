@@ -7,5 +7,6 @@ namespace _MultiplayerFPS.Scripts.Services.InputService
     {
         public Vector2 GetMove();
         public bool JumpButtonDown();
+        public Vector2 GetLook();
     }
 }

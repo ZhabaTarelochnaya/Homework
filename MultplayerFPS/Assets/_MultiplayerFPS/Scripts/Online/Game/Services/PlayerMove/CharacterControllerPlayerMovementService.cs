@@ -5,15 +5,17 @@ using UnityEngine;
 
 namespace _MultiplayerFPS.Scripts.Services.Move
 {
-    public class CharacterControllerMovementService : IMovementService
+    public class CharacterControllerPlayerMovementService : IPlayerMovementService
     {
         readonly CharacterController _characterController;
         
         Vector3 _movement;
         float _verticalVelocity;
         PlayerConfig _playerConfig;
-
-        public CharacterControllerMovementService(CharacterController characterController)
+        
+        public Vector3 Velocity { get; private set; }
+        
+        public CharacterControllerPlayerMovementService(CharacterController characterController)
         {
             _characterController = characterController;
             _playerConfig = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>();
@@ -22,8 +24,9 @@ namespace _MultiplayerFPS.Scripts.Services.Move
         public void AddRun(Vector2 direction)
         {
             direction.Normalize();
-            var velocity = new Vector3(direction.x, 0, direction.y) * _playerConfig.Speed;
-            _movement += velocity;
+            Vector3 localDirection = new Vector3(direction.x, 0f, direction.y);
+            Vector3 worldDirection = _characterController.transform.TransformDirection(localDirection);
+            _movement += worldDirection * _playerConfig.Speed;
         }
         public void AddJump()
         {
@@ -33,7 +36,8 @@ namespace _MultiplayerFPS.Scripts.Services.Move
         public void Move()
         {
             HandleGravity();
-            _characterController.Move(_movement * Time.fixedDeltaTime);
+            Velocity = _movement;
+            _characterController.Move(_movement * Time.deltaTime);
             _movement = Vector3.zero;
         }
         void HandleGravity()
@@ -44,11 +48,9 @@ namespace _MultiplayerFPS.Scripts.Services.Move
             }
             else
             {
-                _verticalVelocity += _playerConfig.Gravity * Time.fixedDeltaTime;
+                _verticalVelocity += _playerConfig.Gravity * Time.deltaTime;
             }
             _movement.y = _verticalVelocity;
-            
-            Debug.Log(_movement.y);
         }
     }
 }

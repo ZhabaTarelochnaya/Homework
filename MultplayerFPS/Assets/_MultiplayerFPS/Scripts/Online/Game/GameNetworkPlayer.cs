@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace _MultiplayerFPS.Scripts
 {
+    [DefaultExecutionOrder(-100)]
     public class GameNetworkPlayer : NetworkBehaviour
     {
         static readonly int MoveHorizontal = Animator.StringToHash("MoveHorizontal");
@@ -25,7 +26,7 @@ namespace _MultiplayerFPS.Scripts
         [SerializeField] Renderer _renderer;
         [SerializeField] CharacterController _characterController;
         [SerializeField] Animator _animator;
-        
+        [SerializeField] Transform _headTransform;
         public override void OnStartClient()
         {
             _nicknameTagView = Instantiate(_nicknameTagViewPrefab, transform);
@@ -38,8 +39,8 @@ namespace _MultiplayerFPS.Scripts
             var inputService = new MouseKeyboardInputService();
             ServiceLocator.Current.Register<IInputService>(inputService);
             var characterController = NetworkClient.localPlayer.GetComponent<CharacterController>();
-            var moveService = new CharacterControllerMovementService(characterController);
-            ServiceLocator.Current.Register<IMovementService>(moveService);
+            var moveService = new CharacterControllerPlayerMovementService(characterController);
+            ServiceLocator.Current.Register<IPlayerMovementService>(moveService);
             
             _playerController = new PlayerController();
             _inputService = ServiceLocator.Current.Get<IInputService>();
@@ -49,23 +50,28 @@ namespace _MultiplayerFPS.Scripts
         {
             if (isLocalPlayer)
             {
-                HandleAnimations();
+                _playerController.HandleMove();
                 _playerController.HandleJump();
+                _playerController.HandlePlayerRotation(transform);
+                HandleAnimations();
             }
         }
-        void FixedUpdate()
+
+        void LateUpdate()
         {
             if (isLocalPlayer)
             {
-                _playerController.HandleMove();
+                _playerController.HandleCameraRotation(_headTransform, transform);
             }
         }
+
         void HandleAnimations()
         {
             var move = _inputService.GetMove();
             _animator.SetInteger(MoveVertical, (int)move.y);
             _animator.SetInteger(MoveHorizontal, (int)move.x);
         }
+        
         void OnNicknameChanged(string oldNickname, string newNickname)
         {
             if (_nicknameTagView == null) return;

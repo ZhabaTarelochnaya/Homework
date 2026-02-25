@@ -9,7 +9,9 @@ namespace _MultiplayerFPS.Scripts
         [SerializeField] TMP_Text _text;
         void Update()
         {
-            Quaternion.LookRotation(transform.position - Camera.main.transform.position);
+            Vector3 direction = Camera.main.transform.position - transform.position;
+            direction.y = 0; 
+            transform.rotation = Quaternion.LookRotation(direction);
         }
         
         public void SetColor(Color color) => _text.color = color;

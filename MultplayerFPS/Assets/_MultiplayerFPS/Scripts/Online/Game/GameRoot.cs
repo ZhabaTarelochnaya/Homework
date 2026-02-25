@@ -20,22 +20,15 @@ namespace _MultiplayerFPS.Scripts
             
         }
 
-        public override void OnStartLocalPlayer()
-        {
-            base.OnStartLocalPlayer();
-            var player = NetworkClient.localPlayer.GetComponent<GameNetworkPlayer>();
-            Debug.Log(player);
-        }
-
         public override void OnStartClient()
         {
-            
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         public override void OnStopClient()
         {
             ServiceLocator.Current.Unregister<IInputService>();
-            ServiceLocator.Current.Unregister<IMovementService>();
+            ServiceLocator.Current.Unregister<IPlayerMovementService>();
         }
     }
 }

@@ -3,8 +3,9 @@ using UnityEngine;
 
 namespace _MultiplayerFPS.Scripts.Services.Move
 {
-    public interface IMovementService: IService
+    public interface IPlayerMovementService: IService
     {
+        public Vector3 Velocity { get; }
         public void AddRun(Vector2 direction);
         public void AddJump();
         public void Move();

@@ -10,26 +10,43 @@ namespace _MultiplayerFPS.Scripts.Controllers
     public class PlayerController
     {
         readonly IInputService _inputService;
-        readonly IMovementService _movementService;
+        readonly IPlayerMovementService _playerMovementService;
+        readonly CameraManager _cameraManager;
         
         public PlayerController()
         {
             _inputService = ServiceLocator.Current.Get<IInputService>();
-            _movementService = ServiceLocator.Current.Get<IMovementService>();
+            _playerMovementService = ServiceLocator.Current.Get<IPlayerMovementService>();
+            _cameraManager = new CameraManager(Camera.main);
         }
 
         public void HandleJump()
         {
             if (_inputService.JumpButtonDown())
             {
-                _movementService.AddJump();
+                _playerMovementService.AddJump();
             }
         }
         public void HandleMove()
         {
             var input = _inputService.GetMove();
-            _movementService.AddRun(input);
-            _movementService.Move();
+            
+            _playerMovementService.AddRun(input);
+            _playerMovementService.Move();
+        }
+
+        public void HandlePlayerRotation(Transform player)
+        {
+            var look = _inputService.GetLook();
+            
+            player.Rotate(Vector3.up * look.x);
+        }
+        public void HandleCameraRotation(Transform head, Transform player)
+        {
+            _cameraManager.FollowPosition(head);
+            
+            var look = _inputService.GetLook();
+            _cameraManager.FollowRotation(look.y, player.rotation.eulerAngles.y);
         }
     }
 }

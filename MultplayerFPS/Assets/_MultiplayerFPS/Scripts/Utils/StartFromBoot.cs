@@ -12,7 +12,7 @@ namespace _MultiplayerFPS.Scripts.Game.Utils
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void AutostartGame()
         {
-            //SceneManager.LoadScene("Boot");
+            SceneManager.LoadScene("Boot");
         }
     }
 }
