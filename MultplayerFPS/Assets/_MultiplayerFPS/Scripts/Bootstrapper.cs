@@ -1,5 +1,6 @@
 using System.Collections;
 using _MultiplayerFPS.Scripts.Services.Config;
+using _MultiplayerFPS.Scripts.Services.LoggerService;
 using _MultiplayerFPS.Scripts.Utils;
 using _MultiplayerFPS.Scripts.Utils.ExceptionPopUp;
 using _MultiplayerFPS.Scripts.Utils.LoadingScreen;
@@ -25,6 +26,8 @@ public class Bootstrapper : MonoBehaviour
         ServiceLocator.Current.Register<IExceptionUIService>(exceptionUIService);
         var configsService = new ConfigService(_configs);
         ServiceLocator.Current.Register<IConfigService>(configsService);
+        var consoleLoggerService = new ConsoleLoggerService();
+        ServiceLocator.Current.Register<ILoggerService>(consoleLoggerService);
 
         _dontDestroyOnLoadUIView.Init(_netManager);
 
