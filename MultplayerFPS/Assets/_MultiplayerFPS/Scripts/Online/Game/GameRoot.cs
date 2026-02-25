@@ -11,7 +11,10 @@ namespace _MultiplayerFPS.Scripts
     [DefaultExecutionOrder(-1000)]
     public class GameRoot : NetworkBehaviour
     {
-        
+        public override void OnStartClient()
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
         public override void OnStartServer()
         {
         }
@@ -19,16 +22,8 @@ namespace _MultiplayerFPS.Scripts
         {
             
         }
-
-        public override void OnStartClient()
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-
         public override void OnStopClient()
         {
-            ServiceLocator.Current.Unregister<IInputService>();
-            ServiceLocator.Current.Unregister<IPlayerMovementService>();
         }
     }
 }

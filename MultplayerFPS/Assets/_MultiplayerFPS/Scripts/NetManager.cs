@@ -147,7 +147,7 @@ public class NetManager : NetworkRoomManager
         GameObject roomPlayer, GameObject gamePlayer)
     {
         var networkPlayer =  roomPlayer.GetComponent<NetworkPlayer>();
-        var gameNetworkPlayer = gamePlayer.GetComponent<GameNetworkPlayer>();
+        var gameNetworkPlayer = gamePlayer.GetComponent<GameNetworkPlayerView>();
         gameNetworkPlayer.Nickname =  networkPlayer.Nickname;
         gameNetworkPlayer.Color = networkPlayer.Color;
         return true;

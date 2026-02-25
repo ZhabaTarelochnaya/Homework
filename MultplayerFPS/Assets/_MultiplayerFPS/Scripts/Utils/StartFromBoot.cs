@@ -12,7 +12,9 @@ namespace _MultiplayerFPS.Scripts.Game.Utils
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void AutostartGame()
         {
-            SceneManager.LoadScene("Boot");
+            #if UNITY_EDITOR
+                SceneManager.LoadScene("Boot");
+            #endif
         }
     }
 }

@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3232600926293641778}
   - component: {fileID: 8937598044557460890}
+  - component: {fileID: 5382530239579014548}
   - component: {fileID: 4500447363394265266}
   - component: {fileID: 3073585225321600875}
   - component: {fileID: 1058734548952967236}
@@ -83,11 +84,27 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  _characterController: {fileID: 3073585225321600875}
+  _gameNetworkPlayerView: {fileID: 5382530239579014548}
+--- !u!114 &5382530239579014548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6475772093013630939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86a9dbe27cef4464a292da3c14ede2fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
   Nickname: 
   Color: {r: 0, g: 0, b: 0, a: 0}
   _nicknameTagViewPrefab: {fileID: 25727620182926670, guid: cd41c94543e12a0478f9c9e23926016b, type: 3}
   _renderer: {fileID: 5846004343312526087}
-  _characterController: {fileID: 3073585225321600875}
   _animator: {fileID: 6485860068272453233}
   _headTransform: {fileID: 8981002603067325784}
 --- !u!136 &4500447363394265266
