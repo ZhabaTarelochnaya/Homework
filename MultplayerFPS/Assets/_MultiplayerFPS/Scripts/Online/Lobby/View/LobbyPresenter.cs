@@ -30,26 +30,27 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
         }
         public void Enable()
         {
-            _colorPickerPresenter.Enable();
-            _playerListPresenter.Enable();
-            _lobbyView.Enable();
             _lobbyView.ReadyPressed += LobbyViewOnReadyPressed;
             _lobbyView.NicknameEditEnded += LobbyViewOnNicknameEditEnded;
             _lobbyView.StopPressed += LobbyViewOnStopPressed;
             _lobbyView.StartGamePressed += LobbyViewOnStartGamePressed;
             _lobbyState.AllPlayersReadyChanged += OnAllPlayersReadyChanged;
+            
+            _colorPickerPresenter.Enable();
+            _playerListPresenter.Enable();
+            _lobbyView.Enable();
         }
 
         public void Disable()
         {
+            _colorPickerPresenter.Disable();
+            _playerListPresenter.Disable();
+            _lobbyView.Disable();
             _lobbyView.ReadyPressed -= LobbyViewOnReadyPressed;
             _lobbyView.NicknameEditEnded -= LobbyViewOnNicknameEditEnded;
             _lobbyView.StopPressed -= LobbyViewOnStopPressed;
             _lobbyView.StartGamePressed -= LobbyViewOnStartGamePressed;
             _lobbyState.AllPlayersReadyChanged -= OnAllPlayersReadyChanged;
-            _colorPickerPresenter.Disable();
-            _playerListPresenter.Disable();
-            _lobbyView.Disable();
         }
         void LobbyViewOnStartGamePressed()
         {

@@ -1,5 +1,6 @@
 using System;
 using _MultiplayerFPS.Scripts.Utils;
+using Mirror;
 using TMPro;
 using UnityEngine;
 
@@ -18,6 +19,10 @@ public class DontDestroyOnLoadUIView : MonoBehaviour
         _netManager.LocalClientDisconnected += NetManagerOnLocalClientDisconnected;
     }
     void NetManagerOnLocalClientConnecting() => _statusText.text = "Status: Connecting...";
-    void NetManagerOnLocalClientConnected() => _statusText.text = "Status: Connected";
+    void NetManagerOnLocalClientConnected()
+    {
+        _statusText.text = NetworkServer.activeHost ? "Status: Host" : "Status: Client";
+    }
+
     void NetManagerOnLocalClientDisconnected() => _statusText.text = "Status: Disconnected";
 }

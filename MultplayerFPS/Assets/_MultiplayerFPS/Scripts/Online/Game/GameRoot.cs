@@ -13,8 +13,13 @@ namespace _MultiplayerFPS.Scripts
     public class GameRoot : NetworkBehaviour
     {
         ILoggerService _loggerService;
+        HUDPresenter _hudPresenter;
+        [SerializeField] HUDView _hudPrefab;
         public override void OnStartClient()
         {
+            var hudView = Instantiate(_hudPrefab);
+            _hudPresenter = new HUDPresenter(hudView);
+            
             Cursor.lockState = CursorLockMode.Locked;
             _loggerService = ServiceLocator.Current.Get<ILoggerService>();
             _loggerService.Log("Match started");
