@@ -1,4 +1,3 @@
-using System;
 using Mirror;
 using UnityEngine;
 
@@ -12,17 +11,22 @@ namespace _MultiplayerFPS.Scripts.Components.Health
         [field: SerializeField] public int MaxHp { get; set; }
         
         public delegate void CurrentHpChangedHandler(int currentHp, int damage);
-        public event CurrentHpChangedHandler CurrentHpChanged;
-        
+        public event CurrentHpChangedHandler ClientCurrentHpChanged;
+        public override void OnStartServer()
+        {
+            _currentHp = MaxHp;
+        }
+
         [Server]
         public void Damage(int damage)
         {
             var currentHp = _currentHp - damage;
             _currentHp = Mathf.Clamp(currentHp, 0, MaxHp);
+            Debug.Log(_currentHp);
         }
         void OnCurrentHpChanged(int oldHp, int newHp)
         {
-            CurrentHpChanged?.Invoke(_currentHp,oldHp - newHp);
+            ClientCurrentHpChanged?.Invoke(_currentHp,oldHp - newHp);
         }
     }
 }

@@ -15,9 +15,9 @@ namespace _MultiplayerFPS.Scripts.Components.Health
             var hitBox = other.GetComponent<HitBox>();
             _health.Damage(hitBox.Damage * DamageMultiplayer);
         }
-        public override void OnStartClient()
+        public void Damage(int damage)
         {
-            gameObject.SetActive(false);
+            _health.Damage(damage * DamageMultiplayer);
         }
         protected override void OnValidate() { }
     }

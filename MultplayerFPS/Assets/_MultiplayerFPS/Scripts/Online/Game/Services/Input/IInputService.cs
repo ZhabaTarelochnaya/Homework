@@ -6,7 +6,9 @@ namespace _MultiplayerFPS.Scripts.Services.InputService
     public interface IInputService : IService
     {
         public Vector2 GetMove();
-        public bool JumpButtonDown();
+        public bool GetJumpButtonDown();
         public Vector2 GetLook();
+        public bool GetShootButtonDown();
+        public bool GetShootButton();
     }
 }

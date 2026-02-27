@@ -22,7 +22,7 @@ namespace _MultiplayerFPS.Scripts.Controllers
 
         public void HandleJump()
         {
-            if (_inputService.JumpButtonDown())
+            if (_inputService.GetJumpButtonDown())
             {
                 _playerMovementService.AddJump();
             }
