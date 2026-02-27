@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -24,11 +23,14 @@ namespace _MultiplayerFPS.Scripts
             _trailRendererPool = new ObjectPool<TrailRenderer>(_bulletTrailPrefab);
             _particleSystemPool = new ObjectPool<ParticleSystem>(_hitParticlesPrefab);
         }
-        public void SpawnMuzzleFlash()
+        public void ShowMuzzleFlash()
+        {
+            StartCoroutine(Flash());
+        }
+        public void PlayShootSound()
         {
             _audioSource.pitch = Random.Range(0.9f, 1.1f);
             _audioSource.PlayOneShot(_audioSource.clip, _audioSource.volume);
-            StartCoroutine(Flash());
         }
         public void SpawnTrail(Vector3 endPos)
         {
@@ -44,14 +46,6 @@ namespace _MultiplayerFPS.Scripts
             yield return _muzzleFlashWait;
             _muzzleFlash.SetActive(false);
         }
-        // IEnumerator SpawnTrailRoutine(Vector3 endPos)
-        // {
-        //     var trail = _trailRendererPool.Get();
-        //     trail.SetPosition(0, ShootPosition.position);
-        //     trail.SetPosition(1, endPos);
-        //     yield return _effectDestroyWait;
-        //     _trailRendererPool.Return(trail);
-        // }
         IEnumerator SpawnTrailRoutine(Vector3 endPos)
         {
             var trail = _trailRendererPool.Get();

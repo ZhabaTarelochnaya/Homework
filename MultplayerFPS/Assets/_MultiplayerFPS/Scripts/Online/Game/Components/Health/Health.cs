@@ -15,6 +15,7 @@ namespace _MultiplayerFPS.Scripts.Components.Health
         public override void OnStartServer()
         {
             _currentHp = MaxHp;
+            
         }
 
         [Server]

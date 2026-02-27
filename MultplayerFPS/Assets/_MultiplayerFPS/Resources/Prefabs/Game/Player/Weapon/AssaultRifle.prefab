@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <ShootPosition>k__BackingField: {fileID: 824363242122186745}
-  flashDuration: 0.1
+  flashDuration: 0.08
   _muzzleFlash: {fileID: 4596112958013741108}
   _bulletTrailPrefab: {fileID: 3807948661796015655, guid: 345039777404f2744914dca6b21332d8, type: 3}
   _hitParticlesPrefab: {fileID: 5430360273491750269, guid: 1954766559c590642ab4df73c7832461, type: 3}
@@ -236,7 +236,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: 510e0a736e5e66243b242a076c59611a, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 510e0a736e5e66243b242a076c59611a, type: 3}
       propertyPath: m_LocalPosition.x

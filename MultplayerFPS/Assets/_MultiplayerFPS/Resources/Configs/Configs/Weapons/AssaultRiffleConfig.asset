@@ -15,3 +15,4 @@ MonoBehaviour:
   <Damage>k__BackingField: 1
   <FireRate>k__BackingField: 10
   <Range>k__BackingField: Infinity
+  <Prefab>k__BackingField: {fileID: 868963202465490056, guid: 304366522831ac5468d6bc797cc4a0dd, type: 3}

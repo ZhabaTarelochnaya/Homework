@@ -13,13 +13,11 @@ namespace _MultiplayerFPS.Scripts
     public class GameNetworkPlayer : NetworkBehaviour
     {
         IInputService _inputService;
-        IWeaponView _view;
-        float _timer;
         PlayerController _playerController;
         [SerializeField] CharacterController _characterController;
         [SerializeField] GameNetworkPlayerView _gameNetworkPlayerView;
         [SerializeField] Weapon _weapon;
-        [SerializeField] GameObject _weaponView;
+        [SerializeField] Transform _cameraTarget;
         
         public override void OnStartLocalPlayer()
         {
@@ -27,16 +25,19 @@ namespace _MultiplayerFPS.Scripts
             ServiceLocator.Current.Register<IInputService>(inputService);
             var moveService = new CharacterControllerPlayerMovementService(_characterController);
             ServiceLocator.Current.Register<IPlayerMovementService>(moveService);
-            _inputService = inputService;
+            var cameraManager = new CameraManager(Camera.main);
+            ServiceLocator.Current.Register<ICameraManager>(cameraManager);
+            
             _playerController = new PlayerController();
-            _gameNetworkPlayerView.Init(_playerController);
+            _gameNetworkPlayerView.Init();
+            _weapon.Init();
         }
         public override void OnStopLocalPlayer()
         {
             ServiceLocator.Current.Unregister<IInputService>();
             ServiceLocator.Current.Unregister<IPlayerMovementService>();
+            ServiceLocator.Current.Unregister<ICameraManager>();
         }
-
         void Update()
         {
             if (isLocalPlayer)
@@ -44,31 +45,16 @@ namespace _MultiplayerFPS.Scripts
                 _playerController.HandleMove();
                 _playerController.HandleJump();
                 _playerController.HandlePlayerRotation(transform);
+                _playerController.HandleShoot(_weapon);
                 
-                if (_inputService.GetShootButton())
-                {
-                    // var shootPos = _weapon.ShootSource.position;
-                    // var shootDirection = _weapon.ShootSource.forward;
-                    // _weapon.CmdShoot(shootPos, shootDirection);
-                    Camera cam = Camera.main;
-
-                    Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-
-                    Vector3 targetPoint;
-
-                    if (Physics.Raycast(ray, out RaycastHit hit, _weapon.Config.Range))
-                    {
-                        targetPoint = hit.point;
-                    }
-                    else
-                    {
-                        targetPoint = ray.origin + ray.direction * _weapon.Config.Range;
-                    }
-                    Vector3 shootOrigin = _weapon.ShootSource.position;
-                    Vector3 shootDirection = (targetPoint - shootOrigin).normalized;
-                    _weapon.CmdShoot(shootOrigin, shootDirection);
-                }
-                
+                _gameNetworkPlayerView.HandleAnimations();
+            }
+        }
+        void LateUpdate()
+        {
+            if (isLocalPlayer)
+            {
+                _playerController.HandleCameraRotation(_cameraTarget, transform);
             }
         }
     }

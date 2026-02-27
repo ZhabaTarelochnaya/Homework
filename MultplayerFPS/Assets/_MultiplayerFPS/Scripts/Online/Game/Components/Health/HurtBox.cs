@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace _MultiplayerFPS.Scripts.Components.Health
 {
-    public class HurtBox : NetworkBehaviour
+    public class HurtBox : MonoBehaviour
     {
         [SerializeField] Health _health;
 
@@ -19,6 +19,5 @@ namespace _MultiplayerFPS.Scripts.Components.Health
         {
             _health.Damage(damage * DamageMultiplayer);
         }
-        protected override void OnValidate() { }
     }
 }

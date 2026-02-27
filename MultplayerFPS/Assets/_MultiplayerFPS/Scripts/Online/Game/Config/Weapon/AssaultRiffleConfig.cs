@@ -8,5 +8,6 @@ namespace _MultiplayerFPS.Scripts.Config.Weapon
         [field: SerializeField] public int Damage { get; private set; }
         [field: SerializeField] public float FireRate { get; private set; } 
         [field: SerializeField] public float Range { get; private set; } = Mathf.Infinity;
+        [field: SerializeField] public GameObject Prefab { get; private set; }
     }
 }

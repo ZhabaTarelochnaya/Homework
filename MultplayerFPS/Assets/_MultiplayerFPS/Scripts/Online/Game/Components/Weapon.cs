@@ -1,6 +1,10 @@
 using System;
 using _MultiplayerFPS.Scripts.Components.Health;
+using _MultiplayerFPS.Scripts.Config;
 using _MultiplayerFPS.Scripts.Config.Weapon;
+using _MultiplayerFPS.Scripts.Services.Config;
+using _MultiplayerFPS.Scripts.Services.InputService;
+using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 using Mirror;
 using UnityEngine;
 
@@ -8,33 +12,55 @@ namespace _MultiplayerFPS.Scripts.Components
 {
     public class Weapon : NetworkBehaviour
     {
-        IWeaponView _view;
-        float _timer;
-        [SerializeField] GameObject _weaponView;
-        [SerializeField] ScriptableObject _weaponConfig;
-        [SerializeField] LayerMask _layerMask;
+        float _shootTimer;
+        float _effectsTimer;
+        IInputService _inputService;
+        [SerializeField] Transform _hand;
+        [SerializeField] LayerMask _hitLayerMask;
         public IWeaponConfig Config { get; set; }
-        public Transform ShootSource => _view.ShootPosition;
-        void Awake()
-        {
-            _view = _weaponView.GetComponent<IWeaponView>();
-            Config = (IWeaponConfig)_weaponConfig;
-        }
+        public IWeaponView View { get; set; }
+        public Transform ShootOrigin => View.ShootPosition;
 
+        void Start()
+        {
+            var playerConfig = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>();
+            Config = (IWeaponConfig)playerConfig.StartingWeapon;
+            if (isClient)
+            {
+                var instance = Instantiate(Config.Prefab, _hand);
+                View = instance.GetComponent<IWeaponView>();
+            }
+        }
+        public void Init()
+        {
+            _inputService = ServiceLocator.Current.Get<IInputService>();
+        }
         void Update()
         {
-            if (isServer && _timer > 0)
+            if (isServer && _shootTimer > 0)
             {
-                _timer -= Time.deltaTime;
+                _shootTimer -= Time.deltaTime;
+            }
+            
+            if (!isClient || _inputService == null) return;
+            
+            if (_effectsTimer > 0)
+            {
+                _effectsTimer -= Time.deltaTime;
+            }
+            else if (_inputService.GetShootButton())
+            {
+                _effectsTimer = 1 / Config.FireRate;
+                View.PlayShootSound();
+                View.ShowMuzzleFlash();
             }
         }
         [Command]
         public void CmdShoot(Vector3 origin, Vector3 direction)
         {
-            if (_timer > 0) return;
-            _timer = 1 / Config.FireRate;
-            SpawnMuzzleFlash(connectionToClient);
-            if (Physics.Raycast(origin, direction, out RaycastHit hit, Config.Range, _layerMask))
+            if (_shootTimer > 0) return;
+            _shootTimer = 1 / Config.FireRate;
+            if (Physics.Raycast(origin, direction, out RaycastHit hit, Config.Range, _hitLayerMask))
             {
                 if (hit.collider.TryGetComponent(out HurtBox hurtBox))
                 {
@@ -49,21 +75,15 @@ namespace _MultiplayerFPS.Scripts.Components
                 RpcSpawnTrail(endPos);
             }
         }
-
-        [TargetRpc]
-        void SpawnMuzzleFlash(NetworkConnectionToClient target)
-        {
-            _view.SpawnMuzzleFlash();
-        }
         [ClientRpc]
         void RpcSpawnTrail(Vector3 hitPos)
         {
-            _view.SpawnTrail(hitPos);
+            View.SpawnTrail(hitPos);
         }
         [ClientRpc]
         void RpcSpawnHit(Vector3 hitPos, Vector3 normal)
         {
-            _view.SpawnHit(hitPos, normal);
+            View.SpawnHit(hitPos, normal);
         }
     }
 }

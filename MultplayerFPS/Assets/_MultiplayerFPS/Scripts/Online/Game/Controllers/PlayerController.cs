@@ -1,3 +1,4 @@
+using _MultiplayerFPS.Scripts.Components;
 using _MultiplayerFPS.Scripts.Config;
 using _MultiplayerFPS.Scripts.Services.Config;
 using _MultiplayerFPS.Scripts.Services.InputService;
@@ -11,13 +12,13 @@ namespace _MultiplayerFPS.Scripts.Controllers
     {
         readonly IInputService _inputService;
         readonly IPlayerMovementService _playerMovementService;
-        readonly CameraManager _cameraManager;
+        readonly ICameraManager _cameraManager;
         
         public PlayerController()
         {
             _inputService = ServiceLocator.Current.Get<IInputService>();
             _playerMovementService = ServiceLocator.Current.Get<IPlayerMovementService>();
-            _cameraManager = new CameraManager(Camera.main);
+            _cameraManager = ServiceLocator.Current.Get<ICameraManager>();
         }
 
         public void HandleJump()
@@ -47,6 +48,27 @@ namespace _MultiplayerFPS.Scripts.Controllers
             
             var look = _inputService.GetLook();
             _cameraManager.FollowRotation(look.y, player.rotation.eulerAngles.y);
+        }
+        public void HandleShoot(Weapon weapon)
+        {
+            if (_inputService.GetShootButton())
+            {
+                Camera cam = _cameraManager.CurrentCamera;
+                Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+                Vector3 targetPoint;
+                if (Physics.Raycast(ray, out RaycastHit hit, weapon.Config.Range))
+                {
+                    targetPoint = hit.point;
+                }
+                else
+                {
+                    targetPoint = ray.origin + ray.direction * weapon.Config.Range;
+                }
+                Vector3 shootOrigin = weapon.ShootOrigin.position;
+                Vector3 shootDirection = (targetPoint - shootOrigin).normalized;
+                
+                weapon.CmdShoot(shootOrigin, shootDirection);
+            }
         }
     }
 }
