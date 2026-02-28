@@ -1,4 +1,6 @@
 using System;
+using _MultiplayerFPS.Scripts.Components;
+using _MultiplayerFPS.Scripts.Config.Pickup;
 using Mirror;
 using UnityEngine;
 
@@ -20,6 +22,9 @@ namespace _MultiplayerFPS.Scripts.State
         public bool IsReloading;
         [SyncVar(hook = nameof(OnIsDeadChanged)), HideInInspector] 
         public bool IsDead;
+        [SyncVar, HideInInspector]
+        public Vector3 Position;
+        public readonly SyncList<PickupName> Pickups = new ();
         
         public event Action<string> NicknameChanged;
         public event Action<Color> ColorChanged;
@@ -28,6 +33,9 @@ namespace _MultiplayerFPS.Scripts.State
         public event Action<bool> IsShootingChanged;
         public event Action<bool> IsReloadingChanged;
         public event Action<bool> IsDeadChanged;
+        
+        [Command]
+        public void CmdChangePosition(Vector3 position) => Position = position;
 
         void OnNicknameChanged(string oldNickname, string newNickname) => NicknameChanged?.Invoke(newNickname);
         void OnColorChanged(Color oldColor, Color newColor) => ColorChanged?.Invoke(newColor);

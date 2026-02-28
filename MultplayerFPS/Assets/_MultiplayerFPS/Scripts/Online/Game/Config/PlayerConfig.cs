@@ -10,6 +10,7 @@ namespace _MultiplayerFPS.Scripts.Config
         [field: SerializeField] public float Gravity { get; private set; } = 1f;
         [field: SerializeField] public float RespawnTime { get; private set; } = 3;
         [field: SerializeField] public int MaxHealth { get; private set; } = 100;
+        [field: SerializeField] public float PickupRange { get; private set; } = 0.6f;
         [field: SerializeField] public ScriptableObject StartingWeapon { get; private set; }
     }
 }

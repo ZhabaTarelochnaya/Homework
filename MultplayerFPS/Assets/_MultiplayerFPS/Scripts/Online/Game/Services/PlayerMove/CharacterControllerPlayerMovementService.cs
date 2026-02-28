@@ -1,5 +1,7 @@
 using _MultiplayerFPS.Scripts.Config;
 using _MultiplayerFPS.Scripts.Services.Config;
+using _MultiplayerFPS.Scripts.Services.State;
+using _MultiplayerFPS.Scripts.State;
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 using UnityEngine;
 
@@ -12,12 +14,14 @@ namespace _MultiplayerFPS.Scripts.Services.Move
         Vector3 _movement;
         float _verticalVelocity;
         PlayerConfig _playerConfig;
+        PlayerState _playerState;
         
         public Vector3 Velocity { get; private set; }
         
-        public CharacterControllerPlayerMovementService(CharacterController characterController)
+        public CharacterControllerPlayerMovementService(CharacterController characterController, PlayerState playerState)
         {
             _characterController = characterController;
+            _playerState = playerState;
             _playerConfig = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>();
         }
         
@@ -38,6 +42,7 @@ namespace _MultiplayerFPS.Scripts.Services.Move
             HandleGravity();
             Velocity = _movement;
             _characterController.Move(_movement * Time.deltaTime);
+            _playerState.CmdChangePosition(_characterController.transform.position);
             _movement = Vector3.zero;
         }
         void HandleGravity()

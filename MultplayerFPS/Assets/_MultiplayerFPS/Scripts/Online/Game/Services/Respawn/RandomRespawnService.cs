@@ -11,7 +11,7 @@ namespace _MultiplayerFPS.Scripts.Services.Respawn
         }
         public void Respawn(CharacterController player)
         {
-            Transform spawnPoint = GetNextSpawnPoint();
+            var spawnPoint = GetNextSpawnPoint();
             player.enabled = false;
             player.transform.SetPositionAndRotation(
                 spawnPoint.position,

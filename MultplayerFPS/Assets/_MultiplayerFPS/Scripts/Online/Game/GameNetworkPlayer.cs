@@ -53,7 +53,7 @@ namespace _MultiplayerFPS.Scripts
             {
                 var inputService = new MouseKeyboardInputService();
                 ServiceLocator.Current.Register<IInputService>(inputService);
-                var moveService = new CharacterControllerPlayerMovementService(_characterController);
+                var moveService = new CharacterControllerPlayerMovementService(_characterController, _playerState);
                 ServiceLocator.Current.Register<IPlayerMovementService>(moveService);
                 var cameraManager = new CameraManager(Camera.main);
                 ServiceLocator.Current.Register<ICameraManager>(cameraManager);

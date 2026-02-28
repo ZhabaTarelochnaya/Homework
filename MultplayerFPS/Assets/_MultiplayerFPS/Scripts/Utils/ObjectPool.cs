@@ -36,7 +36,22 @@ public class ObjectPool<T> where T : Component
         obj.gameObject.SetActive(true);
         return obj;
     }
-
+    /// <summary>
+    /// Returns true if object was instantiated.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns>isInstantiated</returns>
+    public bool Get(out T obj)
+    {
+        bool isPoolEmpty = pool.Count == 0;
+        if (isPoolEmpty)
+        {
+            CreateNewObject();
+        }
+        obj = pool.Dequeue();
+        obj.gameObject.SetActive(true);
+        return isPoolEmpty;
+    }
     public void Return(T obj)
     {
         obj.gameObject.SetActive(false);

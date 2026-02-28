@@ -36,5 +36,19 @@ namespace _MultiplayerFPS.Scripts.Services.Config
             Debug.LogError($"Couldn't find config of type {type}");
             return null;
         }
+        public IReadOnlyList<T> GetAll<T>() where T : ScriptableObject
+        {
+            var result = new List<T>();
+
+            foreach (var config in _configs.Values)
+            {
+                if (config is T baseConfig)
+                {
+                    result.Add(baseConfig);
+                }
+            }
+
+            return result;
+        }
     }
 }
