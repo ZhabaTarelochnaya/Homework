@@ -29,7 +29,6 @@ namespace _MultiplayerFPS.Scripts
         [SerializeField] NicknameTagView _nicknameTagViewPrefab;
         [SerializeField] Renderer _renderer;
         [SerializeField] Animator _animator;
-        [SerializeField] Weapon _weapon;
         [SerializeField] GameObject _disableOnDeath;
         
         public override void OnStartClient()
@@ -115,11 +114,6 @@ namespace _MultiplayerFPS.Scripts
         void PlayerStateOnIsShootingChanged(bool obj)
         {
             _animator.SetBool(IsShooting, obj);
-            if (obj)
-            {
-                _weapon.View.PlayShootSound();
-                _weapon.View.ShowMuzzleFlash();
-            }
         }
         void PlayerStateOnIsReloadingChanged(bool obj) => _animator.SetBool(IsReloading, obj);
     }

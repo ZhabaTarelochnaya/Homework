@@ -23,6 +23,7 @@ namespace _MultiplayerFPS.Scripts.Components
         Coroutine _reloadCoroutine;
         [SerializeField] Transform _hand;
         [SerializeField] LayerMask _hitLayerMask;
+        [SerializeField] AudioSource _hitSoundSource;
         public IWeaponConfig Config { get; set; }
         public IWeaponView View { get; set; }
         public Transform ShootOrigin => View.ShootPosition;
@@ -70,7 +71,6 @@ namespace _MultiplayerFPS.Scripts.Components
             _playerState.IsReloading = false;
             StopCoroutine(_reloadCoroutine);
         }
-
         [Command]
         public void CmdStartReload()
         {
@@ -89,12 +89,15 @@ namespace _MultiplayerFPS.Scripts.Components
             _playerState.IsShooting = true;
             if (Physics.Raycast(origin, direction, out RaycastHit hit, Config.Range, _hitLayerMask))
             {
+                PlayShootEffects(connectionToClient);
+                RpcSpawnTrail(hit.point);
+                RpcSpawnHit(hit.point, hit.normal);
                 if (hit.collider.TryGetComponent(out HurtBox hurtBox))
                 {
                     hurtBox.Damage(Config.Damage);
+                    PlayTargetHitSound(connectionToClient);
                 }
-                RpcSpawnTrail(hit.point);
-                RpcSpawnHit(hit.point, hit.normal);
+                
             }
             else
             {
@@ -113,6 +116,17 @@ namespace _MultiplayerFPS.Scripts.Components
             View.SpawnHit(hitPos, normal);
         }
 
+        [TargetRpc]
+        void PlayTargetHitSound(NetworkConnectionToClient conn)
+        {
+            _hitSoundSource.PlayOneShot(_hitSoundSource.clip, _hitSoundSource.volume);
+        }
+        [TargetRpc]
+        void PlayShootEffects(NetworkConnectionToClient conn)
+        {
+            View.ShowMuzzleFlash();
+            View.PlayShootSound();
+        }
         IEnumerator Reload()
         {
             _playerState.IsReloading = true;
