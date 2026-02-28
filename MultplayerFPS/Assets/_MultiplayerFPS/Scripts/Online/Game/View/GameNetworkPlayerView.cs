@@ -3,6 +3,8 @@ using _MultiplayerFPS.Scripts.Components;
 using _MultiplayerFPS.Scripts.Controllers;
 using _MultiplayerFPS.Scripts.Services.InputService;
 using _MultiplayerFPS.Scripts.Services.LoggerService;
+using _MultiplayerFPS.Scripts.Services.State;
+using _MultiplayerFPS.Scripts.State;
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 using Mirror;
 using UnityEngine;
@@ -14,13 +16,10 @@ namespace _MultiplayerFPS.Scripts
         static readonly int MoveHorizontal = Animator.StringToHash("MoveHorizontal");
         static readonly int MoveVertical = Animator.StringToHash("MoveVertical");
         
-        [SyncVar(hook = nameof(OnNicknameChanged)), HideInInspector] 
-        public string Nickname;
-        [SyncVar(hook = nameof(OnColorChanged)), HideInInspector]  
-        public Color Color;
         
         IInputService _inputService;
         ILoggerService _loggerService;
+        IStateService _stateService;
         NicknameTagView _nicknameTagView;
         
         [SerializeField] NicknameTagView _nicknameTagViewPrefab;
@@ -30,20 +29,47 @@ namespace _MultiplayerFPS.Scripts
         public override void OnStartClient()
         {
             _nicknameTagView = Instantiate(_nicknameTagViewPrefab, transform);
-            OnNicknameChanged("", Nickname);
-            OnColorChanged(Color.black, Color);
-
-            _loggerService = ServiceLocator.Current.Get<ILoggerService>();
-            _loggerService.Log($"Player {Nickname} (netId: {netId}) joined the game.");
+            
+            if (isLocalPlayer)
+            {
+                _inputService = ServiceLocator.Current.Get<IInputService>();
+            }
+            
+            _stateService = ServiceLocator.Current.Get<IStateService>();
+            foreach (var netId in _stateService.GameState.PlayerStates.Keys)
+            {
+                OnAdd(netId);
+            }
+            _stateService.GameState.PlayerStates.OnAdd += OnAdd;
+            _stateService.GameState.PlayerStates.OnRemove += OnRemove;
         }
-
-        public void Init()
+        void OnAdd(uint netId)
         {
-            _inputService = ServiceLocator.Current.Get<IInputService>();
+            var playerState = _stateService.GetPlayerState(netId);
+            
+            OnNicknameChanged(playerState.Nickname);
+            OnColorChanged( playerState.Color);
+            playerState.NicknameChanged += OnNicknameChanged;
+            playerState.ColorChanged += OnColorChanged;
+            
+            if (isLocalPlayer)
+            {
+                var loggerService = ServiceLocator.Current.Get<ILoggerService>();
+                loggerService.Log($"Player {playerState.Nickname} (netId: {netId}) joined the game.");
+            }
+        }
+        void OnRemove(uint netId, PlayerState state)
+        {
+            state.NicknameChanged -= OnNicknameChanged;
+            state.ColorChanged -= OnColorChanged;
         }
         public override void OnStopClient()
         {
-            _loggerService.Log($"Player {Nickname} (netId: {netId}) left the game.");
+            var player = _stateService.GetPlayerState(netId);
+            var loggerService = ServiceLocator.Current.Get<ILoggerService>();
+            loggerService.Log($"Player {player.Nickname} (netId: {netId}) left the game.");
+            _stateService.GameState.PlayerStates.OnAdd -= OnAdd;
+            _stateService.GameState.PlayerStates.OnRemove -= OnRemove;
         }
         public void HandleAnimations()
         {
@@ -51,14 +77,12 @@ namespace _MultiplayerFPS.Scripts
             _animator.SetInteger(MoveVertical, (int)move.y);
             _animator.SetInteger(MoveHorizontal, (int)move.x);
         }
-        void OnNicknameChanged(string oldNickname, string newNickname)
+        void OnNicknameChanged(string newNickname)
         {
-            if (!_nicknameTagView) return;
-            _nicknameTagView?.SetNickname(newNickname);
+            _nicknameTagView.SetNickname(newNickname);
         }
-        void OnColorChanged(Color oldColor, Color newColor)
+        void OnColorChanged(Color newColor)
         {
-            if (!_nicknameTagView) return;
             _nicknameTagView.SetColor(newColor);
             _renderer.material.color = newColor;
         }

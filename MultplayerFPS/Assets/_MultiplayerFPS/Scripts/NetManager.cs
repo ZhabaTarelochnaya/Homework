@@ -147,9 +147,8 @@ public class NetManager : NetworkRoomManager
         GameObject roomPlayer, GameObject gamePlayer)
     {
         var networkPlayer =  roomPlayer.GetComponent<NetworkPlayer>();
-        var gameNetworkPlayer = gamePlayer.GetComponent<GameNetworkPlayerView>();
-        gameNetworkPlayer.Nickname =  networkPlayer.Nickname;
-        gameNetworkPlayer.Color = networkPlayer.Color;
+        var gameNetworkPlayer = gamePlayer.GetComponent<GameNetworkPlayer>();
+        gameNetworkPlayer.Init(networkPlayer.Nickname, networkPlayer.Color);
         return true;
     }
     public override void OnClientError(TransportError error, string reason)
