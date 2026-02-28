@@ -1613,13 +1613,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 629452000}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalRotation: {x: 0.48394608, y: -0.29747826, z: -0.0046622055, w: 0.822971}
+  m_LocalPosition: {x: -27.1, y: 22.8, z: 49.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 52.54, y: -54.336, z: -29.079}
 --- !u!1 &694118151
 GameObject:
   m_ObjectHideFlags: 0
@@ -2446,7 +2446,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  _hudPrefab: {fileID: -7191704096844636504, guid: 5c6d4cf8b5ba67545a20c896044f909a, type: 3}
   _gameState: {fileID: 2086645744}
   _spawnPoints:
   - {fileID: 981465003}

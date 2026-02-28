@@ -53,10 +53,7 @@ namespace _MultiplayerFPS.Scripts
         {
             var playerState = _stateService.GetPlayerState(netId);
             
-            OnNicknameChanged(playerState.Nickname);
-            OnColorChanged( playerState.Color);
-            playerState.NicknameChanged += OnNicknameChanged;
-            playerState.ColorChanged += OnColorChanged;
+            
 
             if (isLocalPlayer)
             {
@@ -65,6 +62,10 @@ namespace _MultiplayerFPS.Scripts
             }
             
             if (netId != this.netId) return;
+            OnNicknameChanged(playerState.Nickname);
+            OnColorChanged( playerState.Color);
+            playerState.NicknameChanged += OnNicknameChanged;
+            playerState.ColorChanged += OnColorChanged;
             playerState.IsShootingChanged += PlayerStateOnIsShootingChanged;
             playerState.IsReloadingChanged += PlayerStateOnIsReloadingChanged; 
             playerState.IsDeadChanged += PlayerStateOnIsDeadChanged;
