@@ -87,17 +87,19 @@ namespace _MultiplayerFPS.Scripts.Components
             _shootTimer = 1 / Config.FireRate;
             _playerState.CurrentAmmo--;
             _playerState.IsShooting = true;
+            PlayShootEffects(connectionToClient);
             if (Physics.Raycast(origin, direction, out RaycastHit hit, Config.Range, _hitLayerMask))
             {
-                PlayShootEffects(connectionToClient);
                 RpcSpawnTrail(hit.point);
-                RpcSpawnHit(hit.point, hit.normal);
+                if (hit.collider)
+                {
+                    RpcSpawnHit(hit.point, hit.normal);
+                }
                 if (hit.collider.TryGetComponent(out HurtBox hurtBox))
                 {
                     hurtBox.Damage(Config.Damage);
                     PlayTargetHitSound(connectionToClient);
                 }
-                
             }
             else
             {

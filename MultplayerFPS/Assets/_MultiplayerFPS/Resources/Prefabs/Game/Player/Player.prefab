@@ -94,6 +94,7 @@ MonoBehaviour:
   _playerState: {fileID: 2786397991171922247}
   _health: {fileID: 1734681077141525986}
   _disableOnDeath: {fileID: 552143018040800945}
+  _hudViewPrefab: {fileID: -7191704096844636504, guid: 5c6d4cf8b5ba67545a20c896044f909a, type: 3}
 --- !u!114 &2786397991171922247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,7 +135,6 @@ MonoBehaviour:
   _nicknameTagViewPrefab: {fileID: 25727620182926670, guid: cd41c94543e12a0478f9c9e23926016b, type: 3}
   _renderer: {fileID: 5846004343312526087}
   _animator: {fileID: 6485860068272453233}
-  _weapon: {fileID: 2535602694409895224}
   _disableOnDeath: {fileID: 552143018040800945}
 --- !u!114 &1734681077141525986
 MonoBehaviour:
@@ -371,7 +371,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7430711236291276668, guid: e132253ebb13b984f9d4bd1f52d67b0e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.026
+      value: -0.108
       objectReference: {fileID: 0}
     - target: {fileID: 7430711236291276668, guid: e132253ebb13b984f9d4bd1f52d67b0e, type: 3}
       propertyPath: m_LocalRotation.w

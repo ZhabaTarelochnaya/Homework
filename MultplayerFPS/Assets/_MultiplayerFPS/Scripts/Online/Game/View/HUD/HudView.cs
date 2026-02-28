@@ -6,12 +6,15 @@ using UnityEngine;
 
 namespace _MultiplayerFPS.Scripts
 {
-    public class HUDView : MonoBehaviour, IView
+    public class HudView : MonoBehaviour, IHudView
     {
         WaitForSeconds _waitForSeconds = new (0.25f);
         Coroutine _updateCoroutine;
+        HudPresenter _hudPresenter;
         [SerializeField] TMP_Text _pingText;
         [SerializeField] TMP_Text _playerCountText;
+        [SerializeField] TMP_Text _ammoText;
+        [SerializeField] TMP_Text _healthText;
         
         public event Action UpdatingPing;
         
@@ -21,6 +24,8 @@ namespace _MultiplayerFPS.Scripts
         }
         public void SetPing(int ping) => _pingText.text = $"Ping: {ping} ms";
         public void SetPlayerCount(int playerCount) => _playerCountText.text = $"Players: {playerCount}";
+        public void SetAmmo(int current, int max) => _ammoText.text = $"{current}/{max}";
+        public void SetHealth(int health) => _healthText.text = $"{health}";
         public void Enable() => gameObject.SetActive(true);
         public void Disable() => gameObject.SetActive(false);
         

@@ -12,8 +12,6 @@ namespace _MultiplayerFPS.Scripts
     public class GameRoot : NetworkBehaviour
     {
         ILoggerService _loggerService;
-        HUDPresenter _hudPresenter;
-        [SerializeField] HUDView _hudPrefab;
         [SerializeField] GameState _gameState;
         [SerializeField] Transform[] _spawnPoints;
 
@@ -36,8 +34,6 @@ namespace _MultiplayerFPS.Scripts
             var respawnService = new RandomRespawnService(_spawnPoints);
             ServiceLocator.Current.Register<IRespawnService>(respawnService);
             
-            var hudView = Instantiate(_hudPrefab);
-            _hudPresenter = new HUDPresenter(hudView);
             Cursor.lockState = CursorLockMode.Locked;
             _loggerService = ServiceLocator.Current.Get<ILoggerService>();
             _loggerService.Log("Match started");
@@ -47,18 +43,6 @@ namespace _MultiplayerFPS.Scripts
             if (!isServer)
             {
                 ServiceLocator.Current.Unregister<IStateService>();
-            }
-        }
-
-        void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                foreach (var pair in _gameState.PlayerStates)
-                {
-                    Debug.Log(pair.Key);
-                    Debug.Log(pair.Value);
-                }
             }
         }
     }

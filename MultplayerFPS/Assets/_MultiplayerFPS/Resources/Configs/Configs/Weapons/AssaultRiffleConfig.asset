@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96610ea8f1d04a6cb108a061c13bfda4, type: 3}
   m_Name: AssaultRiffleConfig
   m_EditorClassIdentifier: 
-  <Damage>k__BackingField: 1
-  <FireRate>k__BackingField: 10
-  <Range>k__BackingField: Infinity
+  <Damage>k__BackingField: 10
+  <FireRate>k__BackingField: 8
+  <Range>k__BackingField: 15
   <ReloadTime>k__BackingField: 1
   <MaxAmmo>k__BackingField: 50
   <Prefab>k__BackingField: {fileID: 868963202465490056, guid: 304366522831ac5468d6bc797cc4a0dd, type: 3}

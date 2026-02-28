@@ -18,6 +18,7 @@ namespace _MultiplayerFPS.Scripts
     {
         IInputService _inputService;
         PlayerController _playerController;
+        HudPresenter _hudPresenter;
         string _lobbyPlayerNickname;
         Color _lobbyPlayerColor;
         [SerializeField] CharacterController _characterController;
@@ -27,6 +28,7 @@ namespace _MultiplayerFPS.Scripts
         [SerializeField] PlayerState _playerState;
         [SerializeField] Health _health;
         [SerializeField] GameObject _disableOnDeath;
+        [SerializeField] HudView _hudViewPrefab;
         
         public override void OnStartServer()
         {
@@ -34,10 +36,10 @@ namespace _MultiplayerFPS.Scripts
             stateService.GameState.PlayerStates.TryAdd(netId, _playerState);
             _playerState.Nickname = _lobbyPlayerNickname;
             _playerState.Color = _lobbyPlayerColor;
-            _health.MaxHp = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>().MaxHealth;
-            _health.FullHeal();
             _health.ServerCurrentHpChanged += HealthOnServerCurrentHpChanged;
             _health.ServerIsDeadChanged += HealthOnServerIsDeadChanged;
+            _health.MaxHp = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>().MaxHealth;
+            _health.FullHeal();
         }
         [Server]
         public void Init(string nickname, Color color)
@@ -58,6 +60,9 @@ namespace _MultiplayerFPS.Scripts
                 
                 _playerController = new PlayerController(_weapon, _cameraTarget, 
                     _characterController, _health, _playerState);
+                
+                var hudView = Instantiate(_hudViewPrefab);
+                _hudPresenter = new HudPresenter(_weapon, _playerState, hudView);
             }
         }
         public override void OnStopLocalPlayer()
