@@ -15,8 +15,9 @@ namespace _MultiplayerFPS.Scripts
     {
         static readonly int MoveHorizontal = Animator.StringToHash("MoveHorizontal");
         static readonly int MoveVertical = Animator.StringToHash("MoveVertical");
-        
-        
+        static readonly int IsReloading = Animator.StringToHash("IsReloading");
+        static readonly int IsShooting = Animator.StringToHash("IsShooting");
+
         IInputService _inputService;
         ILoggerService _loggerService;
         IStateService _stateService;
@@ -34,7 +35,6 @@ namespace _MultiplayerFPS.Scripts
             {
                 _inputService = ServiceLocator.Current.Get<IInputService>();
             }
-            
             _stateService = ServiceLocator.Current.Get<IStateService>();
             foreach (var netId in _stateService.GameState.PlayerStates.Keys)
             {
@@ -51,17 +51,26 @@ namespace _MultiplayerFPS.Scripts
             OnColorChanged( playerState.Color);
             playerState.NicknameChanged += OnNicknameChanged;
             playerState.ColorChanged += OnColorChanged;
-            
             if (isLocalPlayer)
             {
                 var loggerService = ServiceLocator.Current.Get<ILoggerService>();
                 loggerService.Log($"Player {playerState.Nickname} (netId: {netId}) joined the game.");
+                if (netId == this.netId)
+                {
+                    playerState.IsShootingChanged += PlayerStateOnIsShootingChanged;
+                    playerState.IsReloadingChanged += PlayerStateOnIsReloadingChanged;
+                }
             }
         }
         void OnRemove(uint netId, PlayerState state)
         {
             state.NicknameChanged -= OnNicknameChanged;
             state.ColorChanged -= OnColorChanged;
+            if (netId == this.netId)
+            {
+                state.IsShootingChanged += PlayerStateOnIsShootingChanged;
+                state.IsReloadingChanged += PlayerStateOnIsReloadingChanged;
+            }
         }
         public override void OnStopClient()
         {
@@ -71,7 +80,7 @@ namespace _MultiplayerFPS.Scripts
             _stateService.GameState.PlayerStates.OnAdd -= OnAdd;
             _stateService.GameState.PlayerStates.OnRemove -= OnRemove;
         }
-        public void HandleAnimations()
+        public void HandleRunAnimations()
         {
             var move = _inputService.GetMove();
             _animator.SetInteger(MoveVertical, (int)move.y);
@@ -85,6 +94,14 @@ namespace _MultiplayerFPS.Scripts
         {
             _nicknameTagView.SetColor(newColor);
             _renderer.material.color = newColor;
+        }
+        void PlayerStateOnIsShootingChanged(bool obj)
+        {
+            _animator.SetBool(IsShooting, obj);
+        }
+        void PlayerStateOnIsReloadingChanged(bool obj)
+        {
+            _animator.SetBool(IsReloading, obj);
         }
     }
 }

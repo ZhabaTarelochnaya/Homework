@@ -64,7 +64,7 @@ namespace _MultiplayerFPS.Scripts
             if (isLocalPlayer)
             {
                 _playerController.Update();
-                _gameNetworkPlayerView.HandleAnimations();
+                _gameNetworkPlayerView.HandleRunAnimations();
                 
             }
         }
