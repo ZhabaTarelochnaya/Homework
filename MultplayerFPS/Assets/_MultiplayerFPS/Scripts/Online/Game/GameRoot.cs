@@ -1,5 +1,6 @@
 using System;
 using _MultiplayerFPS.Scripts.Services.LoggerService;
+using _MultiplayerFPS.Scripts.Services.Respawn;
 using _MultiplayerFPS.Scripts.Services.State;
 using _MultiplayerFPS.Scripts.State;
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
@@ -14,6 +15,7 @@ namespace _MultiplayerFPS.Scripts
         HUDPresenter _hudPresenter;
         [SerializeField] HUDView _hudPrefab;
         [SerializeField] GameState _gameState;
+        [SerializeField] Transform[] _spawnPoints;
 
         public override void OnStartServer()
         {
@@ -31,6 +33,8 @@ namespace _MultiplayerFPS.Scripts
                 var stateService = new StateService(_gameState);
                 ServiceLocator.Current.Register<IStateService>(stateService);
             }
+            var respawnService = new RandomRespawnService(_spawnPoints);
+            ServiceLocator.Current.Register<IRespawnService>(respawnService);
             
             var hudView = Instantiate(_hudPrefab);
             _hudPresenter = new HUDPresenter(hudView);

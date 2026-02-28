@@ -16,7 +16,6 @@ namespace _MultiplayerFPS.Scripts.Components
     public class Weapon : NetworkBehaviour
     {
         float _shootTimer;
-        float _effectsTimer;
         float _reloadTimer;
         IInputService _inputService;
         IStateService _stateService;
@@ -60,16 +59,6 @@ namespace _MultiplayerFPS.Scripts.Components
             
             if (!isClient || _inputService == null) return;
             
-            if (_effectsTimer > 0)
-            {
-                _effectsTimer -= Time.deltaTime;
-            }
-            else if (_inputService.GetShootButton() && CurrentAmmo > 0)
-            {
-                _effectsTimer = 1 / Config.FireRate;
-                View.PlayShootSound();
-                View.ShowMuzzleFlash();
-            }
         }
 
         [Command]

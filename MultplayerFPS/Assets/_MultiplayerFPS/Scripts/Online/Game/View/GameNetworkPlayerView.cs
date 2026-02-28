@@ -1,6 +1,8 @@
 using System;
 using _MultiplayerFPS.Scripts.Components;
+using _MultiplayerFPS.Scripts.Config;
 using _MultiplayerFPS.Scripts.Controllers;
+using _MultiplayerFPS.Scripts.Services.Config;
 using _MultiplayerFPS.Scripts.Services.InputService;
 using _MultiplayerFPS.Scripts.Services.LoggerService;
 using _MultiplayerFPS.Scripts.Services.State;
@@ -22,19 +24,24 @@ namespace _MultiplayerFPS.Scripts
         ILoggerService _loggerService;
         IStateService _stateService;
         NicknameTagView _nicknameTagView;
+        PlayerConfig _playerConfig;
         
         [SerializeField] NicknameTagView _nicknameTagViewPrefab;
         [SerializeField] Renderer _renderer;
         [SerializeField] Animator _animator;
+        [SerializeField] Weapon _weapon;
+        [SerializeField] GameObject _disableOnDeath;
         
         public override void OnStartClient()
         {
-            _nicknameTagView = Instantiate(_nicknameTagViewPrefab, transform);
+            _nicknameTagView = Instantiate(_nicknameTagViewPrefab, _disableOnDeath.transform);
+            _playerConfig = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>();
             
             if (isLocalPlayer)
             {
                 _inputService = ServiceLocator.Current.Get<IInputService>();
             }
+            
             _stateService = ServiceLocator.Current.Get<IStateService>();
             foreach (var netId in _stateService.GameState.PlayerStates.Keys)
             {
@@ -51,26 +58,30 @@ namespace _MultiplayerFPS.Scripts
             OnColorChanged( playerState.Color);
             playerState.NicknameChanged += OnNicknameChanged;
             playerState.ColorChanged += OnColorChanged;
+
             if (isLocalPlayer)
             {
                 var loggerService = ServiceLocator.Current.Get<ILoggerService>();
                 loggerService.Log($"Player {playerState.Nickname} (netId: {netId}) joined the game.");
-                if (netId == this.netId)
-                {
-                    playerState.IsShootingChanged += PlayerStateOnIsShootingChanged;
-                    playerState.IsReloadingChanged += PlayerStateOnIsReloadingChanged;
-                }
             }
+            
+            if (netId != this.netId) return;
+            playerState.IsShootingChanged += PlayerStateOnIsShootingChanged;
+            playerState.IsReloadingChanged += PlayerStateOnIsReloadingChanged; 
+            playerState.IsDeadChanged += PlayerStateOnIsDeadChanged;
+            playerState.CurrentHealthChanged += PlayerStateOnCurrentHealthChanged;
         }
+
         void OnRemove(uint netId, PlayerState state)
         {
             state.NicknameChanged -= OnNicknameChanged;
             state.ColorChanged -= OnColorChanged;
-            if (netId == this.netId)
-            {
-                state.IsShootingChanged += PlayerStateOnIsShootingChanged;
-                state.IsReloadingChanged += PlayerStateOnIsReloadingChanged;
-            }
+            
+            if (netId != this.netId) return;
+            state.IsShootingChanged -= PlayerStateOnIsShootingChanged;
+            state.IsReloadingChanged -= PlayerStateOnIsReloadingChanged;
+            state.IsDeadChanged -= PlayerStateOnIsDeadChanged;
+            state.CurrentHealthChanged -= PlayerStateOnCurrentHealthChanged;
         }
         public override void OnStopClient()
         {
@@ -86,10 +97,16 @@ namespace _MultiplayerFPS.Scripts
             _animator.SetInteger(MoveVertical, (int)move.y);
             _animator.SetInteger(MoveHorizontal, (int)move.x);
         }
-        void OnNicknameChanged(string newNickname)
+
+        void PlayerStateOnCurrentHealthChanged(int arg1, int arg2)
         {
-            _nicknameTagView.SetNickname(newNickname);
+            _nicknameTagView.SetHealth(arg2 / (float)_playerConfig.MaxHealth);
         }
+        void PlayerStateOnIsDeadChanged(bool obj)
+        {
+            _disableOnDeath.SetActive(!obj);
+        }
+        void OnNicknameChanged(string newNickname) => _nicknameTagView.SetNickname(newNickname);
         void OnColorChanged(Color newColor)
         {
             _nicknameTagView.SetColor(newColor);
@@ -98,10 +115,12 @@ namespace _MultiplayerFPS.Scripts
         void PlayerStateOnIsShootingChanged(bool obj)
         {
             _animator.SetBool(IsShooting, obj);
+            if (obj)
+            {
+                _weapon.View.PlayShootSound();
+                _weapon.View.ShowMuzzleFlash();
+            }
         }
-        void PlayerStateOnIsReloadingChanged(bool obj)
-        {
-            _animator.SetBool(IsReloading, obj);
-        }
+        void PlayerStateOnIsReloadingChanged(bool obj) => _animator.SetBool(IsReloading, obj);
     }
 }

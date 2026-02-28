@@ -2448,6 +2448,15 @@ MonoBehaviour:
   syncInterval: 0
   _hudPrefab: {fileID: -7191704096844636504, guid: 5c6d4cf8b5ba67545a20c896044f909a, type: 3}
   _gameState: {fileID: 2086645744}
+  _spawnPoints:
+  - {fileID: 981465003}
+  - {fileID: 316329123}
+  - {fileID: 84227655}
+  - {fileID: 1695836907}
+  - {fileID: 1559141496}
+  - {fileID: 1868497655}
+  - {fileID: 45894080}
+  - {fileID: 724721199}
 --- !u!4 &2086645742
 Transform:
   m_ObjectHideFlags: 0

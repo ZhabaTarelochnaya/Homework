@@ -6,6 +6,8 @@ using _MultiplayerFPS.Scripts.Utils.LoadingScreen;
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 using UnityEngine;
 using Mirror;
+using Mirror.Examples.Common;
+
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/components/network-room-manager
 	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkRoomManager.html

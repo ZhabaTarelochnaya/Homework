@@ -69,7 +69,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 928387532980808715}
-  - {fileID: 7098285640877738209}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8937598044557460890
@@ -92,6 +91,8 @@ MonoBehaviour:
   _weapon: {fileID: 2535602694409895224}
   _cameraTarget: {fileID: 8981002603067325784}
   _playerState: {fileID: 2786397991171922247}
+  _health: {fileID: 1734681077141525986}
+  _disableOnDeath: {fileID: 552143018040800945}
 --- !u!114 &2786397991171922247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,6 +112,9 @@ MonoBehaviour:
   Color: {r: 0, g: 0, b: 0, a: 0}
   CurrentHealth: 0
   CurrentAmmo: 0
+  IsShooting: 0
+  IsReloading: 0
+  IsDead: 0
 --- !u!114 &5382530239579014548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,6 +133,8 @@ MonoBehaviour:
   _nicknameTagViewPrefab: {fileID: 25727620182926670, guid: cd41c94543e12a0478f9c9e23926016b, type: 3}
   _renderer: {fileID: 5846004343312526087}
   _animator: {fileID: 6485860068272453233}
+  _weapon: {fileID: 2535602694409895224}
+  _disableOnDeath: {fileID: 552143018040800945}
 --- !u!114 &1734681077141525986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,7 +166,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  CurrentAmmo: 0
   _hand: {fileID: 3434452158342321294}
   _hitLayerMask:
     serializedVersion: 2
@@ -248,7 +253,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 3232600926293641778}
+    m_TransformParent: {fileID: 928387532980808715}
     m_Modifications:
     - target: {fileID: 5335230385451641968, guid: e132253ebb13b984f9d4bd1f52d67b0e, type: 3}
       propertyPath: m_Name
@@ -264,7 +269,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7430711236291276668, guid: e132253ebb13b984f9d4bd1f52d67b0e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.979
       objectReference: {fileID: 0}
     - target: {fileID: 7430711236291276668, guid: e132253ebb13b984f9d4bd1f52d67b0e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -368,6 +373,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HumanM_Model
       objectReference: {fileID: 0}
+    - target: {fileID: 3117314352158751344, guid: 593407ec7a89c514b888259eebf6a4cb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9150940619913700654, guid: 593407ec7a89c514b888259eebf6a4cb, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -378,6 +387,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2308442596404781258, guid: 593407ec7a89c514b888259eebf6a4cb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8981002603067325784}
+    - targetCorrespondingSourceObject: {fileID: 2308442596404781258, guid: 593407ec7a89c514b888259eebf6a4cb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7098285640877738209}
     - targetCorrespondingSourceObject: {fileID: 7799307164889003507, guid: 593407ec7a89c514b888259eebf6a4cb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2221293803297222714}

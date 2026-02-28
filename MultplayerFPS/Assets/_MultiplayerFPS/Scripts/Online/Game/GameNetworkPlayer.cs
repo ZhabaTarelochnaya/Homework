@@ -1,7 +1,9 @@
-using System;
 using System.Collections.Generic;
 using _MultiplayerFPS.Scripts.Components;
+using _MultiplayerFPS.Scripts.Components.Health;
+using _MultiplayerFPS.Scripts.Config;
 using _MultiplayerFPS.Scripts.Controllers;
+using _MultiplayerFPS.Scripts.Services.Config;
 using _MultiplayerFPS.Scripts.Services.InputService;
 using _MultiplayerFPS.Scripts.Services.Move;
 using _MultiplayerFPS.Scripts.Services.State;
@@ -23,8 +25,26 @@ namespace _MultiplayerFPS.Scripts
         [SerializeField] Weapon _weapon;
         [SerializeField] Transform _cameraTarget;
         [SerializeField] PlayerState _playerState;
+        [SerializeField] Health _health;
+        [SerializeField] GameObject _disableOnDeath;
         
-
+        public override void OnStartServer()
+        {
+            var stateService = ServiceLocator.Current.Get<IStateService>();
+            stateService.GameState.PlayerStates.TryAdd(netId, _playerState);
+            _playerState.Nickname = _lobbyPlayerNickname;
+            _playerState.Color = _lobbyPlayerColor;
+            _health.MaxHp = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>().MaxHealth;
+            _health.FullHeal();
+            _health.ServerCurrentHpChanged += HealthOnServerCurrentHpChanged;
+            _health.ServerIsDeadChanged += HealthOnServerIsDeadChanged;
+        }
+        [Server]
+        public void Init(string nickname, Color color)
+        {
+            _lobbyPlayerNickname = nickname;
+            _lobbyPlayerColor = color;
+        }
         public override void OnStartClient()
         {
             if (isLocalPlayer)
@@ -36,44 +56,37 @@ namespace _MultiplayerFPS.Scripts
                 var cameraManager = new CameraManager(Camera.main);
                 ServiceLocator.Current.Register<ICameraManager>(cameraManager);
                 
-                _playerController = new PlayerController(_weapon, _cameraTarget, transform);
+                _playerController = new PlayerController(_weapon, _cameraTarget, 
+                    _characterController, _health, _playerState);
             }
         }
-        public override void OnStartServer()
-        {
-            var stateService = ServiceLocator.Current.Get<IStateService>();
-            stateService.GameState.PlayerStates.TryAdd(netId, _playerState);
-            _playerState.Nickname = _lobbyPlayerNickname;
-            _playerState.Color = _lobbyPlayerColor;
-        }
-
         public override void OnStopLocalPlayer()
         {
             ServiceLocator.Current.Unregister<IInputService>();
             ServiceLocator.Current.Unregister<IPlayerMovementService>();
             ServiceLocator.Current.Unregister<ICameraManager>();
         }
-        [Server]
-        public void Init(string nickname, Color color)
-        {
-            _lobbyPlayerNickname = nickname;
-            _lobbyPlayerColor = color;
-        }
         void Update()
         {
-            if (isLocalPlayer)
-            {
-                _playerController.Update();
-                _gameNetworkPlayerView.HandleRunAnimations();
-                
-            }
+            if (!isLocalPlayer) return;
+            _playerController.Update();
+            
+            if (_playerState.IsDead) return;
+            _gameNetworkPlayerView.HandleRunAnimations();
         }
         void LateUpdate()
         {
-            if (isLocalPlayer)
-            {
-                _playerController.UpdateCamera();
-            }
+            if (!isLocalPlayer) return;
+            _playerController.UpdateCamera();
+        }
+        void HealthOnServerIsDeadChanged(bool obj)
+        {
+            _playerState.IsDead = obj;
+            _disableOnDeath.SetActive(!obj);
+        }
+        void HealthOnServerCurrentHpChanged(int oldHp, int newHp)
+        {
+            _playerState.CurrentHealth = newHp;
         }
     }
 }

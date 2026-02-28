@@ -18,6 +18,8 @@ namespace _MultiplayerFPS.Scripts.State
         public bool IsShooting;
         [SyncVar(hook = nameof(OnIsReloadingChanged)), HideInInspector]  
         public bool IsReloading;
+        [SyncVar(hook = nameof(OnIsDeadChanged)), HideInInspector] 
+        public bool IsDead;
         
         public event Action<string> NicknameChanged;
         public event Action<Color> ColorChanged;
@@ -25,8 +27,7 @@ namespace _MultiplayerFPS.Scripts.State
         public event Action<int> CurrentAmmoChanged;
         public event Action<bool> IsShootingChanged;
         public event Action<bool> IsReloadingChanged;
-        
-        
+        public event Action<bool> IsDeadChanged;
 
         void OnNicknameChanged(string oldNickname, string newNickname) => NicknameChanged?.Invoke(newNickname);
         void OnColorChanged(Color oldColor, Color newColor) => ColorChanged?.Invoke(newColor);
@@ -34,5 +35,6 @@ namespace _MultiplayerFPS.Scripts.State
         void OnCurrentAmmoChanged(int oldAmmo, int newAmmo) => CurrentAmmoChanged?.Invoke(newAmmo);
         void OnIsShootingChanged(bool oldValue, bool newValue) => IsShootingChanged?.Invoke(newValue);
         void OnIsReloadingChanged(bool oldValue, bool newValue) => IsReloadingChanged?.Invoke(newValue);
+        void OnIsDeadChanged(bool oldValue, bool newValue) => IsDeadChanged?.Invoke(newValue);
     }
 }
