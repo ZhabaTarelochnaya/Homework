@@ -96,6 +96,7 @@ MonoBehaviour:
   _health: {fileID: 1734681077141525986}
   _disableOnDeath: {fileID: 552143018040800945}
   _hudViewPrefab: {fileID: -7191704096844636504, guid: 5c6d4cf8b5ba67545a20c896044f909a, type: 3}
+  _pickupCollector: {fileID: 966026184308478122}
 --- !u!114 &2786397991171922247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -359,7 +360,7 @@ GameObject:
   - component: {fileID: 966026184308478122}
   - component: {fileID: 491508137867729135}
   - component: {fileID: 3470965972592659776}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PickupCollector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -411,7 +412,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

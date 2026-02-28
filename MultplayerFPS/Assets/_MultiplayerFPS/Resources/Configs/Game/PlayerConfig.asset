@@ -17,5 +17,5 @@ MonoBehaviour:
   <Gravity>k__BackingField: -50
   <RespawnTime>k__BackingField: 3
   <MaxHealth>k__BackingField: 100
-  <PickupRange>k__BackingField: 0.6
+  <PickupRange>k__BackingField: 2
   <StartingWeapon>k__BackingField: {fileID: 11400000, guid: b40d3e608d9a6734aa3480dffe8c64f2, type: 2}

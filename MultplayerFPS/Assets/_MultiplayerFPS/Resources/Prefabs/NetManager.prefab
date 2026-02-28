@@ -65,6 +65,7 @@ MonoBehaviour:
   playerSpawnMethod: 1
   spawnPrefabs:
   - {fileID: 8414447224811415141, guid: fff4da1556f968e47a040544dc1c70e7, type: 3}
+  - {fileID: 5499913459668484313, guid: 67dd091fa7d15524c906dc18289794a1, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2

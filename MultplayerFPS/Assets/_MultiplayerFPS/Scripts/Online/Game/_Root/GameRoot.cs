@@ -1,4 +1,11 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using _MultiplayerFPS.Scripts.Components;
+using _MultiplayerFPS.Scripts.Config;
+using _MultiplayerFPS.Scripts.Services;
+using _MultiplayerFPS.Scripts.Services.Config;
 using _MultiplayerFPS.Scripts.Services.LoggerService;
 using _MultiplayerFPS.Scripts.Services.Respawn;
 using _MultiplayerFPS.Scripts.Services.State;
@@ -11,18 +18,34 @@ namespace _MultiplayerFPS.Scripts
 {
     public class GameRoot : NetworkBehaviour
     {
+        WaitForSeconds _waitForRespawn;
         ILoggerService _loggerService;
+        IPickupService _pickupService;
+        GameConfig _gameConfig;
         [SerializeField] GameState _gameState;
         [SerializeField] Transform[] _spawnPoints;
+        [SerializeField] Transform[] _pickUpSpawnPoints;
 
         public override void OnStartServer()
         {
             var stateService = new StateService(_gameState);
             ServiceLocator.Current.Register<IStateService>(stateService);
+            _pickupService = new PickupService(_pickUpSpawnPoints, stateService);
+            ServiceLocator.Current.Register(_pickupService);
+
+            _gameConfig = ServiceLocator.Current.Get<IConfigService>().Get<GameConfig>();
+            _waitForRespawn = new WaitForSeconds(_gameConfig.PickupRespawnTime);
+            for (int i = 0; i < _gameConfig.MaxPickups; i++)
+            {
+                _pickupService.SpawnRandom();
+            }
+            _gameState.ActivePickups.OnRemove += OnRemove;
         }
         public override void OnStopServer()
         {
             ServiceLocator.Current.Unregister<IStateService>();
+            ServiceLocator.Current.Unregister<IPickupService>();
+            _gameState.ActivePickups.OnRemove -= OnRemove;
         }
         public override void OnStartClient()
         {
@@ -44,6 +67,19 @@ namespace _MultiplayerFPS.Scripts
             {
                 ServiceLocator.Current.Unregister<IStateService>();
             }
+        }
+        
+        void OnRemove(uint arg1, Pickup arg2)
+        {
+            if (isServer)
+            {
+                StartCoroutine(RespawnPickup());
+            }
+        }
+        IEnumerator RespawnPickup()
+        {
+            yield return _waitForRespawn;
+            _pickupService.SpawnRandom();
         }
     }
 }

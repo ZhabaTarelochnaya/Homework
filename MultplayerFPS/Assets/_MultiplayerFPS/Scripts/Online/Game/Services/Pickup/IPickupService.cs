@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using _MultiplayerFPS.Scripts.Config.Pickup;
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 

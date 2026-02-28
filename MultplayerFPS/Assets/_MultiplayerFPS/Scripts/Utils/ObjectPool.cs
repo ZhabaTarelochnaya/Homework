@@ -6,18 +6,13 @@ public class ObjectPool<T> where T : Component
     T prefab;
     Transform parent;
     Queue<T> pool = new Queue<T>();
-
-    public ObjectPool(T prefab, int initialSize = 10, Transform parent = null)
+    public int Count => pool.Count;
+    public ObjectPool(T prefab, Transform parent = null)
     {
         this.prefab = prefab;
         this.parent = parent;
-
-        for (int i = 0; i < initialSize; i++)
-        {
-            CreateNewObject();
-        }
     }
-
+    
     T CreateNewObject()
     {
         T obj = GameObject.Instantiate(prefab, parent);
