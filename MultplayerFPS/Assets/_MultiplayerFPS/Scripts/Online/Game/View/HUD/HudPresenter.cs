@@ -1,5 +1,6 @@
 using _MultiplayerFPS.Scripts.Components;
 using _MultiplayerFPS.Scripts.Config;
+using _MultiplayerFPS.Scripts.Config.Pickup;
 using _MultiplayerFPS.Scripts.Config.Weapon;
 using _MultiplayerFPS.Scripts.Services.Config;
 using _MultiplayerFPS.Scripts.State;
@@ -15,6 +16,8 @@ namespace _MultiplayerFPS.Scripts
         readonly Weapon _weapon;
         readonly PlayerState _playerState;
         readonly IHudView _view;
+        int _currentMedkits;
+        int _currentGrenades;
 
         public HudPresenter(Weapon weapon, PlayerState playerState, IHudView view)
         {
@@ -38,14 +41,31 @@ namespace _MultiplayerFPS.Scripts
             _view.UpdatingPing += ViewOnUpdatingPing;
             _playerState.CurrentHealthChanged += PlayerStateOnCurrentHealthChanged;
             _playerState.CurrentAmmoChanged += PlayerStateOnCurrentAmmoChanged;
+            _playerState.Pickups.OnChange += OnChange;
             _view.Enable();
         }
 
+        void OnChange(SyncList<PickupName>.Operation arg1, int arg2, PickupName name)
+        {
+            if (arg1 == SyncList<PickupName>.Operation.OP_ADD)
+            {
+                if (name == PickupName.MedKit)
+                {
+                    _view.SetMedKit(++_currentMedkits);
+                }
+            }
+            else if (arg1 == SyncList<PickupName>.Operation.OP_REMOVEAT)
+            {
+                if (name == PickupName.MedKit)
+                {
+                    _view.SetMedKit(--_currentMedkits);
+                }
+            }
+        }
         void PlayerStateOnCurrentAmmoChanged(int obj)
         {
             _view.SetAmmo(obj ,_weapon.Config.MaxAmmo);
         }
-
         void PlayerStateOnCurrentHealthChanged(int arg1, int arg2)
         {
             _view.SetHealth(arg2);
@@ -63,6 +83,7 @@ namespace _MultiplayerFPS.Scripts
             _view.UpdatingPing -= ViewOnUpdatingPing;
             _playerState.CurrentHealthChanged -= PlayerStateOnCurrentHealthChanged;
             _playerState.CurrentAmmoChanged -= PlayerStateOnCurrentAmmoChanged;
+            _playerState.Pickups.OnChange -= OnChange;
         }
     }
 }

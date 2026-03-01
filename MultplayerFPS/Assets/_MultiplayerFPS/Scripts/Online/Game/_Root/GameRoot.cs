@@ -71,7 +71,7 @@ namespace _MultiplayerFPS.Scripts
         
         void OnRemove(uint arg1, Pickup arg2)
         {
-            if (isServer)
+            if (isServer && _gameConfig.DoPickupsRespawn)
             {
                 StartCoroutine(RespawnPickup());
             }

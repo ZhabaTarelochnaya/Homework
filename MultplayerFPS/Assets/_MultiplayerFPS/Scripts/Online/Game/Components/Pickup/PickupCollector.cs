@@ -16,6 +16,8 @@ namespace _MultiplayerFPS.Scripts.Components
             if (!isLocalPlayer) return;
             
             var pickUp = other.GetComponent<Pickup>();
+            if (!pickUp) return;
+            
             PickupCollected?.Invoke(pickUp.netId);
         }
     }

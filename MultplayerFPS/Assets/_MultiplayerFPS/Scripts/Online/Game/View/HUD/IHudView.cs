@@ -11,5 +11,7 @@ namespace _MultiplayerFPS.Scripts
         public void SetPlayerCount(int playerCount);
         public void SetAmmo(int current, int max);
         public void SetHealth(int health);
+        public void SetMedKit(int count);
+        public void SetGrenade(int count);
     }
 }

@@ -15,6 +15,8 @@ namespace _MultiplayerFPS.Scripts
         [SerializeField] TMP_Text _playerCountText;
         [SerializeField] TMP_Text _ammoText;
         [SerializeField] TMP_Text _healthText;
+        [SerializeField] TMP_Text _medKitText;
+        [SerializeField] TMP_Text _grenadeText;
         
         public event Action UpdatingPing;
         
@@ -26,6 +28,8 @@ namespace _MultiplayerFPS.Scripts
         public void SetPlayerCount(int playerCount) => _playerCountText.text = $"Players: {playerCount}";
         public void SetAmmo(int current, int max) => _ammoText.text = $"{current}/{max}";
         public void SetHealth(int health) => _healthText.text = $"{health}";
+        public void SetMedKit(int count) => _medKitText.text = $"{count}";
+        public void SetGrenade(int count) => _grenadeText.text = $"{count}";
         public void Enable() => gameObject.SetActive(true);
         public void Disable() => gameObject.SetActive(false);
         

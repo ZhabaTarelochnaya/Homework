@@ -7,5 +7,6 @@ namespace _MultiplayerFPS.Scripts.Config.Pickup
     {
         public abstract PickupName Name { get; protected set; }
         public abstract Components.Pickup Prefab { get; protected set; }
+        public abstract int Limit { get; protected set; }
     }
 }

@@ -11,7 +11,7 @@ namespace _MultiplayerFPS.Scripts.Components
         [SyncVar, HideInInspector]
         public bool IsPickedUp;
         [field: SerializeField] public PickupName Name { get; private set; }
-        
+        public Transform SpawnPoint { get; set; }
         [ClientRpc]
         public void RpcSetActive(bool isActive) => gameObject.SetActive(isActive);
     }
