@@ -5,5 +5,7 @@ namespace _MultiplayerFPS.Scripts.Controllers
         Idle,
         Shoot,
         Reload,
+        Heal,
+        ThrowGrenade,
     }
 }

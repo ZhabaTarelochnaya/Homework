@@ -19,6 +19,8 @@ namespace _MultiplayerFPS.Scripts
         static readonly int MoveVertical = Animator.StringToHash("MoveVertical");
         static readonly int IsReloading = Animator.StringToHash("IsReloading");
         static readonly int IsShooting = Animator.StringToHash("IsShooting");
+        static readonly int IsThrowingGrenade = Animator.StringToHash("IsThrowingGrenade");
+        static readonly int IsHealing = Animator.StringToHash("IsHealing");
 
         IInputService _inputService;
         ILoggerService _loggerService;
@@ -68,18 +70,20 @@ namespace _MultiplayerFPS.Scripts
             playerState.ColorChanged += OnColorChanged;
             playerState.IsShootingChanged += PlayerStateOnIsShootingChanged;
             playerState.IsReloadingChanged += PlayerStateOnIsReloadingChanged; 
+            playerState.IsHealingChanged += PlayerStateOnIsHealingChanged;
+            playerState.IsThrowingGrenadeChanged += PlayerStateOnIsThrowingGrenadeChanged;
             playerState.IsDeadChanged += PlayerStateOnIsDeadChanged;
             playerState.CurrentHealthChanged += PlayerStateOnCurrentHealthChanged;
         }
-
         void OnRemove(uint netId, PlayerState state)
         {
+            if (netId != this.netId) return;
             state.NicknameChanged -= OnNicknameChanged;
             state.ColorChanged -= OnColorChanged;
-            
-            if (netId != this.netId) return;
             state.IsShootingChanged -= PlayerStateOnIsShootingChanged;
             state.IsReloadingChanged -= PlayerStateOnIsReloadingChanged;
+            state.IsHealingChanged -= PlayerStateOnIsHealingChanged;
+            state.IsThrowingGrenadeChanged -= PlayerStateOnIsThrowingGrenadeChanged;
             state.IsDeadChanged -= PlayerStateOnIsDeadChanged;
             state.CurrentHealthChanged -= PlayerStateOnCurrentHealthChanged;
         }
@@ -102,20 +106,16 @@ namespace _MultiplayerFPS.Scripts
         {
             _nicknameTagView.SetHealth(arg2 / (float)_playerConfig.MaxHealth);
         }
-        void PlayerStateOnIsDeadChanged(bool obj)
-        {
-            _disableOnDeath.SetActive(!obj);
-        }
         void OnNicknameChanged(string newNickname) => _nicknameTagView.SetNickname(newNickname);
         void OnColorChanged(Color newColor)
         {
             _nicknameTagView.SetColor(newColor);
             _renderer.material.color = newColor;
         }
-        void PlayerStateOnIsShootingChanged(bool obj)
-        {
-            _animator.SetBool(IsShooting, obj);
-        }
+        void PlayerStateOnIsDeadChanged(bool obj) => _disableOnDeath.SetActive(!obj);
+        void PlayerStateOnIsShootingChanged(bool obj) => _animator.SetBool(IsShooting, obj);
         void PlayerStateOnIsReloadingChanged(bool obj) => _animator.SetBool(IsReloading, obj);
+        void PlayerStateOnIsThrowingGrenadeChanged(bool obj) => _animator.SetBool(IsThrowingGrenade, obj);
+        void PlayerStateOnIsHealingChanged(bool obj) => _animator.SetBool(IsHealing, obj);
     }
 }

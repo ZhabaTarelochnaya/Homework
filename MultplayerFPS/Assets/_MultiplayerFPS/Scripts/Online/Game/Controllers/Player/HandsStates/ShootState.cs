@@ -1,4 +1,6 @@
 using _MultiplayerFPS.Scripts.Components;
+using _MultiplayerFPS.Scripts.Config;
+using _MultiplayerFPS.Scripts.Services.Config;
 using _MultiplayerFPS.Scripts.Services.InputService;
 using _MultiplayerFPS.Scripts.Services.State;
 using _MultiplayerFPS.Scripts.State;
@@ -11,14 +13,18 @@ namespace _MultiplayerFPS.Scripts.Controllers.HandsStates
     public class ShootState : FSMState<HandsStateName>
     {
         readonly Weapon _weapon;
+        readonly PlayerState _playerState;
         readonly IInputService _inputService;
         readonly ICameraManager _cameraManager;
+        readonly PlayerConfig _playerConfig;
 
-        public ShootState(Weapon weapon) : base(HandsStateName.Shoot)
+        public ShootState(Weapon weapon, PlayerState playerState) : base(HandsStateName.Shoot)
         {
             _weapon = weapon;
+            _playerState = playerState;
             _inputService = ServiceLocator.Current.Get<IInputService>();
             _cameraManager = ServiceLocator.Current.Get<ICameraManager>();
+            _playerConfig = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>();
         }
         
         public override void Tick(float deltaTime)
@@ -47,6 +53,12 @@ namespace _MultiplayerFPS.Scripts.Controllers.HandsStates
 
         public override HandsStateName GetNextState()
         {
+            if (_inputService.GetHealButtonDown() 
+                && _playerState.MedKitCount > 0 
+                && _playerState.CurrentHealth < _playerConfig.MaxHealth)
+            {
+                return HandsStateName.Heal;
+            }
             if (_weapon.CurrentAmmo <= 0)
             {
                 return HandsStateName.Reload;

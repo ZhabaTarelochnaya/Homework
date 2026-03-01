@@ -19,6 +19,8 @@ namespace _MultiplayerFPS.Scripts.Services.InputService
         }
         public bool GetShootButtonDown() => Input.GetButtonDown("Fire1");
         public bool GetShootButton() => Input.GetButton("Fire1");
+        public bool GetHealButtonDown() => Input.GetKeyDown(KeyCode.H);
+        public bool GetGrenadeButtonDown() => Input.GetKeyDown(KeyCode.G);
 
         float Sign(float value)
         {

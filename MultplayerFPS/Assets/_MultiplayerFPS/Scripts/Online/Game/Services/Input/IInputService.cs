@@ -10,5 +10,7 @@ namespace _MultiplayerFPS.Scripts.Services.InputService
         public Vector2 GetLook();
         public bool GetShootButtonDown();
         public bool GetShootButton();
+        public bool GetHealButtonDown();
+        public bool GetGrenadeButtonDown();
     }
 }

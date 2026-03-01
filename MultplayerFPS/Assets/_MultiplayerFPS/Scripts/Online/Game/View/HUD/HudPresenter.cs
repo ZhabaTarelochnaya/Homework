@@ -41,49 +41,26 @@ namespace _MultiplayerFPS.Scripts
             _view.UpdatingPing += ViewOnUpdatingPing;
             _playerState.CurrentHealthChanged += PlayerStateOnCurrentHealthChanged;
             _playerState.CurrentAmmoChanged += PlayerStateOnCurrentAmmoChanged;
-            _playerState.Pickups.OnChange += OnChange;
+            _playerState.MedKitCountChanged += PlayerStateOnMedKitCountChanged;
             _view.Enable();
         }
-
-        void OnChange(SyncList<PickupName>.Operation arg1, int arg2, PickupName name)
-        {
-            if (arg1 == SyncList<PickupName>.Operation.OP_ADD)
-            {
-                if (name == PickupName.MedKit)
-                {
-                    _view.SetMedKit(++_currentMedkits);
-                }
-            }
-            else if (arg1 == SyncList<PickupName>.Operation.OP_REMOVEAT)
-            {
-                if (name == PickupName.MedKit)
-                {
-                    _view.SetMedKit(--_currentMedkits);
-                }
-            }
-        }
-        void PlayerStateOnCurrentAmmoChanged(int obj)
-        {
-            _view.SetAmmo(obj ,_weapon.Config.MaxAmmo);
-        }
-        void PlayerStateOnCurrentHealthChanged(int arg1, int arg2)
-        {
-            _view.SetHealth(arg2);
-        }
-        void ViewOnUpdatingPing()
-        {
-            int ping = Mathf.RoundToInt((float)(NetworkTime.rtt * 1000));
-            _view.SetPing(ping);
-            _view.SetPlayerCount(NetworkServer.connections.Count);
-        }
-
         public void Disable()
         {
             _view.Disable();
             _view.UpdatingPing -= ViewOnUpdatingPing;
             _playerState.CurrentHealthChanged -= PlayerStateOnCurrentHealthChanged;
             _playerState.CurrentAmmoChanged -= PlayerStateOnCurrentAmmoChanged;
-            _playerState.Pickups.OnChange -= OnChange;
+            _playerState.MedKitCountChanged -= PlayerStateOnMedKitCountChanged;
+        }
+
+        void PlayerStateOnMedKitCountChanged(int obj) => _view.SetMedKit(obj);
+        void PlayerStateOnCurrentAmmoChanged(int obj) => _view.SetAmmo(obj ,_weapon.Config.MaxAmmo);
+        void PlayerStateOnCurrentHealthChanged(int arg1, int arg2) => _view.SetHealth(arg2);
+        void ViewOnUpdatingPing()
+        {
+            int ping = Mathf.RoundToInt((float)(NetworkTime.rtt * 1000));
+            _view.SetPing(ping);
+            _view.SetPlayerCount(NetworkServer.connections.Count);
         }
     }
 }

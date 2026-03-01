@@ -112,12 +112,15 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  _health: {fileID: 1734681077141525986}
   Nickname: 
   Color: {r: 0, g: 0, b: 0, a: 0}
   CurrentHealth: 0
   CurrentAmmo: 0
   IsShooting: 0
   IsReloading: 0
+  IsHealing: 0
+  IsThrowingGrenade: 0
   IsDead: 0
   Position: {x: 0, y: 0, z: 0}
 --- !u!114 &5382530239579014548

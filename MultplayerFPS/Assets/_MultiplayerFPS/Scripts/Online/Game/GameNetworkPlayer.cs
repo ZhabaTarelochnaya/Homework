@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using _MultiplayerFPS.Scripts.Components;
 using _MultiplayerFPS.Scripts.Components.Health;
 using _MultiplayerFPS.Scripts.Config;
+using _MultiplayerFPS.Scripts.Config.Pickup;
 using _MultiplayerFPS.Scripts.Controllers;
 using _MultiplayerFPS.Scripts.Services;
 using _MultiplayerFPS.Scripts.Services.Config;
@@ -104,6 +105,15 @@ namespace _MultiplayerFPS.Scripts
             if (!isLocalPlayer) return;
             _playerController.UpdateCamera();
         }
+        void PickupCollectorOnPickupCollected(uint netId)
+        {
+            CmdTryPickUp(netId);
+        }
+        [Command]
+        void CmdTryPickUp(uint netId)
+        {
+            _pickupService.TryPickup(netId, connectionToClient.identity.netId);
+        }
         void HealthOnServerIsDeadChanged(bool obj)
         {
             _playerState.IsDead = obj;
@@ -112,16 +122,6 @@ namespace _MultiplayerFPS.Scripts
         void HealthOnServerCurrentHpChanged(int oldHp, int newHp)
         {
             _playerState.CurrentHealth = newHp;
-        }
-        
-        void PickupCollectorOnPickupCollected(uint netId)
-        {
-            CmdTryPickUp(netId);
-        }
-        [Command]
-        public void CmdTryPickUp(uint netId)
-        {
-            _pickupService.TryPickup(netId, connectionToClient.identity.netId);
         }
     }
 }

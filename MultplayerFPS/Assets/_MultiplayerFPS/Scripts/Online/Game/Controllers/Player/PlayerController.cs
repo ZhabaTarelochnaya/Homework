@@ -42,9 +42,10 @@ namespace _MultiplayerFPS.Scripts.Controllers
             _cameraManager = ServiceLocator.Current.Get<ICameraManager>();
             _respawnService = ServiceLocator.Current.Get<IRespawnService>();
             
-            _handsFsm.AddState(new IdleState(_weapon))
-                .AddState(new ShootState(_weapon))
-                .AddState(new ReloadState(_weapon));
+            _handsFsm.AddState(new IdleState(_weapon, _playerState))
+                .AddState(new ShootState(_weapon, _playerState))
+                .AddState(new ReloadState(_weapon, _playerState))
+                .AddState(new HealState(_playerState));
             
             health.ClientIsDeadChanged += HealthOnClientIsDeadChanged;
         }
