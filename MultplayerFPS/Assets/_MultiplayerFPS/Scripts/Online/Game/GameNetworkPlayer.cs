@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using _MultiplayerFPS.Scripts.Components;
 using _MultiplayerFPS.Scripts.Components.Health;
@@ -6,6 +7,7 @@ using _MultiplayerFPS.Scripts.Config.Pickup;
 using _MultiplayerFPS.Scripts.Controllers;
 using _MultiplayerFPS.Scripts.Services;
 using _MultiplayerFPS.Scripts.Services.Config;
+using _MultiplayerFPS.Scripts.Services.GrenadeService;
 using _MultiplayerFPS.Scripts.Services.InputService;
 using _MultiplayerFPS.Scripts.Services.Move;
 using _MultiplayerFPS.Scripts.Services.State;
@@ -20,7 +22,7 @@ namespace _MultiplayerFPS.Scripts
     {
         IInputService _inputService;
         IPickupService _pickupService;
-        GrenadeConfig _config;
+        IGrenadeService _grenadeService;
         PlayerController _playerController;
         HudPresenter _hudPresenter;
         string _lobbyPlayerNickname;
@@ -35,32 +37,29 @@ namespace _MultiplayerFPS.Scripts
         [SerializeField] HudView _hudViewPrefab;
         [SerializeField] PickupCollector _pickupCollector;
         
-        public override void OnStartServer()
-        {
-            var stateService = ServiceLocator.Current.Get<IStateService>();
-            stateService.GameState.PlayerStates.TryAdd(netId, _playerState);
-            _playerState.Nickname = _lobbyPlayerNickname;
-            _playerState.Color = _lobbyPlayerColor;
-            
-            _pickupService = ServiceLocator.Current.Get<IPickupService>();
-            _config = ServiceLocator.Current.Get<IConfigService>().Get<GrenadeConfig>();
-            _health.ServerCurrentHpChanged += HealthOnServerCurrentHpChanged;
-            _health.ServerIsDeadChanged += HealthOnServerIsDeadChanged;
-            _health.MaxHp = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>().MaxHealth;
-            _health.FullHeal();
-        }
-
-        public override void OnStopServer()
-        {
-            _health.ServerCurrentHpChanged -= HealthOnServerCurrentHpChanged;
-            _health.ServerIsDeadChanged -= HealthOnServerIsDeadChanged;
-        }
-
         [Server]
         public void Init(string nickname, Color color)
         {
             _lobbyPlayerNickname = nickname;
             _lobbyPlayerColor = color;
+        }
+        public override void OnStartServer()
+        {
+            _grenadeService = ServiceLocator.Current.Get<IGrenadeService>();
+            _pickupService = ServiceLocator.Current.Get<IPickupService>();
+            var stateService = ServiceLocator.Current.Get<IStateService>();
+            stateService.GameState.PlayerStates.TryAdd(netId, _playerState);
+            _playerState.Nickname = _lobbyPlayerNickname;
+            _playerState.Color = _lobbyPlayerColor;
+            _health.ServerCurrentHpChanged += HealthOnServerCurrentHpChanged;
+            _health.ServerIsDeadChanged += HealthOnServerIsDeadChanged;
+            _health.MaxHp = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>().MaxHealth;
+            _health.FullHeal();
+        }
+        public override void OnStopServer()
+        {
+            _health.ServerCurrentHpChanged -= HealthOnServerCurrentHpChanged;
+            _health.ServerIsDeadChanged -= HealthOnServerIsDeadChanged;
         }
         public override void OnStartClient()
         {
@@ -115,24 +114,16 @@ namespace _MultiplayerFPS.Scripts
         {
             _pickupService.TryPickup(netId, connectionToClient.identity.netId);
         }
-
         [Command]
         public void CmdThrowGrenade(Vector3 direction)
         {
-            var isRemoved = _playerState.Pickups.Remove(PickupName.Grenade);
-            if (!isRemoved) return;
-            var grenade = Instantiate(_config.GrenadePrefab, transform.position, Quaternion.identity);
-            NetworkServer.Spawn(grenade.gameObject);
-            grenade.Throw(direction);
+            _grenadeService.ThrowGrenade(_playerState, transform.position, direction);
         }
         void HealthOnServerIsDeadChanged(bool obj)
         {
             _playerState.IsDead = obj;
             _disableOnDeath.SetActive(!obj);
         }
-        void HealthOnServerCurrentHpChanged(int oldHp, int newHp)
-        {
-            _playerState.CurrentHealth = newHp;
-        }
+        void HealthOnServerCurrentHpChanged(int oldHp, int newHp) => _playerState.CurrentHealth = newHp;
     }
 }

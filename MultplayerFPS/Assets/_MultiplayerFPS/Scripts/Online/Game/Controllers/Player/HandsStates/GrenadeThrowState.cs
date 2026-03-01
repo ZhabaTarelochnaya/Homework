@@ -27,7 +27,6 @@ namespace _MultiplayerFPS.Scripts.Controllers.HandsStates
         {
             _timer = _config.ThrowDuration;
             _playerState.CmdChangeIsThrowingGrenade(true);
-            Debug.Log("GrenadeThrowState Enter");
         }
         public override void Tick(float deltaTime)
         {
@@ -39,8 +38,6 @@ namespace _MultiplayerFPS.Scripts.Controllers.HandsStates
             var direction = _cameraManager.CurrentCamera.transform.forward;
             _player.CmdThrowGrenade(direction);
             _playerState.CmdChangeIsThrowingGrenade(false);
-            
-            Debug.Log("GrenadeThrowState Exit");
         }
 
         public override HandsStateName GetNextState()

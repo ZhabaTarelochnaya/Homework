@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace _MultiplayerFPS.Scripts.Components
 {
-    public class Grenade : NetworkBehaviour, IGrenade
+    public class Grenade : NetworkBehaviour
     {
         GrenadeConfig _config;
         Rigidbody _rigidBody;
@@ -21,10 +21,17 @@ namespace _MultiplayerFPS.Scripts.Components
         {
             _config = ServiceLocator.Current.Get<IConfigService>().Get<GrenadeConfig>();
             _rigidBody = GetComponent<Rigidbody>();
+            _rigidBody.isKinematic = false;
             var velocity = direction * _config.Speed;
             _rigidBody.AddForce(velocity, ForceMode.VelocityChange);
             StartCoroutine(Explode());
 
+        }
+        [ClientRpc]
+        public void RpcSetActive(bool active)
+        {
+            gameObject.SetActive(active);
+            _model.SetActive(active);
         }
         IEnumerator Explode()
         {

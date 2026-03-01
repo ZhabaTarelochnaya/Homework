@@ -87,7 +87,6 @@ namespace _MultiplayerFPS.Scripts.State
                 else if (arg3 == PickupName.Grenade)
                 {
                     _grenadeCount++;
-                    Debug.Log($"Picked Grenade");
                 }
             }
             else if (arg1 == SyncList<PickupName>.Operation.OP_REMOVEAT)
@@ -99,7 +98,6 @@ namespace _MultiplayerFPS.Scripts.State
                 else if (arg3 == PickupName.Grenade)
                 {
                     _grenadeCount--;
-                    Debug.Log($"Used Grenade");
                 }
             }
         }

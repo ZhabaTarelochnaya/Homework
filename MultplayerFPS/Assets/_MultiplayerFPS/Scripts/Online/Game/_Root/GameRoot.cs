@@ -6,6 +6,7 @@ using _MultiplayerFPS.Scripts.Components;
 using _MultiplayerFPS.Scripts.Config;
 using _MultiplayerFPS.Scripts.Services;
 using _MultiplayerFPS.Scripts.Services.Config;
+using _MultiplayerFPS.Scripts.Services.GrenadeService;
 using _MultiplayerFPS.Scripts.Services.LoggerService;
 using _MultiplayerFPS.Scripts.Services.Respawn;
 using _MultiplayerFPS.Scripts.Services.State;
@@ -32,19 +33,24 @@ namespace _MultiplayerFPS.Scripts
             ServiceLocator.Current.Register<IStateService>(stateService);
             _pickupService = new PickupService(_pickUpSpawnPoints, stateService);
             ServiceLocator.Current.Register(_pickupService);
-
+            var grenadeService = new GrenadeService();
+            ServiceLocator.Current.Register<IGrenadeService>(grenadeService);
             _gameConfig = ServiceLocator.Current.Get<IConfigService>().Get<GameConfig>();
+            
             _waitForRespawn = new WaitForSeconds(_gameConfig.PickupRespawnTime);
             for (int i = 0; i < _gameConfig.MaxPickups; i++)
             {
                 _pickupService.SpawnRandom();
             }
+            
             _gameState.ActivePickups.OnRemove += OnRemove;
         }
         public override void OnStopServer()
         {
             ServiceLocator.Current.Unregister<IStateService>();
             ServiceLocator.Current.Unregister<IPickupService>();
+            ServiceLocator.Current.Unregister<IGrenadeService>();
+            
             _gameState.ActivePickups.OnRemove -= OnRemove;
         }
         public override void OnStartClient()
