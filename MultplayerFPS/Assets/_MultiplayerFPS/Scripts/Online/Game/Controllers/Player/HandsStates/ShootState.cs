@@ -59,6 +59,10 @@ namespace _MultiplayerFPS.Scripts.Controllers.HandsStates
             {
                 return HandsStateName.Heal;
             }
+            if (_inputService.GetGrenadeButtonDown() && _playerState.GrenadeCount > 0)
+            {
+                return HandsStateName.ThrowGrenade;
+            }
             if (_weapon.CurrentAmmo <= 0)
             {
                 return HandsStateName.Reload;

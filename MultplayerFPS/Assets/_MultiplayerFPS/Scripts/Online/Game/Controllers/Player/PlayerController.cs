@@ -1,6 +1,7 @@
 using _MultiplayerFPS.Scripts.Components;
 using _MultiplayerFPS.Scripts.Components.Health;
 using _MultiplayerFPS.Scripts.Config;
+using _MultiplayerFPS.Scripts.Config.Pickup;
 using _MultiplayerFPS.Scripts.Controllers.HandsStates;
 using _MultiplayerFPS.Scripts.Services.Config;
 using _MultiplayerFPS.Scripts.Services.InputService;
@@ -21,6 +22,7 @@ namespace _MultiplayerFPS.Scripts.Controllers
         readonly CharacterController _player;
         readonly Health _health;
         readonly PlayerState _playerState;
+        readonly GameNetworkPlayer _gameNetworkPlayer;
         readonly IInputService _inputService;
         readonly IPlayerMovementService _playerMovementService;
         readonly ICameraManager _cameraManager;
@@ -28,14 +30,15 @@ namespace _MultiplayerFPS.Scripts.Controllers
         readonly IRespawnService _respawnService;
         FSM<HandsStateName> _handsFsm =  new ();
 
-        public PlayerController(Weapon weapon, Transform cameraOrigin, CharacterController player, 
-            Health health, PlayerState playerState)
+        public PlayerController(Weapon weapon, Transform cameraOrigin, CharacterController player,
+            Health health, PlayerState playerState, GameNetworkPlayer gameNetworkPlayer)
         {
             _weapon = weapon;
             _cameraOrigin = cameraOrigin;
             _player = player;
             _health = health;
             _playerState = playerState;
+            _gameNetworkPlayer = gameNetworkPlayer;
 
             _inputService = ServiceLocator.Current.Get<IInputService>();
             _playerMovementService = ServiceLocator.Current.Get<IPlayerMovementService>();
@@ -45,7 +48,8 @@ namespace _MultiplayerFPS.Scripts.Controllers
             _handsFsm.AddState(new IdleState(_weapon, _playerState))
                 .AddState(new ShootState(_weapon, _playerState))
                 .AddState(new ReloadState(_weapon, _playerState))
-                .AddState(new HealState(_playerState));
+                .AddState(new HealState(_playerState))
+                .AddState(new GrenadeThrowState(_playerState, gameNetworkPlayer));
             
             health.ClientIsDeadChanged += HealthOnClientIsDeadChanged;
         }

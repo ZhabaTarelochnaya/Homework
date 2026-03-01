@@ -42,8 +42,10 @@ namespace _MultiplayerFPS.Scripts
             _playerState.CurrentHealthChanged += PlayerStateOnCurrentHealthChanged;
             _playerState.CurrentAmmoChanged += PlayerStateOnCurrentAmmoChanged;
             _playerState.MedKitCountChanged += PlayerStateOnMedKitCountChanged;
+            _playerState.GrenadeCountChanged += PlayerStateOnGrenadeCountChanged;
             _view.Enable();
         }
+
         public void Disable()
         {
             _view.Disable();
@@ -52,7 +54,7 @@ namespace _MultiplayerFPS.Scripts
             _playerState.CurrentAmmoChanged -= PlayerStateOnCurrentAmmoChanged;
             _playerState.MedKitCountChanged -= PlayerStateOnMedKitCountChanged;
         }
-
+        void PlayerStateOnGrenadeCountChanged(int obj) => _view.SetGrenade(obj);
         void PlayerStateOnMedKitCountChanged(int obj) => _view.SetMedKit(obj);
         void PlayerStateOnCurrentAmmoChanged(int obj) => _view.SetAmmo(obj ,_weapon.Config.MaxAmmo);
         void PlayerStateOnCurrentHealthChanged(int arg1, int arg2) => _view.SetHealth(arg2);

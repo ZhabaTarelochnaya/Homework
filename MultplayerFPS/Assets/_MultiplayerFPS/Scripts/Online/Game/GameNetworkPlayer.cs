@@ -20,6 +20,7 @@ namespace _MultiplayerFPS.Scripts
     {
         IInputService _inputService;
         IPickupService _pickupService;
+        GrenadeConfig _config;
         PlayerController _playerController;
         HudPresenter _hudPresenter;
         string _lobbyPlayerNickname;
@@ -42,7 +43,7 @@ namespace _MultiplayerFPS.Scripts
             _playerState.Color = _lobbyPlayerColor;
             
             _pickupService = ServiceLocator.Current.Get<IPickupService>();
-            
+            _config = ServiceLocator.Current.Get<IConfigService>().Get<GrenadeConfig>();
             _health.ServerCurrentHpChanged += HealthOnServerCurrentHpChanged;
             _health.ServerIsDeadChanged += HealthOnServerIsDeadChanged;
             _health.MaxHp = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>().MaxHealth;
@@ -73,7 +74,7 @@ namespace _MultiplayerFPS.Scripts
             ServiceLocator.Current.Register<ICameraManager>(cameraManager);
             
             _playerController = new PlayerController(_weapon, _cameraTarget, 
-                _characterController, _health, _playerState);
+                _characterController, _health, _playerState, this);
             
             var hudView = Instantiate(_hudViewPrefab);
             _hudPresenter = new HudPresenter(_weapon, _playerState, hudView);
@@ -113,6 +114,16 @@ namespace _MultiplayerFPS.Scripts
         void CmdTryPickUp(uint netId)
         {
             _pickupService.TryPickup(netId, connectionToClient.identity.netId);
+        }
+
+        [Command]
+        public void CmdThrowGrenade(Vector3 direction)
+        {
+            var isRemoved = _playerState.Pickups.Remove(PickupName.Grenade);
+            if (!isRemoved) return;
+            var grenade = Instantiate(_config.GrenadePrefab, transform.position, Quaternion.identity);
+            NetworkServer.Spawn(grenade.gameObject);
+            grenade.Throw(direction);
         }
         void HealthOnServerIsDeadChanged(bool obj)
         {

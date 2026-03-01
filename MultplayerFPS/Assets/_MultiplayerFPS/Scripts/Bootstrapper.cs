@@ -30,6 +30,7 @@ public class Bootstrapper : MonoBehaviour
         ServiceLocator.Current.Register<ILoggerService>(consoleLoggerService);
 
         _dontDestroyOnLoadUIView.Init(_netManager);
+        
 
         StartCoroutine(LoadMainMenu());
     }

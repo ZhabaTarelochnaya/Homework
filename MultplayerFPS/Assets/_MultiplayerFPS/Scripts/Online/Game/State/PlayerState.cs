@@ -84,12 +84,22 @@ namespace _MultiplayerFPS.Scripts.State
                 {
                     _medKitCount++;
                 }
+                else if (arg3 == PickupName.Grenade)
+                {
+                    _grenadeCount++;
+                    Debug.Log($"Picked Grenade");
+                }
             }
             else if (arg1 == SyncList<PickupName>.Operation.OP_REMOVEAT)
             {
                 if (arg3 == PickupName.MedKit)
                 {
                     _medKitCount--;
+                }
+                else if (arg3 == PickupName.Grenade)
+                {
+                    _grenadeCount--;
+                    Debug.Log($"Used Grenade");
                 }
             }
         }
