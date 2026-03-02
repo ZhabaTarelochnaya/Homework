@@ -20,6 +20,7 @@ namespace _MultiplayerFPS.Scripts.Services.CoroutineRunner
         {
             _coroutines.StopCoroutine(coroutine);
         }
+        public void StopAllCoroutines() => _coroutines.StopAllCoroutines();
         class Coroutines : MonoBehaviour { }
     }
 }

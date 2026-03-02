@@ -11,6 +11,7 @@ using _MultiplayerFPS.Scripts.Services.Config;
 using _MultiplayerFPS.Scripts.Services.GrenadeService;
 using _MultiplayerFPS.Scripts.Services.InputService;
 using _MultiplayerFPS.Scripts.Services.Move;
+using _MultiplayerFPS.Scripts.Services.ServerCommands;
 using _MultiplayerFPS.Scripts.Services.State;
 using _MultiplayerFPS.Scripts.State;
 using _MultiplayerFPS.Scripts.Utils;
@@ -61,6 +62,7 @@ namespace _MultiplayerFPS.Scripts
             _stateService = ServiceLocator.Current.Get<IStateService>();
             _stateService.GameState.PlayerStates.TryAdd(netId, PlayerState);
             _stateService.GameState.PlayerScores.TryAdd(netId, new PlayerScore());
+            _stateService.GameState.GameStateChanged += GameStateOnGameStateChanged;
             
             PlayerState.Nickname = _lobbyPlayerNickname;
             PlayerState.Color = _lobbyPlayerColor;
@@ -71,6 +73,7 @@ namespace _MultiplayerFPS.Scripts
         }
         public override void OnStopServer()
         {
+            _stateService.GameState.GameStateChanged -= GameStateOnGameStateChanged;
             Health.ServerCurrentHpChanged -= HealthOnServerCurrentHpChanged;
             Health.ServerIsDeadChanged -= HealthOnServerIsDeadChanged;
             _stateService.GameState.PlayerStates.Remove(netId);
@@ -86,6 +89,8 @@ namespace _MultiplayerFPS.Scripts
             ServiceLocator.Current.Register<IPlayerMovementService>(moveService);
             var cameraManager = new CameraManager(Camera.main);
             ServiceLocator.Current.Register<ICameraManager>(cameraManager);
+            var playerCommandsService = new PlayerCommandsService(this);
+            ServiceLocator.Current.Register<IPlayerCommandsService>(playerCommandsService);
             
             _playerController = new PlayerController(this);
             
@@ -95,17 +100,10 @@ namespace _MultiplayerFPS.Scripts
             _leaderboardPresenter =  new LeaderboardPresenter(leaderBoardView);
             
             _pickupCollector.PickupCollected += PickupCollectorOnPickupCollected;
-        }
-        public override void OnStopClient()
-        {
-            if (!isLocalPlayer) return;
-            _pickupCollector.PickupCollected -= PickupCollectorOnPickupCollected;
-        }
-        public override void OnStopLocalPlayer()
-        {
-            ServiceLocator.Current.Unregister<IInputService>();
-            ServiceLocator.Current.Unregister<IPlayerMovementService>();
-            ServiceLocator.Current.Unregister<ICameraManager>();
+            
+            _playerController.SetActive(false);
+            _hudPresenter.Disable();
+            PlayerState.CmdChangeInitialized(true);
         }
         void Update()
         {
@@ -134,6 +132,13 @@ namespace _MultiplayerFPS.Scripts
         {
             _grenadeService.ThrowGrenade(PlayerState, transform.position, direction);
         }
+        [Command]
+        public void CmdReturnToLobby()
+        {
+            _stateService.GameState.GameStateName = GameStateName.Unregister;
+            NetManager.singleton.ServerChangeScene("Lobby");
+        }
+
         void HealthOnServerIsDeadChanged(bool obj)
         {
             PlayerState.IsDead = obj;
@@ -144,5 +149,53 @@ namespace _MultiplayerFPS.Scripts
             }
         }
         void HealthOnServerCurrentHpChanged(int oldHp, int newHp) => PlayerState.CurrentHealth = newHp;
+
+        void GameStateOnGameStateChanged(GameStateName state)
+        {
+            if (state == GameStateName.MatchGoing)
+            {
+                RpcEnable();
+            }
+            else if (state == GameStateName.MatchEnded)
+            {
+                RpcDisable();
+            }
+            else if (state == GameStateName.Unregister)
+            {
+                RpcUnregister(connectionToClient);
+            }
+        }
+
+        [TargetRpc]
+        void RpcUnregister(NetworkConnectionToClient conn)
+        {
+            ServiceLocator.Current.Unregister<IInputService>();
+            ServiceLocator.Current.Unregister<IPlayerMovementService>();
+            ServiceLocator.Current.Unregister<ICameraManager>();
+            ServiceLocator.Current.Unregister<IPlayerCommandsService>();
+            _pickupCollector.PickupCollected -= PickupCollectorOnPickupCollected;
+        }
+
+        [ClientRpc]
+        void RpcEnable()
+        {
+            if (isLocalPlayer)
+            {
+                _hudPresenter.Enable();
+                _playerController.SetActive(true);
+            }
+            _disableOnDeath.gameObject.SetActive(true);
+        }
+        [ClientRpc]
+        void RpcDisable()
+        {
+            if (isLocalPlayer)
+            {
+                _playerController.SetActive(false);
+                _hudPresenter.Disable();
+                _leaderboardPresenter.Enable();
+            }
+            _disableOnDeath.gameObject.SetActive(false);
+        }
     }
 }

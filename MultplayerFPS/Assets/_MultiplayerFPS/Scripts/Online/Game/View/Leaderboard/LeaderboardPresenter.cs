@@ -1,4 +1,5 @@
 using System.Linq;
+using _MultiplayerFPS.Scripts.Services.ServerCommands;
 using _MultiplayerFPS.Scripts.Services.State;
 using _MultiplayerFPS.Scripts.State;
 using _MultiplayerFPS.Scripts.Utils;
@@ -15,6 +16,7 @@ namespace _MultiplayerFPS.Scripts.Leaderboard
         {
             _view = view;
             _gameState = ServiceLocator.Current.Get<IStateService>().GameState;
+            _gameState.GameStateChanged += GameStateOnGameStateChanged;
         }
         void Refresh()
         {
@@ -42,18 +44,32 @@ namespace _MultiplayerFPS.Scripts.Leaderboard
         {
             Refresh();
         }
-
         public void Enable()
         {
             _view.Enable();
+            _view.ReturnToLobbyButtonPressed += ViewOnReturnToLobbyButtonPressed;
             _gameState.PlayerScores.OnChange += OnChange;
             Refresh();
+        }
+
+        void GameStateOnGameStateChanged(GameStateName obj)
+        {
+            if (obj == GameStateName.MatchEnded && NetworkServer.active)
+            {
+                _view.SetReturnToLobbyButtonActive(true);
+            }
         }
 
         public void Disable()
         {
             _view.Disable();
+            _view.ReturnToLobbyButtonPressed -= ViewOnReturnToLobbyButtonPressed;
             _gameState.PlayerScores.OnChange -= OnChange;
+        }
+        void ViewOnReturnToLobbyButtonPressed()
+        {
+            Disable();
+            ServiceLocator.Current.Get<IPlayerCommandsService>().ReturnToLobby();
         }
     }
 }

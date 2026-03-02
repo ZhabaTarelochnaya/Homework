@@ -51,12 +51,18 @@ namespace _MultiplayerFPS.Scripts
             _stateService.GameState.PlayerStates.OnAdd += OnAdd;
             _stateService.GameState.PlayerStates.OnRemove += OnRemove;
         }
+        public override void OnStopClient()
+        {
+            var player = _stateService.GetPlayerState(netId);
+            var loggerService = ServiceLocator.Current.Get<ILoggerService>();
+            loggerService.Log($"Player {player.Nickname} (netId: {netId}) left the game.");
+            _stateService.GameState.PlayerStates.OnAdd -= OnAdd;
+            _stateService.GameState.PlayerStates.OnRemove -= OnRemove;
+        }
         void OnAdd(uint netId)
         {
             var playerState = _stateService.GetPlayerState(netId);
             
-            
-
             if (isLocalPlayer)
             {
                 var loggerService = ServiceLocator.Current.Get<ILoggerService>();
@@ -87,14 +93,7 @@ namespace _MultiplayerFPS.Scripts
             state.IsDeadChanged -= PlayerStateOnIsDeadChanged;
             state.CurrentHealthChanged -= PlayerStateOnCurrentHealthChanged;
         }
-        public override void OnStopClient()
-        {
-            var player = _stateService.GetPlayerState(netId);
-            var loggerService = ServiceLocator.Current.Get<ILoggerService>();
-            loggerService.Log($"Player {player.Nickname} (netId: {netId}) left the game.");
-            _stateService.GameState.PlayerStates.OnAdd -= OnAdd;
-            _stateService.GameState.PlayerStates.OnRemove -= OnRemove;
-        }
+        
         public void HandleRunAnimations()
         {
             var move = _inputService.GetMove();

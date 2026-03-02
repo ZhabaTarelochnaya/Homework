@@ -40,7 +40,7 @@ public class NetManager : NetworkRoomManager
         base.Awake();
         _loadingScreen = ServiceLocator.Current.Get<ILoadingScreenService>();
     }
-
+    [Server]
     public void StartGame() => ServerChangeScene(GameplayScene);
     public string GetHostName() => _lobbyState.Players[0].Nickname; 
 
@@ -52,8 +52,7 @@ public class NetManager : NetworkRoomManager
     /// </summary>
     public override void OnRoomStartServer()
     {
-        _lobbyState = Instantiate(_lobbyStatePrefab);
-        NetworkServer.Spawn(_lobbyState.gameObject);
+        
     }
 
     /// <summary>
@@ -110,6 +109,7 @@ public class NetManager : NetworkRoomManager
         GameObject playerObject = Instantiate(roomPlayerPrefab.gameObject);
         var player = playerObject.GetComponent<NetworkPlayer>();
         NetworkServer.Spawn(playerObject, conn);
+        _lobbyState = FindObjectOfType<LobbyState>();
         _lobbyState.Players.Add(player);
         return playerObject;
     }

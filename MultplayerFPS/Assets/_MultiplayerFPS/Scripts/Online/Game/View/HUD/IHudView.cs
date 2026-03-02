@@ -13,5 +13,6 @@ namespace _MultiplayerFPS.Scripts
         public void SetHealth(int health);
         public void SetMedKit(int count);
         public void SetGrenade(int count);
+        public void SetTimer(int time);
     }
 }

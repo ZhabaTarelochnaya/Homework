@@ -12,6 +12,8 @@ namespace _MultiplayerFPS.Scripts.State
     public class PlayerState : NetworkBehaviour
     {
         [SerializeField] Health _health;
+        [SyncVar(hook = nameof(OnIsInitializedChanged)), HideInInspector] 
+        public bool IsInitialized;
         [SyncVar(hook = nameof(OnNicknameChanged)), HideInInspector] 
         public string Nickname;
         [SyncVar(hook = nameof(OnColorChanged)), HideInInspector]  
@@ -39,6 +41,8 @@ namespace _MultiplayerFPS.Scripts.State
         int _grenadeCount;
         public int MedKitCount => _medKitCount;
         public int GrenadeCount => _grenadeCount;
+        
+        public event Action<bool> IsInitializedChanged; 
         public event Action<string> NicknameChanged;
         public event Action<Color> ColorChanged;
         public event Action<int, int> CurrentHealthChanged;
@@ -60,6 +64,8 @@ namespace _MultiplayerFPS.Scripts.State
             Pickups.OnChange -= OnChange;
         }
 
+        [Command]
+        public void CmdChangeInitialized(bool newValue) => IsInitialized = newValue;
         [Command]
         public void CmdChangePosition(Vector3 position) => Position = position;
 
@@ -101,6 +107,7 @@ namespace _MultiplayerFPS.Scripts.State
                 }
             }
         }
+        void OnIsInitializedChanged(bool oldValue, bool newValue) => IsInitializedChanged?.Invoke(newValue);
         void OnNicknameChanged(string oldNickname, string newNickname) => NicknameChanged?.Invoke(newNickname);
         void OnColorChanged(Color oldColor, Color newColor) => ColorChanged?.Invoke(newColor);
         void OnCurrentHealthChanged(int oldHealth, int newHealth) => CurrentHealthChanged?.Invoke(oldHealth, newHealth);

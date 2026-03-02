@@ -9,5 +9,6 @@ namespace _MultiplayerFPS.Scripts.Services.CoroutineRunner
         public Coroutine StartCoroutine(IEnumerator routine);
 
         public void StopCoroutine(Coroutine coroutine);
+        public void StopAllCoroutines();
     }
 }

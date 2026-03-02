@@ -4,6 +4,7 @@ using _MultiplayerFPS.Scripts.Online.Lobby.View;
 using UnityEngine;
 using Mirror;
 using Telepathy;
+using UnityEngine.SceneManagement;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/components/network-room-player
@@ -84,6 +85,8 @@ public class NetworkPlayer : NetworkRoomPlayer
     /// </summary>
     public override void OnStartLocalPlayer()
     {
+        if (SceneManager.GetActiveScene().name != "Lobby")
+            return;
         var _lobbyView = Instantiate(_lobbyViewPrefab);
         var lobbyState = FindAnyObjectByType<LobbyState>();
         _lobbyPresenter = new LobbyPresenter(lobbyState, this, _lobbyView);

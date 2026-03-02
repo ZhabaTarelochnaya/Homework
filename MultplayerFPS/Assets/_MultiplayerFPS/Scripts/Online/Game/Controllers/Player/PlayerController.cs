@@ -25,6 +25,7 @@ namespace _MultiplayerFPS.Scripts.Controllers
         readonly IRespawnService _respawnService;
         FSM<HandsStateName> _handsFsm =  new ();
         bool _isLeaderboardEnabled;
+        bool _isActive;
 
         public PlayerController(GameNetworkPlayer gameNetworkPlayer)
         {
@@ -46,6 +47,7 @@ namespace _MultiplayerFPS.Scripts.Controllers
 
         public void Update()
         {
+            if (!_isActive) return;
             if (!_gameNetworkPlayer.Health.IsDead)
             {
                 HandleMove();
@@ -57,10 +59,12 @@ namespace _MultiplayerFPS.Scripts.Controllers
         }
         public void UpdateCamera()
         {
+            if (!_isActive) return;
             _cameraManager.FollowPosition(_gameNetworkPlayer.CameraTarget);
             var look = _inputService.GetLook();
             _cameraManager.FollowRotation(look.y, _gameNetworkPlayer.transform.rotation.eulerAngles.y);
         }
+        public void SetActive(bool active) => _isActive = active;
         void HandlePlayerRotation()
         {
             var look = _inputService.GetLook();
