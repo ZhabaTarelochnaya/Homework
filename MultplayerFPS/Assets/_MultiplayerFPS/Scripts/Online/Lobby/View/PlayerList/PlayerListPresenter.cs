@@ -16,7 +16,6 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
         {
             _lobbyState = lobbyState;
             _playerListView = playerListView;
-            Enable();
         }
         public void Enable()
         {
@@ -33,6 +32,7 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
         }
         public void Disable()
         {
+            _playerListView.Disable();
             foreach (var player in _lobbyState.Players)
             {
                 player.ClientNicknameChanged -= OnPlayerNicknameChanged;
@@ -41,7 +41,6 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
             }
             _lobbyState.Players.OnAdd -= OnAdd;
             _lobbyState.Players.OnRemove -= OnRemove;
-            _playerListView.Disable();
         }
         void Refresh()
         {
@@ -66,10 +65,10 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
         }
         void OnRemove(int index, NetworkPlayer player)
         {
-            Refresh();
             player.ClientNicknameChanged -= OnPlayerNicknameChanged;
             player.ClientReadyChanged -= OnPlayerReadyChanged;
             player.ClientColorChanged -= OnPlayerNicknameColorChanged;
+            Refresh();
         }
         void OnPlayerNicknameChanged(NetworkPlayer player, string newNickname)
         {

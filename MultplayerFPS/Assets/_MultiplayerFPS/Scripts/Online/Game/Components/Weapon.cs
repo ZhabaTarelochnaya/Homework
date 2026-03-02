@@ -1,12 +1,9 @@
-using System;
 using System.Collections;
-using System.Linq;
 using _MultiplayerFPS.Scripts.Components.Health;
 using _MultiplayerFPS.Scripts.Config;
 using _MultiplayerFPS.Scripts.Config.Weapon;
 using _MultiplayerFPS.Scripts.Services;
 using _MultiplayerFPS.Scripts.Services.Config;
-using _MultiplayerFPS.Scripts.Services.InputService;
 using _MultiplayerFPS.Scripts.Services.State;
 using _MultiplayerFPS.Scripts.State;
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
