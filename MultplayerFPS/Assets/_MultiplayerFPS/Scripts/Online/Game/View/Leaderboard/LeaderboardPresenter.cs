@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using _MultiplayerFPS.Scripts.Services.ServerCommands;
 using _MultiplayerFPS.Scripts.Services.State;
@@ -35,10 +36,8 @@ namespace _MultiplayerFPS.Scripts.Leaderboard
                 .Take(8)                          
                 .ToArray();
             
-            var finalData = new LeaderboardData[8];
-            for (int i = 0; i < data.Length; i++)
-                finalData[i] = data[i];
-            _view.UpdateData(finalData);
+            Array.Resize(ref data, 8);
+            _view.UpdateData(data);
         }
         void OnChange(SyncIDictionary<uint, PlayerScore>.Operation arg1, uint arg2, PlayerScore arg3)
         {

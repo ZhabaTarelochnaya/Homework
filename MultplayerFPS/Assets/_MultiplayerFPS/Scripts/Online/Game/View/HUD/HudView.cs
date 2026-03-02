@@ -35,7 +35,8 @@ namespace _MultiplayerFPS.Scripts
         {
             var minutes =  time / 60;
             var seconds = time % 60;
-            _timerText.text = $"{minutes}:{seconds}";
+            string secondsString = seconds < 10 ? "0" + seconds : seconds.ToString();
+            _timerText.text = $"{minutes}:{secondsString}";
         }
 
         public void Enable() => gameObject.SetActive(true);
