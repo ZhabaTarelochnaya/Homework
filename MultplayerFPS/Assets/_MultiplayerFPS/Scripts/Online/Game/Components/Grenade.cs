@@ -67,6 +67,8 @@ namespace _MultiplayerFPS.Scripts.Components
                 );
                 health.Damage((int)damage);
                 if (!health.IsDead) continue;
+                var hitPlayerId = health.netId;
+                if (hitPlayerId == playerNetId) continue;
                 _playerScoreService.AddKill(playerNetId);
             }
 
