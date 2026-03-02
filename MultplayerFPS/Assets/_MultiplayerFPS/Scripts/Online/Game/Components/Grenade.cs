@@ -15,6 +15,7 @@ namespace _MultiplayerFPS.Scripts.Components
         Vector3 _direction;
         [SerializeField] ParticleSystem[] _particles;
         [SerializeField] GameObject _model;
+        [SerializeField] AudioSource _audioSource;
         
         [Server]
         public void Throw(Vector3 direction)
@@ -70,6 +71,7 @@ namespace _MultiplayerFPS.Scripts.Components
         [ClientRpc]
         void RpcExplode()
         {
+            _audioSource.PlayOneShot(_audioSource.clip, _audioSource.volume);
             foreach (var particle in _particles)
             {
                 particle.Play();
