@@ -3,6 +3,7 @@ using System.Collections;
 using _MultiplayerFPS.Scripts.Components.Health;
 using _MultiplayerFPS.Scripts.Config;
 using _MultiplayerFPS.Scripts.Config.Weapon;
+using _MultiplayerFPS.Scripts.Services;
 using _MultiplayerFPS.Scripts.Services.Config;
 using _MultiplayerFPS.Scripts.Services.InputService;
 using _MultiplayerFPS.Scripts.Services.State;
@@ -17,8 +18,8 @@ namespace _MultiplayerFPS.Scripts.Components
     {
         float _shootTimer;
         float _reloadTimer;
-        IInputService _inputService;
         IStateService _stateService;
+        IPlayerScoreService _playerScoreService;
         PlayerState _playerState;
         Coroutine _reloadCoroutine;
         [SerializeField] Transform _hand;
@@ -35,6 +36,7 @@ namespace _MultiplayerFPS.Scripts.Components
             var playerConfig = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>();
             Config = (IWeaponConfig)playerConfig.StartingWeapon;
             _stateService = ServiceLocator.Current.Get<IStateService>();
+            _playerScoreService = ServiceLocator.Current.Get<IPlayerScoreService>();
             _playerState = _stateService.GetPlayerState(netId);
             _playerState.CurrentAmmo = Config.MaxAmmo;
         }
@@ -43,7 +45,6 @@ namespace _MultiplayerFPS.Scripts.Components
         {
             if (isLocalPlayer)
             {
-                _inputService = ServiceLocator.Current.Get<IInputService>();
                 _stateService = ServiceLocator.Current.Get<IStateService>();
             }
             var playerConfig = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>();
@@ -57,9 +58,6 @@ namespace _MultiplayerFPS.Scripts.Components
             {
                 _shootTimer -= Time.deltaTime;
             }
-            
-            if (!isClient || _inputService == null) return;
-            
         }
 
         [Command]
@@ -99,6 +97,9 @@ namespace _MultiplayerFPS.Scripts.Components
                 {
                     hurtBox.Damage(Config.Damage);
                     PlayTargetHitSound(connectionToClient);
+                    if (!hurtBox.Health.IsDead) return;
+                    
+                    _playerScoreService.AddKill(netId);
                 }
             }
             else

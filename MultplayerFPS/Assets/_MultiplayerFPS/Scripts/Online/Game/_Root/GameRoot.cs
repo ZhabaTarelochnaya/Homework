@@ -35,6 +35,9 @@ namespace _MultiplayerFPS.Scripts
             ServiceLocator.Current.Register(_pickupService);
             var grenadeService = new GrenadeService();
             ServiceLocator.Current.Register<IGrenadeService>(grenadeService);
+            var playerScoreService = new PlayerScoreService(stateService);
+            ServiceLocator.Current.Register<IPlayerScoreService>(playerScoreService);
+            
             _gameConfig = ServiceLocator.Current.Get<IConfigService>().Get<GameConfig>();
             
             _waitForRespawn = new WaitForSeconds(_gameConfig.PickupRespawnTime);
@@ -50,6 +53,7 @@ namespace _MultiplayerFPS.Scripts
             ServiceLocator.Current.Unregister<IStateService>();
             ServiceLocator.Current.Unregister<IPickupService>();
             ServiceLocator.Current.Unregister<IGrenadeService>();
+            ServiceLocator.Current.Unregister<IPlayerScoreService>();
             
             _gameState.ActivePickups.OnRemove -= OnRemove;
         }
@@ -73,6 +77,7 @@ namespace _MultiplayerFPS.Scripts
             {
                 ServiceLocator.Current.Unregister<IStateService>();
             }
+            ServiceLocator.Current.Unregister<IRespawnService>();
         }
         
         void OnRemove(uint arg1, Pickup arg2)

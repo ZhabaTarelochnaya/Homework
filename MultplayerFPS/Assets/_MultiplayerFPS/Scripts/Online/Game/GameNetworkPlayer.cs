@@ -23,6 +23,7 @@ namespace _MultiplayerFPS.Scripts
         IInputService _inputService;
         IPickupService _pickupService;
         IGrenadeService _grenadeService;
+        IPlayerScoreService _playerScoreService;
         PlayerController _playerController;
         HudPresenter _hudPresenter;
         string _lobbyPlayerNickname;
@@ -36,7 +37,7 @@ namespace _MultiplayerFPS.Scripts
         [SerializeField] GameObject _disableOnDeath;
         [SerializeField] HudView _hudViewPrefab;
         [SerializeField] PickupCollector _pickupCollector;
-        
+
         [Server]
         public void Init(string nickname, Color color)
         {
@@ -47,6 +48,7 @@ namespace _MultiplayerFPS.Scripts
         {
             _grenadeService = ServiceLocator.Current.Get<IGrenadeService>();
             _pickupService = ServiceLocator.Current.Get<IPickupService>();
+            _playerScoreService = ServiceLocator.Current.Get<IPlayerScoreService>();
             var stateService = ServiceLocator.Current.Get<IStateService>();
             stateService.GameState.PlayerStates.TryAdd(netId, _playerState);
             _playerState.Nickname = _lobbyPlayerNickname;
@@ -123,6 +125,7 @@ namespace _MultiplayerFPS.Scripts
         {
             _playerState.IsDead = obj;
             _disableOnDeath.SetActive(!obj);
+            _playerScoreService.AddDeath(netId);
         }
         void HealthOnServerCurrentHpChanged(int oldHp, int newHp) => _playerState.CurrentHealth = newHp;
     }

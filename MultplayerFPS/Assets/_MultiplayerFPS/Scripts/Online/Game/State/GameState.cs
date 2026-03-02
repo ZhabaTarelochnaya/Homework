@@ -7,5 +7,6 @@ namespace _MultiplayerFPS.Scripts.State
     {
         public readonly SyncDictionary<uint, PlayerState> PlayerStates = new ();
         public readonly SyncDictionary<uint, Pickup> ActivePickups = new();
+        public readonly SyncDictionary<uint, PlayerScore> PlayerScores = new();
     }
 }

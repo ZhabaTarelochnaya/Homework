@@ -36,7 +36,7 @@ namespace _MultiplayerFPS.Scripts.Services.GrenadeService
             }
             grenade.transform.position = origin;
             grenade.transform.rotation = Quaternion.identity;
-            grenade.Throw(direction);
+            grenade.Throw(direction, playerState.netId);
             _coroutineRunnerService.StartCoroutine(WaitReturnGrenade(grenade));
         }
         IEnumerator WaitReturnGrenade(Grenade grenade)

@@ -1,6 +1,7 @@
 using System.Collections;
 using _MultiplayerFPS.Scripts.Components.Health;
 using _MultiplayerFPS.Scripts.Config.Pickup;
+using _MultiplayerFPS.Scripts.Services;
 using _MultiplayerFPS.Scripts.Services.Config;
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
 using Mirror;
@@ -13,20 +14,23 @@ namespace _MultiplayerFPS.Scripts.Components
         GrenadeConfig _config;
         Rigidbody _rigidBody;
         Vector3 _direction;
+        IPlayerScoreService _playerScoreService;
         [SerializeField] ParticleSystem[] _particles;
         [SerializeField] GameObject _model;
         [SerializeField] AudioSource _audioSource;
-        
-        [Server]
-        public void Throw(Vector3 direction)
+        public override void OnStartServer()
         {
+            _playerScoreService = ServiceLocator.Current.Get<IPlayerScoreService>();
             _config = ServiceLocator.Current.Get<IConfigService>().Get<GrenadeConfig>();
             _rigidBody = GetComponent<Rigidbody>();
+        }
+        [Server]
+        public void Throw(Vector3 direction, uint playerNetId)
+        {
             _rigidBody.isKinematic = false;
             var velocity = direction * _config.Speed;
             _rigidBody.AddForce(velocity, ForceMode.VelocityChange);
-            StartCoroutine(Explode());
-
+            StartCoroutine(Explode(playerNetId));
         }
         [ClientRpc]
         public void RpcSetActive(bool active)
@@ -34,7 +38,7 @@ namespace _MultiplayerFPS.Scripts.Components
             gameObject.SetActive(active);
             _model.SetActive(active);
         }
-        IEnumerator Explode()
+        IEnumerator Explode(uint playerNetId)
         {
             yield return new WaitForSeconds(_config.ExplosionDelay);
             _rigidBody.isKinematic = true;
@@ -62,6 +66,8 @@ namespace _MultiplayerFPS.Scripts.Components
                     normalized
                 );
                 health.Damage((int)damage);
+                if (!health.IsDead) continue;
+                _playerScoreService.AddKill(playerNetId);
             }
 
             yield return new WaitForSeconds(_config.ExplosionDuration);
