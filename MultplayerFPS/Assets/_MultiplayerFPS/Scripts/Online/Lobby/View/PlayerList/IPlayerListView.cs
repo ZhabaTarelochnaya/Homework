@@ -5,6 +5,6 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
 {
     public interface IPlayerListView : IView
     {
-        public void UpdateData(PlayerCardData[] playersData);
+        public void UpdateData(PlayerCardData?[] playersData);
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using _MultiplayerFPS.Scripts.Components.Health;
 using _MultiplayerFPS.Scripts.Config;
 using _MultiplayerFPS.Scripts.Config.Weapon;
@@ -86,14 +87,18 @@ namespace _MultiplayerFPS.Scripts.Components
             _playerState.CurrentAmmo--;
             _playerState.IsShooting = true;
             PlayShootEffects(connectionToClient);
-            if (Physics.Raycast(origin, direction, out RaycastHit hit, Config.Range, _hitLayerMask))
+
+            var hit = Raycast(origin, direction);
+            
+            if (hit.HasValue)
             {
-                RpcSpawnTrail(hit.point);
-                if (hit.collider)
+                var value = hit.Value;
+                RpcSpawnTrail(value.point);
+                if (value.collider)
                 {
-                    RpcSpawnHit(hit.point, hit.normal);
+                    RpcSpawnHit(value.point, value.normal);
                 }
-                if (hit.collider.TryGetComponent(out HurtBox hurtBox))
+                if (value.collider.TryGetComponent(out HurtBox hurtBox))
                 {
                     hurtBox.Damage(Config.Damage);
                     PlayTargetHitSound(connectionToClient);
@@ -108,6 +113,26 @@ namespace _MultiplayerFPS.Scripts.Components
                 RpcSpawnTrail(endPos);
             }
         }
+
+        RaycastHit? Raycast(Vector3 origin, Vector3 direction)
+        {
+            Ray ray = new Ray(origin, direction);
+            var hits = Physics.RaycastAll(ray, Config.Range, _hitLayerMask);
+            RaycastHit? closestHit = null;
+            float closestDistance = float.MaxValue;
+            for (int i = 0; i < hits.Length; i++)
+            {
+                var hit = hits[i];
+                if (hit.collider.transform.root == transform)
+                    continue;
+                if (hit.distance < closestDistance)
+                {
+                    closestDistance = hit.distance;
+                    closestHit = hit;
+                }
+            }
+            return closestHit;
+        }
         [ClientRpc]
         void RpcSpawnTrail(Vector3 hitPos)
         {
@@ -118,7 +143,6 @@ namespace _MultiplayerFPS.Scripts.Components
         {
             View.SpawnHit(hitPos, normal);
         }
-
         [TargetRpc]
         void PlayTargetHitSound(NetworkConnectionToClient conn)
         {

@@ -1,5 +1,6 @@
 using _MultiplayerFPS.Scripts.Components;
 using _MultiplayerFPS.Scripts.Config;
+using _MultiplayerFPS.Scripts.Config.Weapon;
 using _MultiplayerFPS.Scripts.Services.Config;
 using _MultiplayerFPS.Scripts.Services.InputService;
 using _MultiplayerFPS.Scripts.Services.State;
@@ -31,7 +32,16 @@ namespace _MultiplayerFPS.Scripts.Controllers.HandsStates
         {
             Camera cam = _cameraManager.CurrentCamera;
             Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-            Vector3 targetPoint = ray.origin + ray.direction * _weapon.Config.Range;
+            Vector3 targetPoint;
+            
+            if (Physics.Raycast(ray, out RaycastHit hit, _weapon.Config.Range, _weapon.Config.AimLayers))
+            {
+                targetPoint = hit.point;
+            }
+            else
+            {
+                targetPoint = ray.origin + ray.direction * _weapon.Config.Range;
+            }
             Vector3 shootOrigin = _weapon.ShootOrigin.position;
             Vector3 shootDirection = (targetPoint - shootOrigin).normalized;
             _weapon.CmdShoot(shootOrigin, shootDirection);

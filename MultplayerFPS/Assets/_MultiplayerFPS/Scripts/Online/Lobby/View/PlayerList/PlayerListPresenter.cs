@@ -8,6 +8,7 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
 {
     public class PlayerListPresenter : IPresenter
     {
+        const int MaxPlayers = 8;
         readonly LobbyState _lobbyState;
         readonly IPlayerListView _playerListView;
 
@@ -44,15 +45,15 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
         }
         void Refresh()
         {
-            var data = _lobbyState.Players
-                .Select(p =>
-                {
-                    var nickname = p.IsHost ? $"{p.Nickname} (Host)" : p.Nickname;
-                    return new PlayerCardData(nickname, p.Color, p.readyToBegin);
-                })
-                .ToArray();
+            var data = new PlayerCardData?[MaxPlayers];
+            int index = 0;
+            foreach (var p in _lobbyState.Players)
+            {
+                if (index >= MaxPlayers) break;
 
-            Array.Resize(ref data, 8);
+                var nickname = p.IsHost ? $"{p.Nickname} (Host)" : p.Nickname;
+                data[index++] = new PlayerCardData(nickname, p.Color, p.readyToBegin);
+            }
             _playerListView.UpdateData(data);
         }
         void OnAdd(int index)

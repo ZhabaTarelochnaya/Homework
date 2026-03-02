@@ -9,6 +9,7 @@ namespace _MultiplayerFPS.Scripts.Config.Weapon
         public float Range { get; }
         public float ReloadTime { get; }
         public int MaxAmmo { get; }
+        public LayerMask AimLayers { get; }
         public GameObject Prefab { get; }
     }
 }

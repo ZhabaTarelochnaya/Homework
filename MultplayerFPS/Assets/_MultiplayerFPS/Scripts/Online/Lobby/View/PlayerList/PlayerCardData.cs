@@ -2,11 +2,11 @@ using UnityEngine;
 
 namespace _MultiplayerFPS.Scripts.Online.Lobby
 {
-    public class PlayerCardData
+    public readonly struct PlayerCardData
     {
-        public string Nickname { get; set; }
-        public Color Color { get; set; }
-        public bool IsReady { get; set; }
+        public string Nickname { get; }
+        public Color Color { get; }
+        public bool IsReady { get; }
 
         public PlayerCardData(string nickname, Color color, bool isReady)
         {

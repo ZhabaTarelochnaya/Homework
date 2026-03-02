@@ -17,4 +17,7 @@ MonoBehaviour:
   <Range>k__BackingField: 15
   <ReloadTime>k__BackingField: 1
   <MaxAmmo>k__BackingField: 50
+  <AimLayers>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 8
   <Prefab>k__BackingField: {fileID: 868963202465490056, guid: 304366522831ac5468d6bc797cc4a0dd, type: 3}
