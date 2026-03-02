@@ -60,9 +60,6 @@ namespace _MultiplayerFPS.Scripts
                 .AddState(new MatchGoingState(_gameState, matchTimeService))
                 .AddState(new MatchEndedState(_gameState, SetEnableCursor));
         }
-
-        
-
         public override void OnStopServer()
         {
             ServiceLocator.Current.Unregister<IStateService>();
@@ -85,23 +82,15 @@ namespace _MultiplayerFPS.Scripts
             
             Cursor.lockState = CursorLockMode.Locked;
         }
-
         public override void OnStopClient()
         {
             Cursor.lockState = CursorLockMode.None;
         }
-        
         void Update()
         {
             if (!isServer) return;
             _gameStateFsm.Tick(Time.deltaTime);
         }
-        void GameStateOnGameStateChanged(GameStateName obj)
-        {
-            if (obj != GameStateName.Unregister) return;
-            RpcUnregister();
-        }
-
         [ClientRpc]
         void RpcUnregister()
         {
@@ -114,6 +103,11 @@ namespace _MultiplayerFPS.Scripts
         }
         [ClientRpc]
         void SetEnableCursor() => Cursor.lockState = CursorLockMode.None;
+        void GameStateOnGameStateChanged(GameStateName obj)
+        {
+            if (obj != GameStateName.Unregister) return;
+            RpcUnregister();
+        }
         void OnRemove(uint arg1, Pickup arg2)
         {
             if (isServer && _gameConfig.DoPickupsRespawn)

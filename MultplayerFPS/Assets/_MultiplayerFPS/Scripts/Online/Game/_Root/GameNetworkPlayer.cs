@@ -138,7 +138,6 @@ namespace _MultiplayerFPS.Scripts
             _stateService.GameState.GameStateName = GameStateName.Unregister;
             NetManager.singleton.ServerChangeScene("Lobby");
         }
-
         void HealthOnServerIsDeadChanged(bool obj)
         {
             PlayerState.IsDead = obj;

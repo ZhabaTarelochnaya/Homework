@@ -71,10 +71,6 @@ namespace _MultiplayerFPS.Scripts.Components
                 if (hitPlayerId == playerNetId) continue;
                 _playerScoreService.AddKill(playerNetId);
             }
-
-            yield return new WaitForSeconds(_config.ExplosionDuration);
-            _rigidBody.isKinematic = false;
-            _model.SetActive(true);
         }
         [ClientRpc]
         void RpcExplode()

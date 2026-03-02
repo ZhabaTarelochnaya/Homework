@@ -35,6 +35,7 @@ namespace _MultiplayerFPS.Scripts.Components.Health
         [Server]
         public void Damage(int damage)
         {
+            Debug.Log(damage);
             if (_isDead) return;
             var currentHp = _currentHp - damage;
             var newHp = Mathf.Clamp(currentHp, 0, MaxHp);
