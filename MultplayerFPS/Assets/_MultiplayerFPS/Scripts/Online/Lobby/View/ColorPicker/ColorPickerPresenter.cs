@@ -12,7 +12,6 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby.View
         {
             _player = player;
             _view = view;
-            Enable();
         }
         public void Enable()
         {

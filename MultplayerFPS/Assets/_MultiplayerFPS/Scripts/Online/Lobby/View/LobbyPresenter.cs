@@ -70,6 +70,7 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
 
         void OnAllPlayersReadyChanged(bool allPlayersReady)
         {
+            _lobbyView.SetStartGameButtonActive(false);
             if (NetworkServer.connections.Count < 2 || !NetworkServer.active) return;
             _lobbyView.SetStartGameButtonActive(allPlayersReady);
         }
