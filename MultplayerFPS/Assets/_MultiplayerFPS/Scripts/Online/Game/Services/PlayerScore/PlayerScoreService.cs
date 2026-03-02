@@ -1,5 +1,6 @@
 using _MultiplayerFPS.Scripts.Services.State;
 using _MultiplayerFPS.Scripts.State;
+using Mirror;
 
 namespace _MultiplayerFPS.Scripts.Services
 {
@@ -10,6 +11,7 @@ namespace _MultiplayerFPS.Scripts.Services
         public PlayerScoreService(IStateService stateService)
         {
             _gameState = stateService.GameState;
+            
         }
         public void AddKill(uint playerNetId)
         {

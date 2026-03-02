@@ -88,15 +88,16 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  _characterController: {fileID: 3073585225321600875}
   _gameNetworkPlayerView: {fileID: 5382530239579014548}
-  _weapon: {fileID: 2535602694409895224}
-  _cameraTarget: {fileID: 8981002603067325784}
-  _playerState: {fileID: 2786397991171922247}
-  _health: {fileID: 1734681077141525986}
   _disableOnDeath: {fileID: 552143018040800945}
   _hudViewPrefab: {fileID: -7191704096844636504, guid: 5c6d4cf8b5ba67545a20c896044f909a, type: 3}
+  _leaderboardView: {fileID: 3822281535066941748, guid: 64d6c84f8fc8c7541a1e26c2f49b8b0f, type: 3}
   _pickupCollector: {fileID: 966026184308478122}
+  <CharacterController>k__BackingField: {fileID: 3073585225321600875}
+  <Weapon>k__BackingField: {fileID: 2535602694409895224}
+  <CameraTarget>k__BackingField: {fileID: 8981002603067325784}
+  <PlayerState>k__BackingField: {fileID: 2786397991171922247}
+  <Health>k__BackingField: {fileID: 1734681077141525986}
 --- !u!114 &2786397991171922247
 MonoBehaviour:
   m_ObjectHideFlags: 0

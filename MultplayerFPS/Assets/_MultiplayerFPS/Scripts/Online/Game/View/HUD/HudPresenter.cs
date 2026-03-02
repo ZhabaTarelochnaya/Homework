@@ -2,6 +2,7 @@ using _MultiplayerFPS.Scripts.Components;
 using _MultiplayerFPS.Scripts.Config;
 using _MultiplayerFPS.Scripts.Config.Pickup;
 using _MultiplayerFPS.Scripts.Config.Weapon;
+using _MultiplayerFPS.Scripts.Leaderboard;
 using _MultiplayerFPS.Scripts.Services.Config;
 using _MultiplayerFPS.Scripts.State;
 using _MultiplayerFPS.Scripts.Utils;
@@ -16,8 +17,6 @@ namespace _MultiplayerFPS.Scripts
         readonly Weapon _weapon;
         readonly PlayerState _playerState;
         readonly IHudView _view;
-        int _currentMedkits;
-        int _currentGrenades;
 
         public HudPresenter(Weapon weapon, PlayerState playerState, IHudView view)
         {
@@ -30,6 +29,7 @@ namespace _MultiplayerFPS.Scripts
             var config = (IWeaponConfig)startingWeapon;
             _view.SetAmmo(_playerState.CurrentAmmo, config.MaxAmmo);
             Enable();
+            
         }
         public void Enable()
         {

@@ -12,5 +12,6 @@ namespace _MultiplayerFPS.Scripts.Services.InputService
         public bool GetShootButton();
         public bool GetHealButtonDown();
         public bool GetGrenadeButtonDown();
+        public bool GetLeaderboardButtonDown();
     }
 }
