@@ -91,7 +91,6 @@ public class NetManager : NetworkRoomManager
     {
         _lobbyState.Players.Remove(conn.identity.GetComponent<NetworkPlayer>());
     }
-
     /// <summary>
     /// This is called on the server when a networked scene finishes loading.
     /// </summary>

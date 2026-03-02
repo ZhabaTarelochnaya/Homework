@@ -21,37 +21,33 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
             _colorPickerPresenter = new ColorPickerPresenter(player, lobbyView.ColorPickerView);
             _playerListPresenter = new PlayerListPresenter(lobbyState, lobbyView.PlayerListView);
             
-            _lobbyView.Enable();
-            _lobbyView.ReadyPressed += LobbyViewOnReadyPressed;
-            _lobbyView.NicknameEditEnded += LobbyViewOnNicknameEditEnded;
-            _lobbyView.StopPressed += LobbyViewOnStopPressed;
-            _lobbyView.StartGamePressed += LobbyViewOnStartGamePressed;
-            _lobbyState.AllPlayersReadyChanged += OnAllPlayersReadyChanged;
+            Enable();
         }
         public void Enable()
         {
+            _colorPickerPresenter.Enable();
+            _playerListPresenter.Enable();
+            _lobbyView.Enable();
             _lobbyView.ReadyPressed += LobbyViewOnReadyPressed;
             _lobbyView.NicknameEditEnded += LobbyViewOnNicknameEditEnded;
             _lobbyView.StopPressed += LobbyViewOnStopPressed;
             _lobbyView.StartGamePressed += LobbyViewOnStartGamePressed;
             _lobbyState.AllPlayersReadyChanged += OnAllPlayersReadyChanged;
-            
-            _colorPickerPresenter.Enable();
-            _playerListPresenter.Enable();
-            _lobbyView.Enable();
+            _lobbyState.Players.OnRemove += OnRemove;
         }
-
         public void Disable()
         {
-            _colorPickerPresenter.Disable();
-            _playerListPresenter.Disable();
-            _lobbyView.Disable();
             _lobbyView.ReadyPressed -= LobbyViewOnReadyPressed;
             _lobbyView.NicknameEditEnded -= LobbyViewOnNicknameEditEnded;
             _lobbyView.StopPressed -= LobbyViewOnStopPressed;
             _lobbyView.StartGamePressed -= LobbyViewOnStartGamePressed;
             _lobbyState.AllPlayersReadyChanged -= OnAllPlayersReadyChanged;
+            _lobbyState.Players.OnRemove -= OnRemove;
+            _colorPickerPresenter.Disable();
+            _playerListPresenter.Disable();
+            _lobbyView.Disable();
         }
+        void OnRemove(int arg1, NetworkPlayer arg2) => _lobbyView.SetButtonUnready();
         void LobbyViewOnStartGamePressed()
         {
             Disable();

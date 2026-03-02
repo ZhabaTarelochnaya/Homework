@@ -13,7 +13,6 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
         {
             _lobbyState = lobbyState;
             _playerListView = playerListView;
-            Enable();
         }
         public void Enable()
         {

@@ -15,5 +15,6 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
         public event Action StartGamePressed;
         
         public void SetStartGameButtonActive(bool isActive);
+        public void SetButtonUnready();
     }
 }

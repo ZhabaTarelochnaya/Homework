@@ -33,6 +33,7 @@ namespace _MultiplayerFPS.Scripts.Online.Lobby
             gameObject.SetActive(false);
         }
         public void SetStartGameButtonActive(bool isActive) => _startGameButton.gameObject.SetActive(isActive);
+        public void SetButtonUnready() => _readyButtonText.text = "Ready";
         public void OnReadyButtonPressed()
         {
             _readyButtonText.text = _readyButtonText.text == "Unready" ? "Ready" : "Unready";
