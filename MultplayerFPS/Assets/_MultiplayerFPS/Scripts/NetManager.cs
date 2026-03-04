@@ -64,6 +64,7 @@ public class NetManager : NetworkRoomManager
         var networkPlayer =  roomPlayer.GetComponent<NetworkPlayer>();
         var gameNetworkPlayer = gamePlayer.GetComponent<GameNetworkPlayer>();
         gameNetworkPlayer.Init(networkPlayer.Nickname, networkPlayer.Color);
+        NetworkServer.Destroy(roomPlayer);
         return true;
     }
     public override void OnRoomServerPlayersReady() => _lobbyState.AllPlayersReady = allPlayersReady;
