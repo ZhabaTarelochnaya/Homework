@@ -79,7 +79,7 @@ namespace _MultiplayerFPS.Scripts
             playerState.IsHealingChanged += PlayerStateOnIsHealingChanged;
             playerState.IsThrowingGrenadeChanged += PlayerStateOnIsThrowingGrenadeChanged;
             playerState.IsDeadChanged += PlayerStateOnIsDeadChanged;
-            playerState.CurrentHealthChanged += PlayerStateOnCurrentHealthChanged;
+            playerState.CurrentHpChanged += PlayerStateOnCurrentHpChanged;
         }
         void OnRemove(uint netId, PlayerState state)
         {
@@ -91,7 +91,7 @@ namespace _MultiplayerFPS.Scripts
             state.IsHealingChanged -= PlayerStateOnIsHealingChanged;
             state.IsThrowingGrenadeChanged -= PlayerStateOnIsThrowingGrenadeChanged;
             state.IsDeadChanged -= PlayerStateOnIsDeadChanged;
-            state.CurrentHealthChanged -= PlayerStateOnCurrentHealthChanged;
+            state.CurrentHpChanged -= PlayerStateOnCurrentHpChanged;
         }
         
         public void HandleRunAnimations()
@@ -101,7 +101,7 @@ namespace _MultiplayerFPS.Scripts
             _animator.SetInteger(MoveHorizontal, (int)move.x);
         }
 
-        void PlayerStateOnCurrentHealthChanged(int arg1, int arg2)
+        void PlayerStateOnCurrentHpChanged(int arg1, int arg2)
         {
             _nicknameTagView.SetHealth(arg2 / (float)_playerConfig.MaxHealth);
         }

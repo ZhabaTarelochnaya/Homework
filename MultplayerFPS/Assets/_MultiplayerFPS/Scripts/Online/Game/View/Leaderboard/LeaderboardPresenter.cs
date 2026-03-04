@@ -68,7 +68,7 @@ namespace _MultiplayerFPS.Scripts.Leaderboard
         void ViewOnReturnToLobbyButtonPressed()
         {
             Disable();
-            ServiceLocator.Current.Get<IPlayerCommandsService>().ReturnToLobby();
+            ServiceLocator.Current.Get<IPlayerCommandsService>().CmdReturnToLobby();
         }
     }
 }

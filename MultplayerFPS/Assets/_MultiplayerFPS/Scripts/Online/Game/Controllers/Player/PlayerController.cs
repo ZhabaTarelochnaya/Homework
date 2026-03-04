@@ -3,6 +3,7 @@ using _MultiplayerFPS.Scripts.Components.Health;
 using _MultiplayerFPS.Scripts.Config;
 using _MultiplayerFPS.Scripts.Config.Pickup;
 using _MultiplayerFPS.Scripts.Controllers.HandsStates;
+using _MultiplayerFPS.Scripts.Leaderboard;
 using _MultiplayerFPS.Scripts.Services.Config;
 using _MultiplayerFPS.Scripts.Services.InputService;
 using _MultiplayerFPS.Scripts.Services.Move;
@@ -17,7 +18,9 @@ namespace _MultiplayerFPS.Scripts.Controllers
 {
     public class PlayerController
     {
-        readonly GameNetworkPlayer _gameNetworkPlayer;
+        readonly PlayerState _playerState;
+        readonly Transform _cameraTarget;
+        readonly LeaderboardPresenter _leaderboardPresenter;
         readonly IInputService _inputService;
         readonly IPlayerMovementService _playerMovementService;
         readonly ICameraManager _cameraManager;
@@ -27,28 +30,27 @@ namespace _MultiplayerFPS.Scripts.Controllers
         bool _isLeaderboardEnabled;
         bool _isActive;
 
-        public PlayerController(GameNetworkPlayer gameNetworkPlayer)
+        public PlayerController(PlayerState playerState, Weapon weapon, Transform cameraTarget, 
+            LeaderboardPresenter leaderboardPresenter)
         {
-            _gameNetworkPlayer = gameNetworkPlayer;
-
+            _playerState = playerState;
+            _cameraTarget = cameraTarget;
+            _leaderboardPresenter = leaderboardPresenter;
             _inputService = ServiceLocator.Current.Get<IInputService>();
             _playerMovementService = ServiceLocator.Current.Get<IPlayerMovementService>();
             _cameraManager = ServiceLocator.Current.Get<ICameraManager>();
-            _respawnService = ServiceLocator.Current.Get<IRespawnService>();
             
-            _handsFsm.AddState(new IdleState(_gameNetworkPlayer.Weapon, _gameNetworkPlayer.PlayerState))
-                .AddState(new ShootState(_gameNetworkPlayer.Weapon, _gameNetworkPlayer.PlayerState))
-                .AddState(new ReloadState(_gameNetworkPlayer.Weapon, _gameNetworkPlayer.PlayerState))
-                .AddState(new HealState(_gameNetworkPlayer.PlayerState))
-                .AddState(new GrenadeThrowState(_gameNetworkPlayer.PlayerState, gameNetworkPlayer));
-            
-            _gameNetworkPlayer.Health.ClientIsDeadChanged += HealthOnClientIsDeadChanged;
+            _handsFsm.AddState(new IdleState(weapon, _playerState))
+                .AddState(new ShootState(weapon, _playerState))
+                .AddState(new ReloadState(weapon, _playerState))
+                .AddState(new HealState())
+                .AddState(new GrenadeThrowState());
         }
 
         public void Update()
         {
             if (!_isActive) return;
-            if (!_gameNetworkPlayer.Health.IsDead)
+            if (!_playerState.IsDead)
             {
                 HandleMove();
                 HandleJump();
@@ -60,15 +62,15 @@ namespace _MultiplayerFPS.Scripts.Controllers
         public void UpdateCamera()
         {
             if (!_isActive) return;
-            _cameraManager.FollowPosition(_gameNetworkPlayer.CameraTarget);
+            _cameraManager.FollowPosition(_cameraTarget);
             var look = _inputService.GetLook();
-            _cameraManager.FollowRotation(look.y, _gameNetworkPlayer.transform.rotation.eulerAngles.y);
+            _cameraManager.FollowRotation(look.y, _playerState.transform.rotation.eulerAngles.y);
         }
         public void SetActive(bool active) => _isActive = active;
         void HandlePlayerRotation()
         {
             var look = _inputService.GetLook();
-            _gameNetworkPlayer.transform.Rotate(Vector3.up * look.x);
+            _playerState.transform.Rotate(Vector3.up * look.x);
         }
         void HandleJump()
         {
@@ -89,21 +91,12 @@ namespace _MultiplayerFPS.Scripts.Controllers
             if (!_inputService.GetLeaderboardButtonDown()) return;
             if (_isLeaderboardEnabled)
             {
-                _gameNetworkPlayer.LeaderboardPresenter.Disable();
+                _leaderboardPresenter.Disable();
                 _isLeaderboardEnabled = false;
                 return;
             }
-            _gameNetworkPlayer.LeaderboardPresenter.Enable();
+            _leaderboardPresenter.Enable();
             _isLeaderboardEnabled = true;
-        }
-        void HealthOnClientIsDeadChanged(bool obj)
-        {
-            if (obj)
-            {
-                _gameNetworkPlayer.Health.CmdRevive();
-                return;
-            }
-            _respawnService.Respawn(_gameNetworkPlayer.CharacterController);
         }
     }
 }

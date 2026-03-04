@@ -39,9 +39,9 @@ namespace _MultiplayerFPS.Scripts
             {
                 _view.SetAmmo(_playerState.CurrentAmmo, _weapon.Config.MaxAmmo);
             }
-            _view.SetHealth(_playerState.CurrentHealth);
+            _view.SetHealth(_playerState.CurrentHp);
             _view.UpdatingPing += ViewOnUpdatingPing;
-            _playerState.CurrentHealthChanged += PlayerStateOnCurrentHealthChanged;
+            _playerState.CurrentHpChanged += PlayerStateOnCurrentHpChanged;
             _playerState.CurrentAmmoChanged += PlayerStateOnCurrentAmmoChanged;
             _playerState.MedKitCountChanged += PlayerStateOnMedKitCountChanged;
             _playerState.GrenadeCountChanged += PlayerStateOnGrenadeCountChanged;
@@ -52,7 +52,7 @@ namespace _MultiplayerFPS.Scripts
         {
             _view.Disable();
             _view.UpdatingPing -= ViewOnUpdatingPing;
-            _playerState.CurrentHealthChanged -= PlayerStateOnCurrentHealthChanged;
+            _playerState.CurrentHpChanged -= PlayerStateOnCurrentHpChanged;
             _playerState.CurrentAmmoChanged -= PlayerStateOnCurrentAmmoChanged;
             _playerState.MedKitCountChanged -= PlayerStateOnMedKitCountChanged;
             _playerState.GrenadeCountChanged -= PlayerStateOnGrenadeCountChanged;
@@ -61,7 +61,7 @@ namespace _MultiplayerFPS.Scripts
         void PlayerStateOnGrenadeCountChanged(int obj) => _view.SetGrenade(obj);
         void PlayerStateOnMedKitCountChanged(int obj) => _view.SetMedKit(obj);
         void PlayerStateOnCurrentAmmoChanged(int obj) => _view.SetAmmo(obj ,_weapon.Config.MaxAmmo);
-        void PlayerStateOnCurrentHealthChanged(int arg1, int arg2) => _view.SetHealth(arg2);
+        void PlayerStateOnCurrentHpChanged(int arg1, int arg2) => _view.SetHealth(arg2);
         void GameStateOnCurrentTimeChanged(int obj) => _view.SetTimer(obj);
         void ViewOnUpdatingPing()
         {

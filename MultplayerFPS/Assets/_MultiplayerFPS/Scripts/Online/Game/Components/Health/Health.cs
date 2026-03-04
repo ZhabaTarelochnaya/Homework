@@ -19,11 +19,9 @@ namespace _MultiplayerFPS.Scripts.Components.Health
         [field: SerializeField] public int MaxHp { get; set; }
         public int CurrentHp => _currentHp;
         public bool IsDead => _currentHp <= 0;
-        
-        public delegate void CurrentHpChangedHandler(int currentHp, int damage);
-        public event CurrentHpChangedHandler ClientCurrentHpChanged;
+        public event Action<int,int> ClientCurrentHpChanged;
         public event Action<bool> ClientIsDeadChanged;
-        public event CurrentHpChangedHandler ServerCurrentHpChanged;
+        public event Action<int,int> ServerCurrentHpChanged;
         public event Action<bool> ServerIsDeadChanged;
         
         public override void OnStartServer()

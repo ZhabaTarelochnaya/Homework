@@ -28,7 +28,7 @@ namespace _MultiplayerFPS.Scripts.Controllers.HandsStates
         {
             if (_inputService.GetHealButtonDown() 
                 && _playerState.MedKitCount > 0 
-                && _playerState.CurrentHealth < _playerConfig.MaxHealth)
+                && _playerState.CurrentHp < _playerConfig.MaxHealth)
             {
                 return HandsStateName.Heal;
             }

@@ -42,7 +42,6 @@ namespace _MultiplayerFPS.Scripts.Services.Move
             HandleGravity();
             Velocity = _movement;
             _characterController.Move(_movement * Time.deltaTime);
-            _playerState.CmdChangePosition(_characterController.transform.position);
             _movement = Vector3.zero;
         }
         void HandleGravity()

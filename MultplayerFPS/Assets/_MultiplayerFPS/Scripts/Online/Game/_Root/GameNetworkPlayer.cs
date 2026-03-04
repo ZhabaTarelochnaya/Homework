@@ -11,6 +11,7 @@ using _MultiplayerFPS.Scripts.Services.Config;
 using _MultiplayerFPS.Scripts.Services.GrenadeService;
 using _MultiplayerFPS.Scripts.Services.InputService;
 using _MultiplayerFPS.Scripts.Services.Move;
+using _MultiplayerFPS.Scripts.Services.Respawn;
 using _MultiplayerFPS.Scripts.Services.ServerCommands;
 using _MultiplayerFPS.Scripts.Services.State;
 using _MultiplayerFPS.Scripts.State;
@@ -24,28 +25,24 @@ namespace _MultiplayerFPS.Scripts
     public class GameNetworkPlayer : NetworkBehaviour
     {
         IInputService _inputService;
-        IPickupService _pickupService;
-        IGrenadeService _grenadeService;
-        IPlayerScoreService _playerScoreService;
         IStateService _stateService;
+        IRespawnService _respawnService;
         PlayerController _playerController;
         HudPresenter _hudPresenter;
         LeaderboardPresenter _leaderboardPresenter;
         string _lobbyPlayerNickname;
         Color _lobbyPlayerColor;
         [SerializeField] GameNetworkPlayerView _gameNetworkPlayerView;
+        [SerializeField] GameNetworkPlayerCommands _gameNetworkPlayerCommands;
         [SerializeField] GameObject _disableOnDeath;
         [SerializeField] HudView _hudViewPrefab;
         [SerializeField] LeaderboardView _leaderboardView;
         [SerializeField] PickupCollector _pickupCollector;
-        
-        [field: SerializeField] public CharacterController CharacterController { get; private set; }
-        [field: SerializeField] public Weapon Weapon { get; private set; }
-        [field: SerializeField] public Transform CameraTarget { get; private set; }
-        [field: SerializeField] public PlayerState PlayerState { get; private set; }
-        [field: SerializeField] public Health Health { get; private set; }
-        public IPresenter LeaderboardPresenter => _leaderboardPresenter;
-        
+        [SerializeField] CharacterController _characterController;
+        [SerializeField] Weapon _weapon;
+        [SerializeField] Transform _cameraTarget;
+        [SerializeField] PlayerState _playerState;
+        [SerializeField] Health _health;
 
         [Server]
         public void Init(string nickname, Color color)
@@ -55,27 +52,24 @@ namespace _MultiplayerFPS.Scripts
         }
         public override void OnStartServer()
         {
-            _grenadeService = ServiceLocator.Current.Get<IGrenadeService>();
-            _pickupService = ServiceLocator.Current.Get<IPickupService>();
-            _playerScoreService = ServiceLocator.Current.Get<IPlayerScoreService>();
             
             _stateService = ServiceLocator.Current.Get<IStateService>();
-            _stateService.GameState.PlayerStates.TryAdd(netId, PlayerState);
+            _stateService.GameState.PlayerStates.TryAdd(netId, _playerState);
             _stateService.GameState.PlayerScores.TryAdd(netId, new PlayerScore());
             _stateService.GameState.GameStateChanged += GameStateOnGameStateChanged;
             
-            PlayerState.Nickname = _lobbyPlayerNickname;
-            PlayerState.Color = _lobbyPlayerColor;
-            Health.ServerCurrentHpChanged += HealthOnServerCurrentHpChanged;
-            Health.ServerIsDeadChanged += HealthOnServerIsDeadChanged;
-            Health.MaxHp = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>().MaxHealth;
-            Health.FullHeal();
+            _playerState.Nickname = _lobbyPlayerNickname;
+            _playerState.Color = _lobbyPlayerColor;
+            _playerState.Pickups.OnChange += OnChange;
+            _playerState.IsDeadChanged += PlayerStateOnIsDeadChanged;
+            
+            _health.MaxHp = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>().MaxHealth;
+            _health.FullHeal();
         }
         public override void OnStopServer()
         {
             _stateService.GameState.GameStateChanged -= GameStateOnGameStateChanged;
-            Health.ServerCurrentHpChanged -= HealthOnServerCurrentHpChanged;
-            Health.ServerIsDeadChanged -= HealthOnServerIsDeadChanged;
+            _playerState.Pickups.OnChange -= OnChange;
             _stateService.GameState.PlayerStates.Remove(netId);
             _stateService.GameState.PlayerScores.Remove(netId);
         }
@@ -85,32 +79,35 @@ namespace _MultiplayerFPS.Scripts
             
             var inputService = new MouseKeyboardInputService();
             ServiceLocator.Current.Register<IInputService>(inputService);
-            var moveService = new CharacterControllerPlayerMovementService(CharacterController, PlayerState);
+            var moveService = new CharacterControllerPlayerMovementService(_characterController, _playerState);
             ServiceLocator.Current.Register<IPlayerMovementService>(moveService);
             var cameraManager = new CameraManager(Camera.main);
             ServiceLocator.Current.Register<ICameraManager>(cameraManager);
-            var playerCommandsService = new PlayerCommandsService(this);
+            var playerCommandsService = new PlayerCommandsService(_gameNetworkPlayerCommands);
             ServiceLocator.Current.Register<IPlayerCommandsService>(playerCommandsService);
             
-            _playerController = new PlayerController(this);
+            _respawnService = ServiceLocator.Current.Get<IRespawnService>();
             
             var hudView = Instantiate(_hudViewPrefab);
-            _hudPresenter = new HudPresenter(Weapon, PlayerState, hudView);
+            _hudPresenter = new HudPresenter(_weapon, _playerState, hudView);
             var leaderBoardView = Instantiate(_leaderboardView);
             _leaderboardPresenter =  new LeaderboardPresenter(leaderBoardView);
             
+            _playerController = new PlayerController(_playerState, _weapon, _cameraTarget, _leaderboardPresenter);
+            
             _pickupCollector.PickupCollected += PickupCollectorOnPickupCollected;
+            _playerState.IsDeadChanged += PlayerStateOnIsDeadChanged;
             
             _playerController.SetActive(false);
             _hudPresenter.Disable();
-            PlayerState.CmdChangeInitialized(true);
+            _gameNetworkPlayerCommands.CmdChangeInitialized(true);
         }
         void Update()
         {
             if (!isLocalPlayer) return;
             _playerController.Update();
             
-            if (PlayerState.IsDead) return;
+            if (_playerState.IsDead) return;
             _gameNetworkPlayerView.HandleRunAnimations();
         }
         void LateUpdate()
@@ -118,53 +115,6 @@ namespace _MultiplayerFPS.Scripts
             if (!isLocalPlayer) return;
             _playerController.UpdateCamera();
         }
-        void PickupCollectorOnPickupCollected(uint netId)
-        {
-            CmdTryPickUp(netId);
-        }
-        [Command]
-        void CmdTryPickUp(uint netId)
-        {
-            _pickupService.TryPickup(netId, connectionToClient.identity.netId);
-        }
-        [Command]
-        public void CmdThrowGrenade(Vector3 direction)
-        {
-            _grenadeService.ThrowGrenade(PlayerState, transform.position, direction);
-        }
-        [Command]
-        public void CmdReturnToLobby()
-        {
-            _stateService.GameState.GameStateName = GameStateName.Unregister;
-            NetManager.singleton.ServerChangeScene("Lobby");
-        }
-        void HealthOnServerIsDeadChanged(bool obj)
-        {
-            PlayerState.IsDead = obj;
-            _disableOnDeath.SetActive(!obj);
-            if (obj)
-            {
-                _playerScoreService.AddDeath(netId);
-            }
-        }
-        void HealthOnServerCurrentHpChanged(int oldHp, int newHp) => PlayerState.CurrentHealth = newHp;
-
-        void GameStateOnGameStateChanged(GameStateName state)
-        {
-            if (state == GameStateName.MatchGoing)
-            {
-                RpcEnable();
-            }
-            else if (state == GameStateName.MatchEnded)
-            {
-                RpcDisable();
-            }
-            else if (state == GameStateName.Unregister)
-            {
-                RpcUnregister(connectionToClient);
-            }
-        }
-
         [TargetRpc]
         void RpcUnregister(NetworkConnectionToClient conn)
         {
@@ -174,7 +124,6 @@ namespace _MultiplayerFPS.Scripts
             ServiceLocator.Current.Unregister<IPlayerCommandsService>();
             _pickupCollector.PickupCollected -= PickupCollectorOnPickupCollected;
         }
-
         [ClientRpc]
         void RpcEnable()
         {
@@ -195,6 +144,59 @@ namespace _MultiplayerFPS.Scripts
                 _leaderboardPresenter.Enable();
             }
             _disableOnDeath.gameObject.SetActive(false);
+        }
+        void PickupCollectorOnPickupCollected(uint netId) => _gameNetworkPlayerCommands.CmdTryPickUp(netId);
+        void PlayerStateOnIsDeadChanged(bool obj)
+        {
+            if (!isLocalPlayer) return;
+            _disableOnDeath.SetActive(!obj);
+            if (obj)
+            {
+                _health.CmdRevive();
+                _gameNetworkPlayerCommands.CmdAddDeath();
+                return;
+            }
+            _respawnService.Respawn(_characterController);
+        }
+        void GameStateOnGameStateChanged(GameStateName state)
+        {
+            if (state == GameStateName.MatchGoing)
+            {
+                RpcEnable();
+            }
+            else if (state == GameStateName.MatchEnded)
+            {
+                RpcDisable();
+            }
+            else if (state == GameStateName.Unregister)
+            {
+                RpcUnregister(connectionToClient);
+            }
+        }
+        void OnChange(SyncList<PickupName>.Operation arg1, int arg2, PickupName arg3)
+        {
+            if (arg1 == SyncList<PickupName>.Operation.OP_ADD)
+            {
+                if (arg3 == PickupName.MedKit)
+                {
+                    _playerState.MedKitCount++;
+                }
+                else if (arg3 == PickupName.Grenade)
+                {
+                    _playerState.GrenadeCount++;
+                }
+            }
+            else if (arg1 == SyncList<PickupName>.Operation.OP_REMOVEAT)
+            {
+                if (arg3 == PickupName.MedKit)
+                {
+                    _playerState.MedKitCount--;
+                }
+                else if (arg3 == PickupName.Grenade)
+                {
+                    _playerState.GrenadeCount--;
+                }
+            }
         }
     }
 }

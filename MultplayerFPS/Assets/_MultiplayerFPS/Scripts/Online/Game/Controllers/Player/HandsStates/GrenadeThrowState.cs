@@ -1,6 +1,7 @@
 using _MultiplayerFPS.Scripts.Components;
 using _MultiplayerFPS.Scripts.Config.Pickup;
 using _MultiplayerFPS.Scripts.Services.Config;
+using _MultiplayerFPS.Scripts.Services.ServerCommands;
 using _MultiplayerFPS.Scripts.State;
 using _MultiplayerFPS.Scripts.Utils.FiniteStateMachine;
 using _MultiplayerFPS.Scripts.Utils.ServiceLocator;
@@ -14,32 +15,29 @@ namespace _MultiplayerFPS.Scripts.Controllers.HandsStates
         readonly GameNetworkPlayer _player;
         readonly GrenadeConfig _config;
         readonly ICameraManager _cameraManager;
+        readonly IPlayerCommandsService _playerCommandsService;
         float _timer;
-        public GrenadeThrowState(PlayerState playerState, GameNetworkPlayer player) 
-            : base(HandsStateName.ThrowGrenade)
+        public GrenadeThrowState() : base(HandsStateName.ThrowGrenade)
         {
-            _playerState = playerState;
-            _player = player;
             _config = ServiceLocator.Current.Get<IConfigService>().Get<GrenadeConfig>();
             _cameraManager = ServiceLocator.Current.Get<ICameraManager>();
+            _playerCommandsService = ServiceLocator.Current.Get<IPlayerCommandsService>();
         }
         public override void OnEnter()
         {
             _timer = _config.ThrowDuration;
-            _playerState.CmdChangeIsThrowingGrenade(true);
+            _playerCommandsService.CmdChangeIsThrowingGrenade(true);
         }
         public override void Tick(float deltaTime)
         {
             _timer -= deltaTime;
         }
-
         public override void OnExit()
         {
             var direction = _cameraManager.CurrentCamera.transform.forward;
-            _player.CmdThrowGrenade(direction);
-            _playerState.CmdChangeIsThrowingGrenade(false);
+            _playerCommandsService.CmdThrowGrenade(direction);
+            _playerCommandsService.CmdChangeIsThrowingGrenade(false);
         }
-
         public override HandsStateName GetNextState()
         {
             if (_timer <= 0)

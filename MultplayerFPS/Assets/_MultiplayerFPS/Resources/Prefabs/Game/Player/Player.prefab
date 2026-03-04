@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 3232600926293641778}
   - component: {fileID: 8937598044557460890}
   - component: {fileID: 2786397991171922247}
+  - component: {fileID: 6139692233579960212}
   - component: {fileID: 5382530239579014548}
   - component: {fileID: 1734681077141525986}
   - component: {fileID: 2535602694409895224}
@@ -89,15 +90,16 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   _gameNetworkPlayerView: {fileID: 5382530239579014548}
+  _gameNetworkPlayerCommands: {fileID: 6139692233579960212}
   _disableOnDeath: {fileID: 552143018040800945}
   _hudViewPrefab: {fileID: -7191704096844636504, guid: 5c6d4cf8b5ba67545a20c896044f909a, type: 3}
   _leaderboardView: {fileID: 3822281535066941748, guid: 64d6c84f8fc8c7541a1e26c2f49b8b0f, type: 3}
   _pickupCollector: {fileID: 966026184308478122}
-  <CharacterController>k__BackingField: {fileID: 3073585225321600875}
-  <Weapon>k__BackingField: {fileID: 2535602694409895224}
-  <CameraTarget>k__BackingField: {fileID: 8981002603067325784}
-  <PlayerState>k__BackingField: {fileID: 2786397991171922247}
-  <Health>k__BackingField: {fileID: 1734681077141525986}
+  _characterController: {fileID: 3073585225321600875}
+  _weapon: {fileID: 2535602694409895224}
+  _cameraTarget: {fileID: 8981002603067325784}
+  _playerState: {fileID: 2786397991171922247}
+  _health: {fileID: 1734681077141525986}
 --- !u!114 &2786397991171922247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,18 +115,33 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  _health: {fileID: 1734681077141525986}
   IsInitialized: 0
   Nickname: 
   Color: {r: 0, g: 0, b: 0, a: 0}
-  CurrentHealth: 0
   CurrentAmmo: 0
   IsShooting: 0
   IsReloading: 0
   IsHealing: 0
   IsThrowingGrenade: 0
-  IsDead: 0
-  Position: {x: 0, y: 0, z: 0}
+  MedKitCount: 0
+  GrenadeCount: 0
+  _health: {fileID: 1734681077141525986}
+--- !u!114 &6139692233579960212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6475772093013630939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc76ca2218ab451998c3fec756d6c90d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  _playerState: {fileID: 2786397991171922247}
 --- !u!114 &5382530239579014548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncDirection: 0
-  syncMode: 0
+  syncMode: 1
   syncInterval: 0
   <MaxHp>k__BackingField: 100
 --- !u!114 &2535602694409895224
