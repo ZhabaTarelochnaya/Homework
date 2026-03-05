@@ -85,6 +85,8 @@ namespace _MultiplayerFPS.Scripts
         public override void OnStopClient()
         {
             Cursor.lockState = CursorLockMode.None;
+            ServiceLocator.Current.Unregister<IStateService>();
+            ServiceLocator.Current.Unregister<IRespawnService>();
         }
         void Update()
         {

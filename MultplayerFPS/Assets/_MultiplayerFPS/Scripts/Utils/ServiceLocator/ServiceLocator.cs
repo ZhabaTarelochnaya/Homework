@@ -22,7 +22,6 @@ namespace _MultiplayerFPS.Scripts.Utils.ServiceLocator
             if (!_services.ContainsKey(key))
             {
                 Debug.LogError($"{key} not registered with {GetType().Name}");
-                throw new InvalidOperationException();
             }
 
             return (T)_services[key];

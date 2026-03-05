@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using _MultiplayerFPS.Scripts.Components;
@@ -105,6 +106,14 @@ namespace _MultiplayerFPS.Scripts
             _hudPresenter.Disable();
             
             _gameNetworkPlayerCommands.CmdChangeInitialized(true);
+        }
+
+        public override void OnStopClient()
+        {
+            ServiceLocator.Current.Unregister<IInputService>();
+            ServiceLocator.Current.Unregister<IPlayerMovementService>();
+            ServiceLocator.Current.Unregister<ICameraManager>();
+            ServiceLocator.Current.Unregister<IPlayerCommandsService>();
         }
 
         void Update()
