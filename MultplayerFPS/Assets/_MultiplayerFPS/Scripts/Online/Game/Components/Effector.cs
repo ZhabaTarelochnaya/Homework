@@ -25,31 +25,30 @@ namespace _MultiplayerFPS.Scripts.Components
             _playerNetIdToEffects.Add(playerState.netId, coroutines);
             playerState.IsDeadChanged += PlayerStateOnIsDeadChanged;
         }
-
+        void OnTriggerExit(Collider other)
+        {
+            var playerState = other.GetComponentInParent<PlayerState>();
+            RemoveEffects(playerState);
+            playerState.IsDeadChanged -= PlayerStateOnIsDeadChanged;
+        }
         void PlayerStateOnIsDeadChanged(PlayerState playerState, bool obj)
         {
             if (isServer)
             {
-                RemoveEffects(playerState.netId);
+                RemoveEffects(playerState);
                 playerState.IsDeadChanged -= PlayerStateOnIsDeadChanged;
             }
         }
-        [ServerCallback]
-        void OnTriggerExit(Collider other)
+        void RemoveEffects(PlayerState playerState)
         {
-            var playerState = other.GetComponentInParent<PlayerState>();
-            RemoveEffects(playerState.netId);
-            playerState.IsDeadChanged -= PlayerStateOnIsDeadChanged;
-        }
-        void RemoveEffects(uint netId)
-        {
-            if (!_playerNetIdToEffects.TryGetValue(netId, out var coroutines))
+            if (!_playerNetIdToEffects.TryGetValue(playerState.netId, out var coroutines))
                 return;
             for (int i = 0; i < _effects.Length; i++)
             {
                 StopCoroutine(coroutines[i]);
+                _effects[i].OnRemove(playerState);
             }
-            _playerNetIdToEffects.Remove(netId);
+            _playerNetIdToEffects.Remove(playerState.netId);
         }
     }
 }

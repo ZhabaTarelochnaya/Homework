@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1e7529fdbc149089bfee6306931c88c, type: 3}
-  m_Name: DamageOverTimeEffect
+  m_Script: {fileID: 11500000, guid: 3c374b5d48794a45b20187cda62369bb, type: 3}
+  m_Name: JumpHeightAssignEffect
   m_EditorClassIdentifier: 
-  <Damage>k__BackingField: 1
-  <Rate>k__BackingField: 6
+  <HeightMultiplier>k__BackingField: 0.1

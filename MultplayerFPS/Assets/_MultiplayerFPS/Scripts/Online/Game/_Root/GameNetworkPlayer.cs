@@ -59,9 +59,12 @@ namespace _MultiplayerFPS.Scripts
             _stateService.GameState.PlayerStates.TryAdd(netId, _playerState);
             _stateService.GameState.PlayerScores.TryAdd(netId, new PlayerScore());
             _stateService.GameState.GameStateChanged += GameStateOnGameStateChanged;
-            
+
+            var playerConfig = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>();
             _playerState.Nickname = _lobbyPlayerNickname;
             _playerState.Color = _lobbyPlayerColor;
+            _playerState.Speed = playerConfig.Speed;
+            _playerState.JumpHeight = playerConfig.JumpHeight;
             _playerState.Pickups.OnChange += OnChange;
             _playerState.IsDeadChanged += PlayerStateOnIsDeadChanged;
             

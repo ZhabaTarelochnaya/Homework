@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1e7529fdbc149089bfee6306931c88c, type: 3}
-  m_Name: DamageOverTimeEffect
+  m_Script: {fileID: 11500000, guid: ccbd2c188ef2481995a472aa79e893c8, type: 3}
+  m_Name: SpeedChangeEffect
   m_EditorClassIdentifier: 
-  <Damage>k__BackingField: 1
-  <Rate>k__BackingField: 6
+  <AdditionalSpeed>k__BackingField: -8

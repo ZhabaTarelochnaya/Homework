@@ -30,6 +30,10 @@ namespace _MultiplayerFPS.Scripts.State
         public int MedKitCount;
         [SyncVar(hook = nameof(OnGrenadeCountChanged)), HideInInspector]
         public int GrenadeCount;
+        [SyncVar, HideInInspector] 
+        public float Speed;
+        [SyncVar, HideInInspector] 
+        public float JumpHeight;
         
         [SerializeField] Health _health;
         

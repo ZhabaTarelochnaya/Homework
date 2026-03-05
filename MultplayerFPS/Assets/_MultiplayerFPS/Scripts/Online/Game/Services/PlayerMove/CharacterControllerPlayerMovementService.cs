@@ -30,12 +30,12 @@ namespace _MultiplayerFPS.Scripts.Services.Move
             direction.Normalize();
             Vector3 localDirection = new Vector3(direction.x, 0f, direction.y);
             Vector3 worldDirection = _characterController.transform.TransformDirection(localDirection);
-            _movement += worldDirection * _playerConfig.Speed;
+            _movement += worldDirection * _playerState.Speed;
         }
         public void AddJump()
         {
             if (!_characterController.isGrounded) return;
-            _verticalVelocity = Mathf.Sqrt( -2f * _playerConfig.Gravity * _playerConfig.JumpHeight);
+            _verticalVelocity = Mathf.Sqrt( -2f * _playerConfig.Gravity * _playerState.JumpHeight);
         }
         public void Move()
         {
