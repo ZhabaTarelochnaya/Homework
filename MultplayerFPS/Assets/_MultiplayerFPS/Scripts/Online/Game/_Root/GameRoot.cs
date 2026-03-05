@@ -23,11 +23,9 @@ namespace _MultiplayerFPS.Scripts
     [DefaultExecutionOrder(-100)]
     public class GameRoot : NetworkBehaviour
     {
-        WaitForSeconds _waitForRespawn;
         ILoggerService _loggerService;
         IPickupService _pickupService;
         IStateService _stateService;
-        GameConfig _gameConfig;
         FSM<GameStateName> _gameStateFsm = new ();
         [SerializeField] GameState _gameState;
         [SerializeField] Transform[] _spawnPoints;
@@ -52,15 +50,6 @@ namespace _MultiplayerFPS.Scripts
             var matchTimeService = new MatchTimeService(_gameState);
             ServiceLocator.Current.Register<IMatchTimeService>(matchTimeService);
             
-            _gameConfig = ServiceLocator.Current.Get<IConfigService>().Get<GameConfig>();
-            
-            _waitForRespawn = new WaitForSeconds(_gameConfig.PickupRespawnTime);
-            for (int i = 0; i < _gameConfig.MaxPickups; i++)
-            {
-                _pickupService.SpawnRandom();
-            }
-            
-            _gameState.ActivePickups.OnRemove += OnRemove;
             _gameState.GameStateChanged += GameStateOnGameStateChanged;
             
             _gameStateFsm.AddState(new InitState(_gameState))
@@ -75,12 +64,8 @@ namespace _MultiplayerFPS.Scripts
             ServiceLocator.Current.Unregister<IPlayerScoreService>();
             ServiceLocator.Current.Unregister<IMatchTimeService>();
             
-            _gameState.ActivePickups.OnRemove -= OnRemove;
         }
-        public override void OnStartClient()
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+        public override void OnStartClient() => Cursor.lockState = CursorLockMode.Locked;
         public override void OnStopClient()
         {
             Cursor.lockState = CursorLockMode.None;
@@ -91,6 +76,11 @@ namespace _MultiplayerFPS.Scripts
         {
             if (!isServer) return;
             _gameStateFsm.Tick(Time.deltaTime);
+        }
+        void GameStateOnGameStateChanged(GameStateName obj)
+        {
+            if (obj != GameStateName.Unregister) return;
+            RpcUnregister();
         }
         [ClientRpc]
         void RpcUnregister()
@@ -104,22 +94,5 @@ namespace _MultiplayerFPS.Scripts
         }
         [ClientRpc]
         void SetEnableCursor() => Cursor.lockState = CursorLockMode.None;
-        void GameStateOnGameStateChanged(GameStateName obj)
-        {
-            if (obj != GameStateName.Unregister) return;
-            RpcUnregister();
-        }
-        void OnRemove(uint arg1, Pickup arg2)
-        {
-            if (isServer && _gameConfig.DoPickupsRespawn)
-            {
-                StartCoroutine(RespawnPickup());
-            }
-        }
-        IEnumerator RespawnPickup()
-        {
-            yield return _waitForRespawn;
-            _pickupService.SpawnRandom();
-        }
     }
 }

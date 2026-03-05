@@ -46,7 +46,6 @@ namespace _MultiplayerFPS.Scripts
         [SerializeField] Health _health;
         [SerializeField] Collider _effectorTarget;
         
-
         [Server]
         public void Init(string nickname, Color color)
         {
@@ -81,8 +80,6 @@ namespace _MultiplayerFPS.Scripts
         public override void OnStartClient()
         {
             if (!isLocalPlayer) return;
-            _stateService = ServiceLocator.Current.Get<IStateService>();
-            
             
             var inputService = new MouseKeyboardInputService();
             ServiceLocator.Current.Register<IInputService>(inputService);
@@ -94,6 +91,7 @@ namespace _MultiplayerFPS.Scripts
             ServiceLocator.Current.Register<IPlayerCommandsService>(playerCommandsService);
 
             _respawnService = ServiceLocator.Current.Get<IRespawnService>();
+            _stateService = ServiceLocator.Current.Get<IStateService>();
             
             var hudView = Instantiate(_hudViewPrefab);
             _hudPresenter = new HudPresenter(_weapon, _playerState, hudView);
