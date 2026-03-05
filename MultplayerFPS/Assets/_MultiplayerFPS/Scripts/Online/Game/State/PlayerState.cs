@@ -42,14 +42,11 @@ namespace _MultiplayerFPS.Scripts.State
         public event Action<Color> ColorChanged;
         public event Action<int, int> CurrentHpChanged
         {
-            add => _health.ClientCurrentHpChanged += value;
-            remove => _health.ClientCurrentHpChanged -= value;
+            add => _health.CurrentHpChanged += value;
+            remove => _health.CurrentHpChanged -= value;
         }
-        public event Action<bool> IsDeadChanged
-        {
-            add => _health.ClientIsDeadChanged += value;
-            remove => _health.ClientIsDeadChanged -= value;
-        }
+
+        public event Action<PlayerState, bool> IsDeadChanged;
         public event Action<int> CurrentAmmoChanged;
         public event Action<bool> IsShootingChanged;
         public event Action<bool> IsReloadingChanged;
@@ -61,6 +58,11 @@ namespace _MultiplayerFPS.Scripts.State
         [Server]
         public void Damage(int damage) => _health.Damage(damage);
         
+        public override void OnStartServer() => _health.IsDeadChanged += OnHealthIsDeadChanged;
+        public override void OnStopServer() => _health.IsDeadChanged -= OnHealthIsDeadChanged;
+        public override void OnStartClient() => _health.IsDeadChanged += OnHealthIsDeadChanged;
+        public override void OnStopClient() => _health.IsDeadChanged -= OnHealthIsDeadChanged;
+        void OnHealthIsDeadChanged(bool obj) => IsDeadChanged?.Invoke(this, obj);
 
         # region HOOKS
         void OnIsInitializedChanged(bool oldValue, bool newValue) => IsInitializedChanged?.Invoke(newValue);

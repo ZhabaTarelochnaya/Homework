@@ -17,8 +17,8 @@ TagManager:
   - PlayerCollison
   - Pickup
   - GrenadeThrowable
-  - 
-  - 
+  - Effectors
+  - Effectable
   - 
   - 
   - 

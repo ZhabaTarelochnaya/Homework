@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace _MultiplayerFPS.Scripts.Services.Respawn
 {
@@ -9,9 +11,12 @@ namespace _MultiplayerFPS.Scripts.Services.Respawn
         {
             _startPositions = startPositions;
         }
+
+        public event Action Respawned;
+
         public void Respawn(CharacterController player)
         {
-            var spawnPoint = GetNextSpawnPoint();
+            var spawnPoint = GetSpawnPoint();
             player.enabled = false;
             player.transform.SetPositionAndRotation(
                 spawnPoint.position,
@@ -19,6 +24,7 @@ namespace _MultiplayerFPS.Scripts.Services.Respawn
             );
             player.enabled = true;
         }
-        Transform GetNextSpawnPoint() => _startPositions[Random.Range(0, _startPositions.Length)];
+        
+        Transform GetSpawnPoint() => _startPositions[Random.Range(0, _startPositions.Length)];
     }
 }

@@ -35,6 +35,7 @@ namespace _MultiplayerFPS.Scripts
         
         public override void OnStartClient()
         {
+            Debug.Log("View OnStartClient");
             _nicknameTagView = Instantiate(_nicknameTagViewPrefab, _disableOnDeath.transform);
             _playerConfig = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>();
             
@@ -111,7 +112,7 @@ namespace _MultiplayerFPS.Scripts
             _nicknameTagView.SetColor(newColor);
             _renderer.material.color = newColor;
         }
-        void PlayerStateOnIsDeadChanged(bool obj) => _disableOnDeath.SetActive(!obj);
+        void PlayerStateOnIsDeadChanged(PlayerState playerState, bool obj) => _disableOnDeath.SetActive(!obj);
         void PlayerStateOnIsShootingChanged(bool obj) => _animator.SetBool(IsShooting, obj);
         void PlayerStateOnIsReloadingChanged(bool obj) => _animator.SetBool(IsReloading, obj);
         void PlayerStateOnIsThrowingGrenadeChanged(bool obj) => _animator.SetBool(IsThrowingGrenade, obj);

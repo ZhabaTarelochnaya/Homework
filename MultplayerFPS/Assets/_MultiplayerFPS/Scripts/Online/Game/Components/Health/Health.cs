@@ -18,11 +18,9 @@ namespace _MultiplayerFPS.Scripts.Components.Health
         Coroutine _respawnCoroutine;
         [field: SerializeField] public int MaxHp { get; set; }
         public int CurrentHp => _currentHp;
-        public bool IsDead => _currentHp <= 0;
-        public event Action<int,int> ClientCurrentHpChanged;
-        public event Action<bool> ClientIsDeadChanged;
-        public event Action<int,int> ServerCurrentHpChanged;
-        public event Action<bool> ServerIsDeadChanged;
+        public bool IsDead => _isDead;
+        public event Action<int,int> CurrentHpChanged;
+        public event Action<bool> IsDeadChanged;
         
         public override void OnStartServer()
         {
@@ -37,30 +35,19 @@ namespace _MultiplayerFPS.Scripts.Components.Health
             var currentHp = _currentHp - damage;
             var newHp = Mathf.Clamp(currentHp, 0, MaxHp);
             if (newHp == _currentHp) return;
-            ServerCurrentHpChanged?.Invoke(_currentHp, newHp);
             _currentHp = newHp;
             if (_currentHp == 0)
             {
                 _isDead = true;
-                ServerIsDeadChanged?.Invoke(_isDead);
             }
-        }
-        [Server]
-        public void Revive()
-        {
-            FullHeal();
-            _isDead = false;
-            ServerIsDeadChanged?.Invoke(_isDead);
         }
         [Server]
         public void FullHeal()
         {
-            ServerCurrentHpChanged?.Invoke(_currentHp, MaxHp);
             _currentHp = MaxHp;
-        }
-
+        } 
         [Command]
-        public void CmdRevive()
+        public void CmdStartRevive()
         {
             if (_respawnCoroutine != null)
             {
@@ -73,13 +60,19 @@ namespace _MultiplayerFPS.Scripts.Components.Health
             yield return _waitForRespawn;
             Revive();
         }
+        [Server]
+        void Revive()
+        {
+            FullHeal();
+            _isDead = false;
+        }
         void OnCurrentHpChanged(int oldHp, int newHp)
         {
-            ClientCurrentHpChanged?.Invoke(oldHp,newHp);
+            CurrentHpChanged?.Invoke(oldHp,newHp);
         }
         void OnIsDeadChanged(bool oldValue, bool newValue)
         {
-            ClientIsDeadChanged?.Invoke(newValue);
+            IsDeadChanged?.Invoke(newValue);
         }
     }
 }

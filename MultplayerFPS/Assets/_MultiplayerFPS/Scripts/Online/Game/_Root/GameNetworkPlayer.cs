@@ -43,6 +43,8 @@ namespace _MultiplayerFPS.Scripts
         [SerializeField] Transform _cameraTarget;
         [SerializeField] PlayerState _playerState;
         [SerializeField] Health _health;
+        [SerializeField] Collider _effectorTarget;
+        
 
         [Server]
         public void Init(string nickname, Color color)
@@ -52,7 +54,6 @@ namespace _MultiplayerFPS.Scripts
         }
         public override void OnStartServer()
         {
-            
             _stateService = ServiceLocator.Current.Get<IStateService>();
             _stateService.GameState.PlayerStates.TryAdd(netId, _playerState);
             _stateService.GameState.PlayerScores.TryAdd(netId, new PlayerScore());
@@ -85,8 +86,9 @@ namespace _MultiplayerFPS.Scripts
             ServiceLocator.Current.Register<ICameraManager>(cameraManager);
             var playerCommandsService = new PlayerCommandsService(_gameNetworkPlayerCommands);
             ServiceLocator.Current.Register<IPlayerCommandsService>(playerCommandsService);
-            
+
             _respawnService = ServiceLocator.Current.Get<IRespawnService>();
+            _respawnService.Respawned += RespawnServiceOnRespawned;
             
             var hudView = Instantiate(_hudViewPrefab);
             _hudPresenter = new HudPresenter(_weapon, _playerState, hudView);
@@ -102,6 +104,12 @@ namespace _MultiplayerFPS.Scripts
             _hudPresenter.Disable();
             _gameNetworkPlayerCommands.CmdChangeInitialized(true);
         }
+
+        void RespawnServiceOnRespawned()
+        {
+            // _gameNetworkPlayerCommands.CmdSetEffectorTargetActive(true);
+        }
+
         void Update()
         {
             if (!isLocalPlayer) return;
@@ -123,6 +131,8 @@ namespace _MultiplayerFPS.Scripts
             ServiceLocator.Current.Unregister<ICameraManager>();
             ServiceLocator.Current.Unregister<IPlayerCommandsService>();
             _pickupCollector.PickupCollected -= PickupCollectorOnPickupCollected;
+            _respawnService.Respawned -= RespawnServiceOnRespawned;
+            _playerState.IsDeadChanged -= PlayerStateOnIsDeadChanged;
         }
         [ClientRpc]
         void RpcEnable()
@@ -146,18 +156,25 @@ namespace _MultiplayerFPS.Scripts
             _disableOnDeath.gameObject.SetActive(false);
         }
         void PickupCollectorOnPickupCollected(uint netId) => _gameNetworkPlayerCommands.CmdTryPickUp(netId);
-        void PlayerStateOnIsDeadChanged(bool obj)
+        void PlayerStateOnIsDeadChanged(PlayerState state, bool obj)
         {
             if (!isLocalPlayer) return;
             _disableOnDeath.SetActive(!obj);
             if (obj)
             {
-                _health.CmdRevive();
+                _gameNetworkPlayerCommands.CmdDisableEffectorTarget();
+                _health.CmdStartRevive();
                 _gameNetworkPlayerCommands.CmdAddDeath();
                 return;
             }
+
+            // StartCoroutine(Respawn());
             _respawnService.Respawn(_characterController);
+            _gameNetworkPlayerCommands.CmdEnableEffectorTarget(transform.position);
         }
+
+
+        
         void GameStateOnGameStateChanged(GameStateName state)
         {
             if (state == GameStateName.MatchGoing)

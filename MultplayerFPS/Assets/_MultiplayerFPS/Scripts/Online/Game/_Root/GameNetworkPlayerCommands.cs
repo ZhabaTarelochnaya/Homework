@@ -1,3 +1,4 @@
+using System.Collections;
 using _MultiplayerFPS.Scripts.Components.Health;
 using _MultiplayerFPS.Scripts.Config.Pickup;
 using _MultiplayerFPS.Scripts.Services;
@@ -14,6 +15,7 @@ namespace _MultiplayerFPS.Scripts
     public class GameNetworkPlayerCommands : NetworkBehaviour
     {
         [SerializeField] PlayerState _playerState;
+        [SerializeField] Collider _effectorTarget;
         IPickupService _pickupService;
         IGrenadeService _grenadeService;
         IStateService _stateService;
@@ -33,6 +35,21 @@ namespace _MultiplayerFPS.Scripts
         {
             _pickupService.TryPickup(netId, connectionToClient.identity.netId);
         }
+
+        [Command]
+        public void CmdDisableEffectorTarget() => _effectorTarget.gameObject.SetActive(false);
+        [Command]
+        public void CmdEnableEffectorTarget(Vector3 currentPos)
+        {
+            StartCoroutine(EnableEffectorTarget(currentPos));
+           
+        }
+        IEnumerator EnableEffectorTarget(Vector3 pos)
+        {
+            yield return new WaitUntil(() => (transform.position - pos).sqrMagnitude < 0.1f);
+            _effectorTarget.gameObject.SetActive(true);
+        }
+
         [Command]
         public void CmdThrowGrenade(Vector3 direction)
         {
@@ -51,7 +68,6 @@ namespace _MultiplayerFPS.Scripts
             if (!isRemoved) return;
             _playerState.Damage(-_medKitConfig.Heal);
         }
-
         [Command]
         public void CmdAddDeath()
         {
