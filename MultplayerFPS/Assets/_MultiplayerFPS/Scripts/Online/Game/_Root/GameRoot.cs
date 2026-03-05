@@ -79,7 +79,6 @@ namespace _MultiplayerFPS.Scripts
         }
         public override void OnStartClient()
         {
-            
             Cursor.lockState = CursorLockMode.Locked;
         }
         public override void OnStopClient()

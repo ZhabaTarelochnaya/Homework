@@ -21,7 +21,7 @@ namespace _MultiplayerFPS.Scripts.Leaderboard
         }
         void Refresh()
         {
-            var data = _gameState.PlayerScores
+            LeaderboardData[] data = _gameState.PlayerScores
                 .Select(pair =>
                 {
                     var netId = pair.Key;
@@ -33,10 +33,7 @@ namespace _MultiplayerFPS.Scripts.Leaderboard
                 .OrderByDescending(d => d.Score)   
                 .ThenBy(d => d.Deaths)            
                 .ThenBy(d => d.Nickname)           
-                .Take(8)                          
                 .ToArray();
-            
-            Array.Resize(ref data, 8);
             _view.UpdateData(data);
         }
         void OnChange(SyncIDictionary<uint, PlayerScore>.Operation arg1, uint arg2, PlayerScore arg3)

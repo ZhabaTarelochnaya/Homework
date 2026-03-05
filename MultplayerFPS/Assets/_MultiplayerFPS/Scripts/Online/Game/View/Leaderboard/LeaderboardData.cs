@@ -2,7 +2,7 @@ using _MultiplayerFPS.Scripts.State;
 
 namespace _MultiplayerFPS.Scripts.Leaderboard
 {
-    public class LeaderboardData
+    public readonly struct LeaderboardData
     {
         public readonly string Nickname;
         public readonly int Kills;

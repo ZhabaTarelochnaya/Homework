@@ -14,11 +14,12 @@ namespace _MultiplayerFPS.Scripts.Leaderboard
         {
             for (int i = 0; i < _rowViews.Length; i++)
             {
-                if (leaderboardData[i] == null)
+                if (i >= leaderboardData.Length)
                 {
                     _rowViews[i].Disable();
                     continue;
                 }
+
                 _rowViews[i].Enable();
                 _rowViews[i].UpdateData(i + 1, leaderboardData[i]);
             }
