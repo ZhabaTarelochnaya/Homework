@@ -35,7 +35,6 @@ namespace _MultiplayerFPS.Scripts
         
         public override void OnStartClient()
         {
-            Debug.Log("View OnStartClient");
             _nicknameTagView = Instantiate(_nicknameTagViewPrefab, _disableOnDeath.transform);
             _playerConfig = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>();
             

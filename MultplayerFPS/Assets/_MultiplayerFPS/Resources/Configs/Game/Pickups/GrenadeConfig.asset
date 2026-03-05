@@ -17,7 +17,7 @@ MonoBehaviour:
   <Limit>k__BackingField: 4
   <GrenadePrefab>k__BackingField: {fileID: 5886865867755734922, guid: 1a94c7c6d44b11a42912746d6bb9f4aa, type: 3}
   <MinDamage>k__BackingField: 20
-  <MaxDamage>k__BackingField: 100
+  <MaxDamage>k__BackingField: 140
   <ExplosionDelay>k__BackingField: 3
   <ThrowDuration>k__BackingField: 1
   <Speed>k__BackingField: 30

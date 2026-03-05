@@ -77,6 +77,8 @@ namespace _MultiplayerFPS.Scripts
         public override void OnStartClient()
         {
             if (!isLocalPlayer) return;
+            _stateService = ServiceLocator.Current.Get<IStateService>();
+            
             
             var inputService = new MouseKeyboardInputService();
             ServiceLocator.Current.Register<IInputService>(inputService);
@@ -88,7 +90,6 @@ namespace _MultiplayerFPS.Scripts
             ServiceLocator.Current.Register<IPlayerCommandsService>(playerCommandsService);
 
             _respawnService = ServiceLocator.Current.Get<IRespawnService>();
-            _respawnService.Respawned += RespawnServiceOnRespawned;
             
             var hudView = Instantiate(_hudViewPrefab);
             _hudPresenter = new HudPresenter(_weapon, _playerState, hudView);
@@ -102,12 +103,8 @@ namespace _MultiplayerFPS.Scripts
             
             _playerController.SetActive(false);
             _hudPresenter.Disable();
+            
             _gameNetworkPlayerCommands.CmdChangeInitialized(true);
-        }
-
-        void RespawnServiceOnRespawned()
-        {
-            // _gameNetworkPlayerCommands.CmdSetEffectorTargetActive(true);
         }
 
         void Update()
@@ -131,7 +128,6 @@ namespace _MultiplayerFPS.Scripts
             ServiceLocator.Current.Unregister<ICameraManager>();
             ServiceLocator.Current.Unregister<IPlayerCommandsService>();
             _pickupCollector.PickupCollected -= PickupCollectorOnPickupCollected;
-            _respawnService.Respawned -= RespawnServiceOnRespawned;
             _playerState.IsDeadChanged -= PlayerStateOnIsDeadChanged;
         }
         [ClientRpc]
@@ -167,14 +163,9 @@ namespace _MultiplayerFPS.Scripts
                 _gameNetworkPlayerCommands.CmdAddDeath();
                 return;
             }
-
-            // StartCoroutine(Respawn());
             _respawnService.Respawn(_characterController);
             _gameNetworkPlayerCommands.CmdEnableEffectorTarget(transform.position);
         }
-
-
-        
         void GameStateOnGameStateChanged(GameStateName state)
         {
             if (state == GameStateName.MatchGoing)

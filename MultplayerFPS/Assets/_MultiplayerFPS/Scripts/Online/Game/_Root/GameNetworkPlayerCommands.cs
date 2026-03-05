@@ -30,19 +30,18 @@ namespace _MultiplayerFPS.Scripts
             _playerScoreService = ServiceLocator.Current.Get<IPlayerScoreService>();
             _medKitConfig = ServiceLocator.Current.Get<IConfigService>().Get<MedKitConfig>();
         }
+        
         [Command]
         public void CmdTryPickUp(uint netId)
         {
             _pickupService.TryPickup(netId, connectionToClient.identity.netId);
         }
-
         [Command]
         public void CmdDisableEffectorTarget() => _effectorTarget.gameObject.SetActive(false);
         [Command]
         public void CmdEnableEffectorTarget(Vector3 currentPos)
         {
             StartCoroutine(EnableEffectorTarget(currentPos));
-           
         }
         IEnumerator EnableEffectorTarget(Vector3 pos)
         {

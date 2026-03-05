@@ -10,7 +10,6 @@ using _MultiplayerFPS.Scripts.Services.GrenadeService;
 using _MultiplayerFPS.Scripts.Services.LoggerService;
 using _MultiplayerFPS.Scripts.Services.MatchTime;
 using _MultiplayerFPS.Scripts.Services.Respawn;
-using _MultiplayerFPS.Scripts.Services.ServerCommands;
 using _MultiplayerFPS.Scripts.Services.State;
 using _MultiplayerFPS.Scripts.State;
 using _MultiplayerFPS.Scripts.States;
@@ -21,26 +20,34 @@ using UnityEngine;
 
 namespace _MultiplayerFPS.Scripts
 {
+    [DefaultExecutionOrder(-100)]
     public class GameRoot : NetworkBehaviour
     {
         WaitForSeconds _waitForRespawn;
         ILoggerService _loggerService;
         IPickupService _pickupService;
+        IStateService _stateService;
         GameConfig _gameConfig;
         FSM<GameStateName> _gameStateFsm = new ();
         [SerializeField] GameState _gameState;
         [SerializeField] Transform[] _spawnPoints;
         [SerializeField] Transform[] _pickUpSpawnPoints;
 
+        void Awake()
+        {
+            if (ServiceLocator.Current == null) return;
+            _stateService = new StateService(_gameState);
+            ServiceLocator.Current.Register(_stateService);
+            var respawnService = new RandomRespawnService(_spawnPoints);
+            ServiceLocator.Current.Register<IRespawnService>(respawnService);
+        }
         public override void OnStartServer()
         {
-            var stateService = new StateService(_gameState);
-            ServiceLocator.Current.Register<IStateService>(stateService);
-            _pickupService = new PickupService(_pickUpSpawnPoints, stateService);
+            _pickupService = new PickupService(_pickUpSpawnPoints, _stateService);
             ServiceLocator.Current.Register(_pickupService);
             var grenadeService = new GrenadeService();
             ServiceLocator.Current.Register<IGrenadeService>(grenadeService);
-            var playerScoreService = new PlayerScoreService(stateService);
+            var playerScoreService = new PlayerScoreService(_stateService);
             ServiceLocator.Current.Register<IPlayerScoreService>(playerScoreService);
             var matchTimeService = new MatchTimeService(_gameState);
             ServiceLocator.Current.Register<IMatchTimeService>(matchTimeService);
@@ -72,13 +79,6 @@ namespace _MultiplayerFPS.Scripts
         }
         public override void OnStartClient()
         {
-            if (!isServer)
-            {
-                var stateService = new StateService(_gameState);
-                ServiceLocator.Current.Register<IStateService>(stateService);
-            }
-            var respawnService = new RandomRespawnService(_spawnPoints);
-            ServiceLocator.Current.Register<IRespawnService>(respawnService);
             
             Cursor.lockState = CursorLockMode.Locked;
         }
