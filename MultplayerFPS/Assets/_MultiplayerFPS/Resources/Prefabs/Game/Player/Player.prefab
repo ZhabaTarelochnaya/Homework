@@ -125,6 +125,8 @@ MonoBehaviour:
   IsThrowingGrenade: 0
   MedKitCount: 0
   GrenadeCount: 0
+  Speed: 0
+  JumpHeight: 0
   _health: {fileID: 1734681077141525986}
 --- !u!114 &6139692233579960212
 MonoBehaviour:
@@ -162,6 +164,7 @@ MonoBehaviour:
   _renderer: {fileID: 5846004343312526087}
   _animator: {fileID: 6485860068272453233}
   _disableOnDeath: {fileID: 552143018040800945}
+  _playerState: {fileID: 2786397991171922247}
 --- !u!114 &1734681077141525986
 MonoBehaviour:
   m_ObjectHideFlags: 0

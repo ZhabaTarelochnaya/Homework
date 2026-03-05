@@ -50,7 +50,6 @@ public class NetManager : NetworkRoomManager
         var networkPlayer =  roomPlayer.GetComponent<NetworkPlayer>();
         var gameNetworkPlayer = gamePlayer.GetComponent<GameNetworkPlayer>();
         gameNetworkPlayer.Init(networkPlayer.Nickname, networkPlayer.Color);
-        Debug.Log(FindFirstObjectByType<GameRoot>());
         NetworkServer.Destroy(roomPlayer);
         return true;
     }

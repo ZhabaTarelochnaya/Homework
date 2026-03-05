@@ -109,13 +109,7 @@ namespace _MultiplayerFPS.Scripts
             _gameNetworkPlayerCommands.CmdChangeInitialized(true);
         }
 
-        public override void OnStopClient()
-        {
-            ServiceLocator.Current.Unregister<IInputService>();
-            ServiceLocator.Current.Unregister<IPlayerMovementService>();
-            ServiceLocator.Current.Unregister<ICameraManager>();
-            ServiceLocator.Current.Unregister<IPlayerCommandsService>();
-        }
+        public override void OnStopClient() => Unregister();
 
         void Update()
         {
@@ -131,7 +125,9 @@ namespace _MultiplayerFPS.Scripts
             _playerController.UpdateCamera();
         }
         [TargetRpc]
-        void RpcUnregister(NetworkConnectionToClient conn)
+        void RpcUnregister(NetworkConnectionToClient conn) => Unregister();
+
+        void Unregister()
         {
             ServiceLocator.Current.Unregister<IInputService>();
             ServiceLocator.Current.Unregister<IPlayerMovementService>();
@@ -164,8 +160,9 @@ namespace _MultiplayerFPS.Scripts
         void PickupCollectorOnPickupCollected(uint netId) => _gameNetworkPlayerCommands.CmdTryPickUp(netId);
         void PlayerStateOnIsDeadChanged(PlayerState state, bool obj)
         {
-            if (!isLocalPlayer) return;
             _disableOnDeath.SetActive(!obj);
+            if (!isLocalPlayer) return;
+            
             if (obj)
             {
                 _gameNetworkPlayerCommands.CmdDisableEffectorTarget();

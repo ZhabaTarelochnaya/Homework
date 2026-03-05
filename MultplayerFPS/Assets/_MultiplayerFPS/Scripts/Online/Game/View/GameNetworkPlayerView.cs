@@ -32,6 +32,7 @@ namespace _MultiplayerFPS.Scripts
         [SerializeField] Renderer _renderer;
         [SerializeField] Animator _animator;
         [SerializeField] GameObject _disableOnDeath;
+        [SerializeField] PlayerState _playerState;
         
         public override void OnStartClient()
         {
@@ -44,56 +45,45 @@ namespace _MultiplayerFPS.Scripts
             }
             
             _stateService = ServiceLocator.Current.Get<IStateService>();
-            foreach (var netId in _stateService.GameState.PlayerStates.Keys)
-            {
-                OnAdd(netId);
-            }
-            _stateService.GameState.PlayerStates.OnAdd += OnAdd;
-            _stateService.GameState.PlayerStates.OnRemove += OnRemove;
-        }
-        public override void OnStopClient()
-        {
-            var player = _stateService.GetPlayerState(netId);
+            _stateService.GameState.GameStateChanged += GameStateOnGameStateChanged;
+            
+            OnNicknameChanged(_playerState.Nickname);
+            OnColorChanged( _playerState.Color);
+            _playerState.NicknameChanged += OnNicknameChanged;
+            _playerState.ColorChanged += OnColorChanged;
+            _playerState.IsShootingChanged += PlayerStateOnIsShootingChanged;
+            _playerState.IsReloadingChanged += PlayerStateOnIsReloadingChanged; 
+            _playerState.IsHealingChanged += PlayerStateOnIsHealingChanged;
+            _playerState.IsThrowingGrenadeChanged += PlayerStateOnIsThrowingGrenadeChanged;
+            _playerState.IsDeadChanged += PlayerStateOnIsDeadChanged;
+            _playerState.CurrentHpChanged += PlayerStateOnCurrentHpChanged;
+            
             var loggerService = ServiceLocator.Current.Get<ILoggerService>();
-            loggerService.Log($"Player {player.Nickname} (netId: {netId}) left the game.");
-            _stateService.GameState.PlayerStates.OnAdd -= OnAdd;
-            _stateService.GameState.PlayerStates.OnRemove -= OnRemove;
+            loggerService.Log($"Player {_playerState.Nickname} (netId: {netId}) joined the game.");
         }
-        void OnAdd(uint netId)
+        public override void OnStopClient() => Unregister();
+        void GameStateOnGameStateChanged(GameStateName obj)
         {
-            var playerState = _stateService.GetPlayerState(netId);
-            
-            if (isLocalPlayer)
-            {
-                var loggerService = ServiceLocator.Current.Get<ILoggerService>();
-                loggerService.Log($"Player {playerState.Nickname} (netId: {netId}) joined the game.");
-            }
-            
-            if (netId != this.netId) return;
-            OnNicknameChanged(playerState.Nickname);
-            OnColorChanged( playerState.Color);
-            playerState.NicknameChanged += OnNicknameChanged;
-            playerState.ColorChanged += OnColorChanged;
-            playerState.IsShootingChanged += PlayerStateOnIsShootingChanged;
-            playerState.IsReloadingChanged += PlayerStateOnIsReloadingChanged; 
-            playerState.IsHealingChanged += PlayerStateOnIsHealingChanged;
-            playerState.IsThrowingGrenadeChanged += PlayerStateOnIsThrowingGrenadeChanged;
-            playerState.IsDeadChanged += PlayerStateOnIsDeadChanged;
-            playerState.CurrentHpChanged += PlayerStateOnCurrentHpChanged;
+            if (obj != GameStateName.Unregister) return;
+            RpcUnregister(connectionToClient);
         }
-        void OnRemove(uint netId, PlayerState state)
+
+        [TargetRpc]
+        void RpcUnregister(NetworkConnectionToClient conn) => Unregister();
+
+        void Unregister()
         {
-            if (netId != this.netId) return;
-            state.NicknameChanged -= OnNicknameChanged;
-            state.ColorChanged -= OnColorChanged;
-            state.IsShootingChanged -= PlayerStateOnIsShootingChanged;
-            state.IsReloadingChanged -= PlayerStateOnIsReloadingChanged;
-            state.IsHealingChanged -= PlayerStateOnIsHealingChanged;
-            state.IsThrowingGrenadeChanged -= PlayerStateOnIsThrowingGrenadeChanged;
-            state.IsDeadChanged -= PlayerStateOnIsDeadChanged;
-            state.CurrentHpChanged -= PlayerStateOnCurrentHpChanged;
+            _playerState.NicknameChanged -= OnNicknameChanged;
+            _playerState.ColorChanged -= OnColorChanged;
+            _playerState.IsShootingChanged -= PlayerStateOnIsShootingChanged;
+            _playerState.IsReloadingChanged -= PlayerStateOnIsReloadingChanged;
+            _playerState.IsHealingChanged -= PlayerStateOnIsHealingChanged;
+            _playerState.IsThrowingGrenadeChanged -= PlayerStateOnIsThrowingGrenadeChanged;
+            _playerState.IsDeadChanged -= PlayerStateOnIsDeadChanged;
+            _playerState.CurrentHpChanged -= PlayerStateOnCurrentHpChanged;
+            var loggerService = ServiceLocator.Current.Get<ILoggerService>();
+            loggerService.Log($"Player {_playerState.Nickname} (netId: {netId}) left the game.");
         }
-        
         public void HandleRunAnimations()
         {
             var move = _inputService.GetMove();
