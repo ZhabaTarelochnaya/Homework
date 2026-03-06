@@ -1,5 +1,5 @@
 # Homework
-Repository dedicated to homeworks. Each branch corresponds to a new module.\
+Start from Game scene.\
 wasd - move.\
 space - jump.\
 left mouse button - shoot.\
