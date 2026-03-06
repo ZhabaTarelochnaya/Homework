@@ -34,7 +34,7 @@ namespace _MultiplayerFPS.Scripts
         [SerializeField] GameObject _disableOnDeath;
         [SerializeField] PlayerState _playerState;
         
-        public override void OnStartClient()
+        public void InitClient()
         {
             _nicknameTagView = Instantiate(_nicknameTagViewPrefab, _disableOnDeath.transform);
             _playerConfig = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>();
@@ -61,6 +61,7 @@ namespace _MultiplayerFPS.Scripts
             var loggerService = ServiceLocator.Current.Get<ILoggerService>();
             loggerService.Log($"Player {_playerState.Nickname} (netId: {netId}) joined the game.");
         }
+
         public override void OnStopClient() => Unregister();
         void GameStateOnGameStateChanged(GameStateName obj)
         {

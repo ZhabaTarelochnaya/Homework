@@ -33,6 +33,7 @@ namespace _MultiplayerFPS.Scripts
         LeaderboardPresenter _leaderboardPresenter;
         string _lobbyPlayerNickname;
         Color _lobbyPlayerColor;
+        bool isInitialized = false;
         [SerializeField] GameNetworkPlayerView _gameNetworkPlayerView;
         [SerializeField] GameNetworkPlayerCommands _gameNetworkPlayerCommands;
         [SerializeField] GameObject _disableOnDeath;
@@ -46,6 +47,7 @@ namespace _MultiplayerFPS.Scripts
         [SerializeField] Health _health;
         [SerializeField] Collider _effectorTarget;
         
+        
         [Server]
         public void Init(string nickname, Color color)
         {
@@ -55,6 +57,7 @@ namespace _MultiplayerFPS.Scripts
         public override void OnStartServer()
         {
             _stateService = ServiceLocator.Current.Get<IStateService>();
+            
             _stateService.GameState.PlayerStates.TryAdd(netId, _playerState);
             _stateService.GameState.PlayerScores.TryAdd(netId, new PlayerScore());
             _stateService.GameState.GameStateChanged += GameStateOnGameStateChanged;
@@ -79,40 +82,55 @@ namespace _MultiplayerFPS.Scripts
         }
         public override void OnStartClient()
         {
-            if (!isLocalPlayer) return;
-            
-            var inputService = new MouseKeyboardInputService();
-            ServiceLocator.Current.Register<IInputService>(inputService);
-            var moveService = new CharacterControllerPlayerMovementService(_characterController, _playerState);
-            ServiceLocator.Current.Register<IPlayerMovementService>(moveService);
-            var cameraManager = new CameraManager(Camera.main);
-            ServiceLocator.Current.Register<ICameraManager>(cameraManager);
-            var playerCommandsService = new PlayerCommandsService(_gameNetworkPlayerCommands);
-            ServiceLocator.Current.Register<IPlayerCommandsService>(playerCommandsService);
-
-            _respawnService = ServiceLocator.Current.Get<IRespawnService>();
-            _stateService = ServiceLocator.Current.Get<IStateService>();
-            
-            var hudView = Instantiate(_hudViewPrefab);
-            _hudPresenter = new HudPresenter(_weapon, _playerState, hudView);
-            var leaderBoardView = Instantiate(_leaderboardView);
-            _leaderboardPresenter =  new LeaderboardPresenter(leaderBoardView);
-            
-            _playerController = new PlayerController(_playerState, _weapon, _cameraTarget, _leaderboardPresenter);
-            
-            _pickupCollector.PickupCollected += PickupCollectorOnPickupCollected;
-            _playerState.IsDeadChanged += PlayerStateOnIsDeadChanged;
-            
-            _playerController.SetActive(false);
-            _hudPresenter.Disable();
-            
-            _gameNetworkPlayerCommands.CmdChangeInitialized(true);
+            StartCoroutine(DelayedStartClient());
         }
 
+        IEnumerator DelayedStartClient()
+        {
+            yield return null;
+            if (isLocalPlayer)
+            {
+                var inputService = new MouseKeyboardInputService();
+                ServiceLocator.Current.Register<IInputService>(inputService);
+                var moveService = new CharacterControllerPlayerMovementService(_characterController, _playerState);
+                ServiceLocator.Current.Register<IPlayerMovementService>(moveService);
+                var cameraManager = new CameraManager(Camera.main);
+                ServiceLocator.Current.Register<ICameraManager>(cameraManager);
+                var playerCommandsService = new PlayerCommandsService(_gameNetworkPlayerCommands);
+                ServiceLocator.Current.Register<IPlayerCommandsService>(playerCommandsService);
+
+                _respawnService = ServiceLocator.Current.Get<IRespawnService>();
+            
+            
+                _stateService = ServiceLocator.Current.Get<IStateService>();
+            
+            
+                var hudView = Instantiate(_hudViewPrefab);
+                _hudPresenter = new HudPresenter(_weapon, _playerState, hudView);
+                var leaderBoardView = Instantiate(_leaderboardView);
+                _leaderboardPresenter =  new LeaderboardPresenter(leaderBoardView);
+            
+                _playerController = new PlayerController(_playerState, _weapon, _cameraTarget, _leaderboardPresenter);
+            
+                _pickupCollector.PickupCollected += PickupCollectorOnPickupCollected;
+                _playerState.IsDeadChanged += PlayerStateOnIsDeadChanged;
+            
+                _playerController.SetActive(false);
+                _hudPresenter.Disable();
+                
+                _gameNetworkPlayerCommands.CmdChangeInitialized(true);
+            }
+
+            isInitialized = true;
+            _weapon.InitClient();
+            _gameNetworkPlayerView.InitClient();
+        }
+        
         public override void OnStopClient() => Unregister();
 
         void Update()
         {
+            if (!isInitialized) return;
             if (!isLocalPlayer) return;
             _playerController.Update();
             
@@ -121,6 +139,7 @@ namespace _MultiplayerFPS.Scripts
         }
         void LateUpdate()
         {
+            if (!isInitialized) return;
             if (!isLocalPlayer) return;
             _playerController.UpdateCamera();
         }

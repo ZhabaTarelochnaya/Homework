@@ -30,25 +30,22 @@ namespace _MultiplayerFPS.Scripts
         [SerializeField] GameState _gameState;
         [SerializeField] Transform[] _spawnPoints;
         [SerializeField] Transform[] _pickUpSpawnPoints;
-
-        void Awake()
+        
+        public override void OnStartServer()
         {
-            if (ServiceLocator.Current == null) return;
+            
             _stateService = new StateService(_gameState);
             ServiceLocator.Current.Register(_stateService);
             var respawnService = new RandomRespawnService(_spawnPoints);
             ServiceLocator.Current.Register<IRespawnService>(respawnService);
-        }
-        public override void OnStartServer()
-        {
-            _pickupService = new PickupService(_pickUpSpawnPoints, _stateService);
-            ServiceLocator.Current.Register(_pickupService);
             var grenadeService = new GrenadeService();
             ServiceLocator.Current.Register<IGrenadeService>(grenadeService);
             var playerScoreService = new PlayerScoreService(_stateService);
             ServiceLocator.Current.Register<IPlayerScoreService>(playerScoreService);
             var matchTimeService = new MatchTimeService(_gameState);
             ServiceLocator.Current.Register<IMatchTimeService>(matchTimeService);
+            _pickupService = new PickupService(_pickUpSpawnPoints, _stateService);
+            ServiceLocator.Current.Register(_pickupService);
             
             _gameState.GameStateChanged += GameStateOnGameStateChanged;
             
@@ -65,7 +62,19 @@ namespace _MultiplayerFPS.Scripts
             ServiceLocator.Current.Unregister<IMatchTimeService>();
             
         }
-        public override void OnStartClient() => Cursor.lockState = CursorLockMode.Locked;
+
+        public override void OnStartClient()
+        {
+            if (!isServer)
+            {
+                _stateService = new StateService(_gameState);
+                ServiceLocator.Current.Register(_stateService);
+                var respawnService = new RandomRespawnService(_spawnPoints);
+                ServiceLocator.Current.Register<IRespawnService>(respawnService);
+            }
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
         public override void OnStopClient()
         {
             Cursor.lockState = CursorLockMode.None;

@@ -58,6 +58,7 @@ namespace _MultiplayerFPS.Scripts.Services
             }
             pickup.SpawnPoint = spawnPoint;
             pickup.transform.position = spawnPoint.transform.position;
+            Debug.Log(_stateService);
             _stateService.GameState.ActivePickups.Add(pickup.netId, pickup);
         }
 

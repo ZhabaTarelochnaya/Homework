@@ -39,16 +39,21 @@ namespace _MultiplayerFPS.Scripts.Components
             _playerState.CurrentAmmo = Config.MaxAmmo;
         }
 
-        public override void OnStartClient()
+        public void InitClient()
         {
             if (isLocalPlayer)
             {
                 _stateService = ServiceLocator.Current.Get<IStateService>();
             }
+            
             var playerConfig = ServiceLocator.Current.Get<IConfigService>().Get<PlayerConfig>();
             Config = (IWeaponConfig)playerConfig.StartingWeapon;
             var instance = Instantiate(Config.Prefab, _hand);
             View = instance.GetComponent<IWeaponView>();
+        }
+        public override void OnStartClient()
+        {
+            
         }
         void Update()
         {

@@ -21,7 +21,7 @@ namespace _MultiplayerFPS.Scripts
         IStateService _stateService;
         IPlayerScoreService _playerScoreService;
         MedKitConfig _medKitConfig;
-
+        
         public override void OnStartServer()
         {
             _pickupService = ServiceLocator.Current.Get<IPickupService>();
